@@ -1,0 +1,55 @@
+import "./bootstrap";
+import "../css/app.css";
+
+import "/node_modules/bootstrap-icons/font/bootstrap-icons.css";
+import "/node_modules/bootstrap/dist/css/bootstrap.css";
+import "/node_modules/bootstrap/dist/js/bootstrap.js";
+
+import "primevue/resources/primevue.min.css ";
+import "primeicons/primeicons.css";
+import "/node_modules/primeflex/primeflex.css";
+
+import { createApp, h } from "vue";
+import { createRouter, createWebHistory } from "vue-router";
+import { createInertiaApp } from "@inertiajs/inertia-vue3";
+import { InertiaProgress } from "@inertiajs/progress";
+import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
+import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
+import PrimeVue from "primevue/config";
+import ToastService from "primevue/toastservice";
+import Tooltip from "primevue/tooltip";
+
+// Roles y permisos
+import VueGates from "vue-gates";
+import Permissions from "./Plugins/Permissions";
+
+const router = createRouter({
+    history: createWebHistory(import.meta.env.BASE_URL),
+    routes: [],
+});
+
+const appName =
+    window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
+
+createInertiaApp({
+    title: (title) => `${title} - ${appName}`,
+    resolve: (name) =>
+        resolvePageComponent(
+            `./Pages/${name}.vue`,
+            import.meta.glob("./Pages/**/*.vue")
+        ),
+    setup({ el, app, props, plugin }) {
+        return createApp({ render: () => h(app, props) })
+            .use(plugin)
+            .use(ZiggyVue, Ziggy)
+            .use(PrimeVue)
+            .use(ToastService)
+            .use(router)
+            .use(VueGates)
+            .use(Permissions)
+            .directive('tooltip', Tooltip)
+            .mount(el);
+    },
+});
+
+InertiaProgress.init({ color: "#4B5563" });

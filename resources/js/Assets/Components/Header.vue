@@ -1,0 +1,143 @@
+<script setup>
+/* Componentes de Vue */
+import { ref, watch } from "vue";
+import { Inertia } from "@inertiajs/inertia";
+import { Head, Link } from "@inertiajs/inertia-vue3";
+/* Componentes de Jetstream */
+import JetApplicationMark from "@/Jetstream/ApplicationMark.vue";
+import JetBanner from "@/Jetstream/Banner.vue";
+import JetDropdown from "@/Jetstream/Dropdown.vue";
+import JetDropdownLink from "@/Jetstream/DropdownLink.vue";
+import JetNavLink from "@/Jetstream/NavLink.vue";
+import JetResponsiveNavLink from "@/Jetstream/ResponsiveNavLink.vue";
+/* Componentes de primevue */
+import Button from "primevue/button";
+import Sidebar from "primevue/sidebar";
+import PanelMenu from "@/Assets/Components/primevue/Menu/PanelMenu.vue";
+import Menubar from "primevue/menubar";
+import Avatar from "primevue/avatar";
+import UserMenu from "@/Assets/Components/UserMenu.vue";
+
+const props = defineProps({
+    title: String,
+    darkMode: {
+        type: Boolean,
+        default: null,
+    },
+});
+
+const emits = defineEmits(["themeColor"]);
+
+const showingNavigationDropdown = ref(false);
+
+const switchToTeam = (team) => {
+    Inertia.put(
+        route("current-team.update"),
+        {
+            team_id: team.id,
+        },
+        {
+            preserveState: false,
+        }
+    );
+};
+
+const logout = () => {
+    Inertia.post(route("logout"));
+};
+</script>
+
+<template>
+    <div class="flex my-auto">
+        <Menubar :model="items" class="container-fluid">
+            <template #start>
+                <Sidebar v-model:visible="visibleLeft" class="ps-2">
+                    <Avatar
+                        :image="$page.props.user.profile_photo_url"
+                        size="xlarge"
+                        class="p-avatar-circle"
+                    ></Avatar>
+                    <div class="my-2">
+                        <p class="h6">{{ $page.props.user.name }}</p>
+                        <small>{{ $page.props.user.email }}</small>
+                    </div>
+                </Sidebar>
+                <Button
+                    icon="pi pi-align-justify"
+                    @click="visibleLeft = true"
+                    class="p-button-text p-button-sm p-button-secondary"
+                />
+            </template>
+            <template #end>
+                <div class="d-flex align-items-center">
+                    <Button
+                        :icon="darkMode == true ? 'pi pi-moon' : 'pi pi-sun'"
+                        class="p-button-rounded"
+                        :class="
+                            darkMode == true
+                                ? 'p-button-text p-button-help'
+                                : 'p-button-warning p-button-outlined'
+                        "
+                        id="darkModeId"
+                        name="darkModeId"
+                        @click="emits('themeColor')"
+                    />
+                    <user-menu></user-menu>
+                </div>
+            </template>
+        </Menubar>
+    </div>
+</template>
+
+<script>
+export default {
+    data() {
+        return {
+            visibleLeft: false,
+            items: [
+                {
+                    label: "Sistema",
+                    icon: "pi pi-cog",
+                    items: [
+                        {
+                            label: "Usuarios",
+                            icon: "pi pi-users",
+                            command: () => {
+                                Inertia.visit(route("user.index"));
+                            },
+                        },
+                        {
+                            label: "Roles",
+                            icon: "pi pi-key",
+                            command: () => {
+                                Inertia.visit(route("role.index"));
+                            },
+                        },
+                        {
+                            label: "Permisos",
+                            icon: "pi pi-unlock",
+                            command: () => {
+                                Inertia.visit(route("permission.index"));
+                            },
+                        },
+                    ],
+                },
+                {
+                    label: "Anuncios",
+                    icon: "pi pi-bell",
+                    command: () => {
+                        Inertia.visit(route("anuncios.index"));
+                    },
+                },
+                {
+                    label: "Vacantes",
+                    icon: "pi pi-inbox",
+                    command: () => {
+                        Inertia.visit(route("vacantes.index"));
+                    },
+                },
+            ],
+        };
+    },
+};
+</script>
