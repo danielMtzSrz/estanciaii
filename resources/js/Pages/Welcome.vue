@@ -301,8 +301,8 @@ export default {
     methods: {
         theme() {
             return this.darkMode
-                ? "/themes/vela-blue/theme.css"
-                : "/themes/saga-blue/theme.css";
+                ? "/themes/bootstrap4-dark-blue/theme.css"
+                : "/themes/bootstrap4-light-blue/theme.css";
         },
         themeColor() {
             this.darkMode = this.cheked = !this.darkMode;

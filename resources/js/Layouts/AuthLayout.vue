@@ -128,8 +128,8 @@ defineProps({
         methods: {
             theme() {
                 return this.darkMode
-                    ? "/themes/vela-blue/theme.css"
-                    : "/themes/saga-blue/theme.css";
+                    ? "/themes/bootstrap4-dark-blue/theme.css"
+                    : "/themes/bootstrap4-light-blue/theme.css";
             },
             themeColor() {
                 this.darkMode = this.cheked = !this.darkMode;
@@ -169,44 +169,44 @@ defineProps({
     };
     </script>
     
-    <style>
-    .modoOscuro {
-        background-color: #17212f;
-        color: rgba(255, 255, 255, 0.87);
+<style>
+.modoOscuro {
+    background-color: #20262e;
+    color: rgba(255, 255, 255, 0.87);
+}
+.modoOscuro .card {
+    background-color: #20262e;
+    color: rgba(255, 255, 255, 0.87);
+}
+.modoOscuro input {
+    background-color: #20262e;
+    color: rgba(255, 255, 255, 0.87);
+}
+.modoOscuro label {
+    color: rgba(255, 255, 255, 0.87);
+}
+.modoOscuro p {
+    color: rgba(255, 255, 255, 0.87);
+}
+.modoOscuro strong {
+    color: rgba(255, 255, 255, 0.87);
+}
+
+@media (prefers-color-scheme: dark) {
+    ::-webkit-scrollbar {
+        width: 12px;
     }
-    .modoOscuro .card {
-        background-color: #17212f;
-        color: rgba(255, 255, 255, 0.87);
+
+    ::-webkit-scrollbar-track {
+        background: #20262e;
     }
-    .modoOscuro input {
-        background-color: #17212f;
-        color: rgba(255, 255, 255, 0.87);
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #1f2d40;
+        border-radius: 20px;
+        border: 3px solid #2b3e58;
     }
-    .modoOscuro label {
-        color: rgba(255, 255, 255, 0.87);
-    }
-    .modoOscuro p {
-        color: rgba(255, 255, 255, 0.87);
-    }
-    .modoOscuro strong {
-        color: rgba(255, 255, 255, 0.87);
-    }
-    
-    @media (prefers-color-scheme: dark) {
-        ::-webkit-scrollbar {
-            width: 12px;
-        }
-    
-        ::-webkit-scrollbar-track {
-            background: #17212f;
-        }
-    
-        ::-webkit-scrollbar-thumb {
-            background-color: #1f2d40;
-            border-radius: 20px;
-            border: 3px solid #2b3e58;
-        }
-    }
+}
     </style>
     
     
