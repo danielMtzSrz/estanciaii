@@ -7,7 +7,7 @@
             <form @submit.prevent="submit(false)">
                 <div class="row p-fluid">
                     <div class="mt-2 col-md-6">
-                        <Dropdown 
+                        <Dropdown
                             :data="dataModal.dataAulas"
                             icon="bi bi-building"
                             label="Aula"
@@ -18,7 +18,7 @@
                         />
                     </div>
                     <div class="mt-2 col-md-6">
-                        <Dropdown 
+                        <Dropdown
                             :data="dataModal.dataDiasSemana"
                             icon="bi bi-calendar-week"
                             label="Día"
@@ -84,7 +84,7 @@ import Checkbox from 'primevue/checkbox';
 import InputText from "@/Assets/Components/Forms/InputText.vue";
 import Textarea from "@/Assets/Components/Forms/Textarea.vue";
 import Dropdown from '@/Assets/Components/Forms/Dropdown.vue';
-import Calendar from '@/Components/Forms/CalendarTime.vue';
+import Calendar from '@/Assets/Components/Forms/CalendarTime.vue';
 import Divider from 'primevue/divider';
 
 import GenericModal from '@/Assets/Components/GenericModal.vue';
@@ -146,7 +146,7 @@ watch(() => props.dataModal.dataRegistro, (newVal, oldVal) => {
 
     horaInicio.value = newVal?.hora_inicio ?? null
     horaFin.value = newVal?.hora_fin ?? null
-    
+
     // En caso de que se modifique el registro se llenarán estos campos correspondientes al form.
     aula.value = newVal?.aula ?? null
     diaSemana.value = newVal?.diaSemana ?? null
