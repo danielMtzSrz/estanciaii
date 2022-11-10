@@ -35,6 +35,12 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
+
+            Route::middleware('web')
+                ->namespace($this->namespace)
+                ->prefix('Calendarizaciones')
+                ->name('Calendarizaciones.')
+                ->group(base_path('routes/Calendarizaciones.php'));
         });
     }
 
