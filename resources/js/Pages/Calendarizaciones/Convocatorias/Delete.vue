@@ -35,7 +35,7 @@ import { useForm } from "@inertiajs/inertia-vue3";
 import Button from "primevue/button";
 
 // Componentes personalizados
-import GenericModal from '@/Components/GenericModal.vue';
+import GenericModal from '@/Assets/Components/GenericModal.vue';
 
 const form = useForm()
 

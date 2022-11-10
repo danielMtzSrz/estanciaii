@@ -83,9 +83,9 @@ import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 
 // Componentes personalizados
-import GenericLayout from '@/Components/GenericLayout.vue';
-import GenericTable from '@/Components/GenericTable.vue';
-import GenericAlert from '@/Components/GenericAlert.vue';
+import GenericLayout from '@/Assets/Components/GenericLayout.vue';
+import GenericTable from '@/Assets/Components/GenericTable.vue';
+import GenericAlert from '@/Assets/Components/GenericAlert.vue';
 
 import moment from 'moment'
 

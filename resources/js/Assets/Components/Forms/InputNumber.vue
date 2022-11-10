@@ -1,14 +1,14 @@
 <template>
-    <div class="p-inputgroup my-4">
+    <div class="p-inputgroup">
         <span v-if="icon" class="p-inputgroup-addon">
             <i :class="icon"></i>
         </span>
-        <span class="p-float-label">
-            <InputText
+        <span class="p-float-label my-3">
+            <InputNumber
                 :class="{'p-invalid': errors}"
                 :name="name"
                 :id="id"
-                type="text"
+                :mode="mode"
                 v-model="inputValue"
                 v-tooltip.top="tooltip"
                 :disabled="disabled"
@@ -23,8 +23,8 @@
 
 <script setup>
 import { ref, watch } from 'vue';
-// Primevue
-import InputText from "primevue/inputtext";
+
+import InputNumber from "primevue/inputnumber";
 import Tooltip from "primevue/tooltip";
 
 const inputValue = ref(props.value)
@@ -41,7 +41,7 @@ const props = defineProps({
     },
     label: {
         type: String,
-        default: "Falta agregar el label"
+        default: "Number"
     },
     formModel : {
         type : Object,
@@ -62,6 +62,10 @@ const props = defineProps({
     id: {
         type: String,
         default: null
+    },
+    mode:{
+        type: String,
+        default: "decimal"
     }
 })
 

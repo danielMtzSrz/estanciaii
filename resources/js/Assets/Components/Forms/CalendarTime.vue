@@ -4,17 +4,15 @@
             <i :class="icon"></i>
         </span>
         <span class="p-float-label">
-            <Textarea
-                :id="id"
-                :name="name"
+            <Calendar
                 :class="{'p-invalid': errors}"
-                v-model="inputValue"
-                :autoResize="true"
-                rows="5"
-                cols="30"
-                v-tooltip.top="tooltip"
+                :name="name"
+                @date-select="selected($event)"
+                hourFormat="24"
+                :timeOnly="true"
+                v-model="value"
             />
-            <label>{{ label }}</label>
+            <label class="mb-2"> {{ label }}</label>
         </span>
     </div>
     <small class="p-error" v-if="errors">
@@ -23,9 +21,10 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
+
 // Primevue
-import Textarea from "primevue/textarea";
+import Calendar from 'primevue/calendar';
 
 const inputValue = ref(props.value)
 
@@ -35,23 +34,19 @@ const props = defineProps({
         type: [Object, String],
         default: null
     },
+    value: {
+        type: [Object, String],
+        default: null
+    },
     label: {
         type: String,
-        default: "Falta agregar el label"
-    },
-    tooltip : {
-        default: String,
-        default: null
-    },
-    value : {
-        type: String,
-        default: null
+        default: 'Falta agregar el label',
     },
     name: {
         type: String,
-        default: null,
+        default: null
     },
-    id: {
+    icon: {
         type: String,
         default: null
     }
@@ -59,9 +54,8 @@ const props = defineProps({
 
 const emits = defineEmits(['input'])
 
-watch(inputValue, (newVal, oldVal) => {
-    inputValue.value = newVal
-    emits('input', inputValue);
-})
-
-</script>
+const selected = (event) => {
+    inputValue.value = event.toLocaleTimeString("en-CA", { hour12: false, hour: 'numeric', minute: 'numeric'})
+    emits('input', {valueFormat: inputValue.value, valueShow: event});
+}
+</script> 

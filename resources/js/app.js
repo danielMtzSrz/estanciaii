@@ -18,6 +18,7 @@ import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
 import PrimeVue from "primevue/config";
 import ToastService from "primevue/toastservice";
 import Tooltip from "primevue/tooltip";
+import { Link } from "@inertiajs/inertia-vue3";
 
 // Roles y permisos
 import VueGates from "vue-gates";
@@ -47,6 +48,7 @@ createInertiaApp({
             .use(router)
             .use(VueGates)
             .use(Permissions)
+            .component("Link", Link)
             .directive('tooltip', Tooltip)
             .mount(el);
     },

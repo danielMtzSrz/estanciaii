@@ -76,8 +76,8 @@ import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 
 // Componentes personalizados
-import GenericLayout from '@/Components/GenericLayout.vue';
-import GenericTable from '@/Components/GenericTable.vue';
+import GenericLayout from '@/Assets/Components/GenericLayout.vue';
+import GenericTable from '@/Assets/Components/GenericTable.vue';
 
 // Componentes de los modales
 import FormCreateUpdate from '@/Pages/Calendarizaciones/Convocatorias/CreateUpdate.vue';

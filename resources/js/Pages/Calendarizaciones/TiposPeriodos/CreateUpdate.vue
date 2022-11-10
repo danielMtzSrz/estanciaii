@@ -65,11 +65,11 @@ import Button from "primevue/button";
 import Tooltip from "primevue/tooltip";
 
 // Inputs
-import InputText from "@/Components/Forms/InputText.vue";
-import Textarea from "@/Components/Forms/Textarea.vue";
+import InputText from "@/Assets/Components/Forms/InputText.vue";
+import Textarea from "@/Assets/Components/Forms/Textarea.vue";
 import ColorPicker from 'primevue/colorpicker';
 
-import GenericModal from '@/Components/GenericModal.vue';
+import GenericModal from '@/Assets/Components/GenericModal.vue';
 
 const loading = ref(null)
 const display = ref(null)

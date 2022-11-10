@@ -21,7 +21,7 @@
                     :label="alertProcess?.alertTitle"
                     :class="`p-button-text p-button-raised p-button-rounded p-button-${alertProcess?.color}`"
                     @click="submit()"
-                    :loading="form?.processing"
+                    :loading="form.processing"
                 />
             </div>
         </template>
@@ -40,10 +40,9 @@ import Button from "primevue/button";
 // Componentes personalizados
 import GenericModal from '@/Assets/Components/GenericModal.vue';
 
+const form = useForm()
 const proceso = ref(null)
 const alertProcess = ref(null)
-const dataRegistro = ref(null)
-const form = useForm()
 
 const props = defineProps({
     dataModal: Object,
@@ -68,31 +67,22 @@ const submit = () => {
                 cerrarModal();
             },
         });
-    }else if(proceso.value == 'APROBAR'){
-        form.transform((data) => ({
-            ...data,
-            ...dataRegistro.value
-        })).put(route(props.dataModal.dataProceso.ruta, props.dataModal.dataRegistro), {
-            onSuccess: () => {
-                cerrarModal();
-            },
-        });
     }
 }
 
 const procesoExecute = () => {
     const dataProcess = {
-        'APROBAR' : {
-            'alertTitle' : 'Aprobar',
-            'textAlert' : 'aprobar',
-            'icon' : 'bi bi-check',
-            'color' : 'success'
-        },
         'FORCEDELETE' : {
             'alertTitle' : 'Eliminar definitivamente',
             'textAlert' : 'ELIMINAR DEFINITIVAMENTE',
             'icon' : 'pi pi-trash',
             'color' : 'danger'
+        },
+        'RESTORE' : {
+            'alertTitle' : 'Restaurar',
+            'textAlert' : 'restaurar',
+            'icon' : 'bi bi-arrow-counterclockwise',
+            'color' : 'success'
         },
         'DELETE' : {
             'alertTitle' : 'Eliminar',
@@ -111,9 +101,6 @@ const procesoExecute = () => {
 }
 
 // Watchers
-watch(() => props.dataModal.dataRegistro, newVal => {
-    dataRegistro.value = {...newVal}
-})
 watch(() => props.dataModal.dataProceso, (newVal) => {
     proceso.value = newVal?.proceso.toUpperCase() ?? null
     procesoExecute()

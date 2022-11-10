@@ -99,12 +99,12 @@ import ColorPicker from 'primevue/colorpicker';
 import Checkbox from 'primevue/checkbox';
 
 // Inputs
-import InputText from "@/Components/Forms/InputText.vue";
-import Textarea from "@/Components/Forms/Textarea.vue";
-import Dropdown from '@/Components/Forms/Dropdown.vue';
-import Calendar from '@/Components/Forms/Calendar.vue';
+import InputText from "@/Assets/Components/Forms/InputText.vue";
+import Textarea from "@/Assets/Components/Forms/Textarea.vue";
+import Dropdown from '@/Assets/Components/Forms/Dropdown.vue';
+import Calendar from '@/Assets/Components/Forms/Calendar.vue';
 
-import GenericModal from '@/Components/GenericModal.vue';
+import GenericModal from '@/Assets/Components/GenericModal.vue';
 
 const tipoPeriodo = ref(null)
 const mostrarFechaInicio = ref(null)
