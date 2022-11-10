@@ -17,10 +17,10 @@ defineProps({
     title: String,
 });
 </script>
-    
+
     <template>
         <Head :title="title" />
-        <div>        
+        <div>
             <div
                 class="min-h-screen dark:modoOscuro"
                 :class="{ modoOscuro: darkMode }"
@@ -28,7 +28,6 @@ defineProps({
             >
             <Menubar :model="items" class="container-fluid">
                 <template #start>
-                    Algo al principio
                 </template>
                 <template #end>
                     <div class="d-flex align-items-center space-x-2">
@@ -47,14 +46,14 @@ defineProps({
                         <Link :href="route('login')" class="text-sm text-gray-400 underline">
                             Iniciar sesión
                         </Link>
-    
+
                         <Link :href="route('register')" class="ml-4 text-sm text-gray-400 underline">
                             Crear usuario
                         </Link>
                     </div>
                 </template>
             </Menubar>
-    
+
                 <!-- Page Content -->
                 <div class="col-md-">
                     <slot name="content"/>
@@ -62,7 +61,7 @@ defineProps({
             </div>
         </div>
     </template>
-    
+
     <script>
     export default {
         data() {
@@ -168,7 +167,7 @@ defineProps({
         },
     };
     </script>
-    
+
 <style>
 .modoOscuro {
     background-color: #20262e;
@@ -208,5 +207,5 @@ defineProps({
     }
 }
     </style>
-    
-    
+
+

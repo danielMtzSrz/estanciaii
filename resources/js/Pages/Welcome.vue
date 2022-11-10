@@ -42,7 +42,7 @@ console.log(props.vacantes)
 </script>
 
 <template>
-    <Head :title="title" />    
+    <Head :title="title" />
         <div
             class="dark:modoOscuro h-auto"
             :class="{ modoOscuro: darkMode, 'surface-hover' : !darkMode }"
@@ -50,7 +50,6 @@ console.log(props.vacantes)
         >
         <Menubar class="container-fluid">
             <template #start>
-                Algo al principio
             </template>
             <template #end>
                 <div class="d-flex align-items-center space-x-2">
@@ -115,7 +114,7 @@ console.log(props.vacantes)
                                             <div class="col-sm-4 my-auto mb-3">
                                                 <div class="flex align-items-center mb-2 col-sm-12">
                                                     <div class="col-sm-2">
-                                                        <Avatar 
+                                                        <Avatar
                                                             class="p-avatar-lg p-avatar-circle"
                                                             :image="`/storage/${slotProps.data.empresa.imagen}`"
                                                         />
@@ -124,7 +123,7 @@ console.log(props.vacantes)
                                                         <p class="text-2xl font-semibold">{{ slotProps.data.empresa.name }}</p>
                                                     </div>
                                                 </div>
-                                                <img 
+                                                <img
                                                     class="my-auto"
                                                     :src="`/storage/${slotProps.data.imagen}`"
                                                     :alt="slotProps.data.name"
@@ -157,7 +156,7 @@ console.log(props.vacantes)
                                             <div class="col-sm-4 my-auto mb-3">
                                                 <div class="flex align-items-center mb-2 col-sm-12">
                                                     <div class="col-sm-2">
-                                                        <Avatar 
+                                                        <Avatar
                                                             class="p-avatar-lg p-avatar-circle"
                                                             :image="`/storage/${slotProps.data.empresa.imagen}`"
                                                         />
@@ -166,7 +165,7 @@ console.log(props.vacantes)
                                                         <p class="text-2xl font-semibold ms-2">{{ slotProps.data.empresa.name }}</p>
                                                     </div>
                                                 </div>
-                                                <img 
+                                                <img
                                                     class="my-auto"
                                                     :src="`/storage/${slotProps.data.imagen}`"
                                                     :alt="slotProps.data.name"
@@ -196,7 +195,7 @@ console.log(props.vacantes)
                                 <div class="product-item m-auto p-auto">
                                     <div class="product-item-content ms-4">
                                         <div class="mb-3">
-                                            <img 
+                                            <img
                                                 class="m-auto"
                                                 :src="`/storage/${slotProps.data.imagen}`"
                                                 :alt="slotProps.data.name"
