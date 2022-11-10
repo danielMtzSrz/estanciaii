@@ -123,6 +123,70 @@ export default {
                     ],
                 },
                 {
+                    label: "Calendarizaciones",
+                    icon: "pi pi-calendar",
+                    items: [
+                        {
+                            label: "Periodos",
+                            icon: "bi bi-calendar3",
+                            command: () => {
+                                this.$inertia.visit(
+                                    route("Calendarizaciones.Periodos.index")
+                                );
+                            },
+                        },
+                        {
+                            label: "Tipos de periodos",
+                            icon: "bi bi-calendar2-check",
+                            command: () => {
+                                this.$inertia.visit(
+                                    route(
+                                        "Calendarizaciones.TiposPeriodos.index"
+                                    )
+                                );
+                            },
+                        },
+                        {
+                            label: "Días de la semana",
+                            icon: "bi bi-calendar2-week",
+                            command: () => {
+                                this.$inertia.visit(
+                                    route("Calendarizaciones.DiasSemana.index")
+                                );
+                            },
+                        },
+                        {
+                            label: "Tipos de convocatorias",
+                            icon: "bi bi-pencil-square",
+                            command: () => {
+                                this.$inertia.visit(
+                                    route("Calendarizaciones.TipoConv.index")
+                                );
+                            },
+                        },
+                        {
+                            label: "Convocatorias",
+                            icon: "bi bi-files-alt",
+                            command: () => {
+                                this.$inertia.visit(
+                                    route(
+                                        "Calendarizaciones.Convocatorias.index"
+                                    )
+                                );
+                            },
+                        },
+                        {
+                            label: "Horarios",
+                            icon: "bi bi-clock",
+                            command: () => {
+                                this.$inertia.visit(
+                                    route("Calendarizaciones.Horarios.index")
+                                );
+                            },
+                        },
+                    ],
+                },
+                {
                     label: "Anuncios",
                     icon: "pi pi-bell",
                     command: () => {
