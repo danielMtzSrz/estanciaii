@@ -40,7 +40,7 @@ CREATE TABLE `Empresa_asociada` (
 
 CREATE TABLE `tipoAnuncio` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `empresa_asociada_id` int,
+  `empresa_asociada_id` bigint,
   `titulo` varchar(255),
   `contenido` varchar(255),
   `imagen` varchar(255),
@@ -52,7 +52,7 @@ CREATE TABLE `Anuncios` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `tipo_anuncio_id` bigint,
   `escuela_id` int,
-  `empresa_asociada_id` int,
+  `empresa_asociada_id` bigint,
   `titulo` varchar(255),
   `contenido` varchar(255),
   `imagen` varchar(255),
@@ -167,15 +167,6 @@ CREATE TABLE `colonias` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `municipio_id` bigint,
   `cp` varchar(255),
-  `nombre` varchar(255),
-  `tipo_asentamiento_id` bigint,
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
-);
-
-CREATE TABLE `tiposAsentamientos` (
-  `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `nombre` varchar(255),
   `created_at` timestamp DEFAULT NULL,
   `updated_at` timestamp DEFAULT NULL,
@@ -481,8 +472,6 @@ ALTER TABLE `estados` ADD FOREIGN KEY (`pais_id`) REFERENCES `paises` (`id`);
 ALTER TABLE `municipios` ADD FOREIGN KEY (`estado_id`) REFERENCES `estados` (`id`);
 
 ALTER TABLE `colonias` ADD FOREIGN KEY (`municipio_id`) REFERENCES `municipios` (`id`);
-
-ALTER TABLE `colonias` ADD FOREIGN KEY (`tipo_asentamiento_id`) REFERENCES `tiposAsentamientos` (`id`);
 
 ALTER TABLE `paisPersona` ADD FOREIGN KEY (`nacionalidad_id`) REFERENCES `paises` (`id`);
 
