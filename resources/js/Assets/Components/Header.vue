@@ -187,6 +187,65 @@ export default {
                     ],
                 },
                 {
+                    label:"Gestión Académica",
+                    icon: "pi pi-briefcase",
+                    items:[
+                        {
+                            label: "Carreras",
+                            icon: "bi bi-mortarboard-fill",
+                            command: () => {
+                                this.$inertia.visit(
+                                    route("GestionAcademica.Carreras.index")
+                                );
+                            },
+                        },
+                        {
+                            label: "Cuatrimestres",
+                            icon: "bi bi-collection",
+                            command: () => {
+                                this.$inertia.visit(
+                                    route(
+                                        "GestionAcademica.Cuatrimestres.index"
+                                    )
+                                );
+                            },
+                        },
+                        {
+                            label: "Mapas Curriculares",
+                            icon: "bi bi-calendar2-range",
+                            command: () => {
+                                this.$inertia.visit(
+                                    route(
+                                        "GestionAcademica.MapasCurriculares.index"
+                                    )
+                                );
+                            },
+                        },
+                        
+                        {
+                            label: "Materias",
+                            icon: "pi pi-book",
+                            command: () => {
+                                this.$inertia.visit(
+                                    route("GestionAcademica.Materias.index")
+                                );
+                            },
+                        },
+                        {
+                            label: "Planes de estudio",
+                            icon: "bi bi-journal-bookmark",
+                            command: () => {
+                                this.$inertia.visit(
+                                    route(
+                                        "GestionAcademica.PlanesEstudios.index"
+                                    )
+                                );
+                            },
+                        },
+
+                    ]
+                },
+                {
                     label: "Anuncios",
                     icon: "pi pi-bell",
                     command: () => {
