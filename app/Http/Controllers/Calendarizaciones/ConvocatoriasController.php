@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Calendarizaciones;
 
 use App\Http\Controllers\Controller;
-use App\Models\ServiciosFinancieros\{Servicio};
 use App\Models\Calendarizaciones\{Convocatoria, Periodo, TipoConvocatoria};
 use App\Http\Requests\Calendarizaciones\StoreConvocatoriaRequest;
 use App\Http\Requests\Calendarizaciones\UpdateConvocatoriaRequest;
@@ -24,8 +23,7 @@ class ConvocatoriasController extends Controller{
         });
         $periodos = Periodo::all();
         $tiposConvocatorias = TipoConvocatoria::all();
-        $servicios = Servicio::all();
-        return Inertia::render('Calendarizaciones/Convocatorias/Index', compact('convocatorias', 'periodos', 'tiposConvocatorias', 'servicios'));
+        return Inertia::render('Calendarizaciones/Convocatorias/Index', compact('convocatorias', 'periodos', 'tiposConvocatorias'));
     }
 
     public function create(){

@@ -52,9 +52,4 @@ class Periodo extends Model{
     public function pagos(){
         return $this->hasMany('App\Models\ServiciosFinancieros\Pago');
     }
-
-    // Relación con el modelo SinGrupo/Logs
-    public function log(){
-        return $this->belongsTo('App\Models\SinGrupo\Log');
-    }
 }

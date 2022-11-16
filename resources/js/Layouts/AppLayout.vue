@@ -171,14 +171,12 @@ export default {
         width: 12px;
     }
 
-    ::-webkit-scrollbar-track {
-        background: #20262e;
-    }
+  
 
     ::-webkit-scrollbar-thumb {
-        background-color: #1f2d40;
+        background-color: #565c6323;
         border-radius: 20px;
-        border: 3px solid #2b3e58;
+        border: 3px solid #454e5ab6;
     }
 }
 </style>

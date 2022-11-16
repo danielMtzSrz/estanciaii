@@ -23,8 +23,4 @@ class TipoConvocatoria extends Model{
         return $this->hasMany('App\Models\Calendarizaciones\Convocatoria');
     }
 
-    // Relación con el modelo SinGrupo/Logs
-    public function log(){
-        return $this->belongsTo('App\Models\SinGrupo\Log');
-    }
 }

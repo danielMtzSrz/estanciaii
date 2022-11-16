@@ -24,9 +24,4 @@ class TipoPeriodo extends Model{
     public function periodo(){
         return $this->hasMany('App\Models\Calendarizaciones\Periodo');
     }
-
-    // Relación con el modelo SinGrupo/Logs
-    public function log(){
-        return $this->belongsTo('App\Models\SinGrupo\Log');
-    }
 }

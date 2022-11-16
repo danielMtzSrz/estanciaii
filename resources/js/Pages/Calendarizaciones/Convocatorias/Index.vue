@@ -51,7 +51,6 @@
                     dataRegistro: dataRegistro,
                     dataPeriodos: periodos,
                     dataTiposConvocatorias: tiposConvocatorias,
-                    dataServicios: servicios,
                 }"
                 v-on:visible="(visible) => modalCreateUpdate(null, visible)"
             />
@@ -103,10 +102,6 @@ const props = defineProps({
         type: Object,
         default: null
     },
-    servicios: {
-        type: Object,
-        default: null
-    },
 })
 
 // Métodos
@@ -124,7 +119,6 @@ onMounted(() => {
         {field: 'id', header: 'ID', sortable: true},
         {field: 'tipoConvocatoria.nombre', header: 'Tipo de convocatoria', sortable: true},
         {field: 'periodo.titulo', header: 'Periodo', sortable: true},
-        {field: 'servicio.concepto', header: 'Servicio', sortable: true},
         {field: 'contenido', header: 'Contenido', sortable: true},
     ];
 })

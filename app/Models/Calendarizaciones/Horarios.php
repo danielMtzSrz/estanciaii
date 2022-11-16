@@ -37,10 +37,4 @@ class Horarios extends Model{
     {
         return $this->belongsTo('App\Models\Calendarizaciones\DiasSemana');
     }
-
-    // Relación con el modelo SinGrupo\Logs
-    public function log()
-    {
-        return $this->belongsTo('App\Models\SinGrupo\Logs');
-    }
 }

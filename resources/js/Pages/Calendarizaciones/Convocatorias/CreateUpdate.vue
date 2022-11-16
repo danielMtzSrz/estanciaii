@@ -26,16 +26,6 @@
                             :errors="form.errors.periodo_id"
                         />
                     </div>
-                    <div class="mt-2 col-md-12">
-                        <Dropdown 
-                            :data="dataModal.dataServicios"
-                            label="Servicios"
-                            textDropdown="concepto"
-                            :value="servicio"
-                            @input="form.servicio_id = $event.id, servicio=$event"
-                            :errors="form.errors.servicio_id"
-                        />
-                    </div>
                     <div class="mt-4 col-md-12">
                         <Textarea
                             label="Contenido"
@@ -88,14 +78,12 @@ import GenericModal from '@/Assets/Components/GenericModal.vue';
 
 const periodo = ref(null)
 const tipoConvocatoria = ref(null)
-const servicio = ref(null)
 const mostrarFechaInicio = ref(null)
 const mostrarFechaFin = ref(null)
 
 const form = useForm({
     tipo_convocatoria_id : null,
     periodo_id: null,
-    servicio_id : null,
     contenido: null,
 })
 
@@ -148,11 +136,9 @@ watch(() => props.dataModal.dataRegistro, (newVal, oldVal) => {
     // En caso de que se modifique el registro se llenarán estos campos correspondientes al form.
     tipoConvocatoria.value = newVal?.tipoConvocatoria ?? null
     periodo.value = newVal?.periodo ?? null
-    servicio.value = newVal?.servicio ?? null
 
     form.tipo_convocatoria_id = newVal?.tipoConvocatoria.id ?? null
     form.periodo_id = newVal?.periodo.id ?? null
-    form.servicio_id = newVal?.servicio.id ?? null
     form.contenido = newVal?.contenido ?? null
 })
 </script>

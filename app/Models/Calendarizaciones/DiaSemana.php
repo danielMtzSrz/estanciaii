@@ -22,9 +22,4 @@ class DiaSemana extends Model{
     public function horario(){
         return $this->hasMany('App\Models\Calendarizaciones\Horario');
     }
-
-    // Relación con el modelo SinGrupo/Logs
-    public function log(){
-        return $this->belongsTo('App\Models\SinGrupo\Log');
-    }
 }

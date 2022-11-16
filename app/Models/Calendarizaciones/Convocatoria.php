@@ -30,14 +30,4 @@ class Convocatoria extends Model{
     public function tipoConvocatoria(){
         return $this->belongsTo('App\Models\Calendarizaciones\TipoConvocatoria');
     }
-
-    // Relación con el modelo ServiciosFinancieros/Servicios
-    public function servicio(){
-        return $this->belongsTo('App\Models\ServiciosFinancieros\Servicio');
-    }
-
-    // Relación con el modelo SinGrupo/Logs
-    public function log(){
-        return $this->belongsTo('App\Models\SinGrupo\Log');
-    }
 }

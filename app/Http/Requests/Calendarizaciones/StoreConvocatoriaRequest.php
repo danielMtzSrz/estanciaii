@@ -15,7 +15,6 @@ class StoreConvocatoriaRequest extends FormRequest{
         return [
             'periodo_id' => 'required',
             'tipo_convocatoria_id' => 'required',
-            'servicio_id' => 'required',
             'contenido' => 'required | string',
             'log_id' => '',
         ];
