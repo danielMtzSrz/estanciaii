@@ -42,11 +42,17 @@ class RouteServiceProvider extends ServiceProvider
                 ->name('Calendarizaciones.')
                 ->group(base_path('routes/Calendarizaciones.php'));
 
-                Route::middleware('web')
+            Route::middleware('web')
+                ->namespace($this->namespace)
+                ->prefix('EstructuraAcademica')
+                ->name('EstructuraAcademica.')
+                ->group(base_path('routes/EstructuraAcademica.php'));
+                
+            Route::middleware('web')
                 ->namespace($this->namespace)
                 ->prefix('GestionAcademica')
                 ->name('GestionAcademica.')
-                ->group(base_path('routes/GestionAcademica.php'));    
+                ->group(base_path('routes/GestionAcademica.php'));
         });
     }
 
