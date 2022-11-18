@@ -187,6 +187,57 @@ export default {
                     ],
                 },
                 {
+                    label: "Estructura Académica",
+                    icon: "bi bi-columns-gap",
+                    items: [
+                        {
+                            label: "Aulas",
+                            icon: "bi bi-easel2",
+                            command: () => {
+                                this.$inertia.visit(
+                                    route("EstructuraAcademica.Aulas.index")
+                                );
+                            },
+                        },
+                        {
+                            label: "Aulas Reservación",
+                            icon: "bi bi-calendar-check",
+                            command: () => {
+                                this.$inertia.visit(
+                                    route("EstructuraAcademica.AulasReservacion.index")
+                                );
+                            },
+                        },
+                        {
+                            label: "Edificios",
+                            icon: "bi bi-building",
+                            command: () => {
+                                this.$inertia.visit(
+                                    route("EstructuraAcademica.Edificios.index")
+                                );
+                            },
+                        },
+                        {
+                            label: "Grupos",
+                            icon: "bi bi-people",
+                            command: () => {
+                                this.$inertia.visit(
+                                    route("EstructuraAcademica.Grupos.index")
+                                );
+                            },
+                        },
+                        {
+                            label: "Tipos Aulas",
+                            icon: "bi bi-file-easel",
+                            command: () => {
+                                this.$inertia.visit(
+                                    route("EstructuraAcademica.TiposAulas.index")
+                                );
+                            },
+                        },
+                    ],
+                },
+                {
                     label:"Gestión Académica",
                     icon: "pi pi-briefcase",
                     items:[
