@@ -39,7 +39,7 @@ function env_setup {
     if [ ! -e .env ]; then
         echo "no existe .env ... copiando default"
         cp ./.env.example ./.env
-        return 1
+        set_artisan
     fi
     while read env_var
     do
@@ -100,7 +100,6 @@ function helpAlfred {
 function build {
     compose \
         && build_webpack \
-        && set_artisan \
         || return 1
 }
 
@@ -109,6 +108,50 @@ function deploy {
     docker-compose ${@:-up -d} \
         || return 1
 }
+## SET DEV ENVIROMENT
+function dev {
+    env_setup
+    doc_dev="docker compose"
+    session="laravite"
+    # COMANDS
+    if [[ ${1} == 'down' ]]; then
+        echo "Apagando db"
+        $doc_dev "down" && \
+            tmux kill-session -t $session
+        exit 0
+    fi
+    # dependecias
+    if [ ! -f "vendor/autoload.php" ] ; then
+        compose || exit 1
+    fi
+    if [ ! -e "node_modules" ] ; then
+        $npm i || exit 1
+    fi
+    if [ ! -x $(which tmux) ] ; then
+        echo "Instalar tmux para usar modo dev"
+        exit 1
+    fi
+    #### FIX WORDIR DB SCRIPTS
+    export WORKDIR=$workdir
+
+    ## TMUX
+    # Crea la session
+    tmux new-session -d -s $session
+    window=0
+    tmux rename-window -t $session:$window 'db'
+    tmux send-keys -t $session:$window "$doc_dev up" C-m
+    window=1
+    tmux new-window -t $session:$window -n 'serve'
+    tmux send-keys -t $session:$window 'php artisan serve' C-m
+    window=2
+    tmux new-window -t $session:$window -n 'vite'
+    tmux send-keys -t $session:$window 'npm run dev' C-m
+    # Se atachea a la session
+    if [[ ${1} == '-a' ]]; then
+        tmux attach-session -t $session
+    fi
+}
+
 
 ## ------------------------------------------------------------------ MAIN
 function main {
@@ -122,9 +165,7 @@ function main {
     # if [[ ! -z $ssl_init ]] ; then
     #     echo -e "Creando SSL\n\n"
     #     ssl ${@} \
-    #         && return 0 \
-    #         || return 1
-
+    #         && return 0 \ || return 1
     # fi
     if [[ ! -z $builder ]] ; then
         build \
@@ -154,7 +195,14 @@ while getopts 'bdh-:' OPT; do
 	esac
 done
 
-main ${@} \
-    || exit 0 \
-    || exit 1
+if [ ${1} == 'dev' ]; then
+    shift 1
+    dev ${@} \
+        && exit 0
+else
+    main ${@} \
+        && exit 0 \
+        || exit 1
+fi
+
 

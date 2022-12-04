@@ -27,6 +27,10 @@ services:
             - lms-net
         depends_on:
             - mysql
+        profiles:
+            - "prod"
+
+
     mysql:
         image: mysql/mysql-server:8.0
         ports:
