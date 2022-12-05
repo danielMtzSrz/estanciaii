@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Seguimiento;
 
 use App\Http\Controllers\Controller;
 use App\Models\Seguimiento\Anuncios;
-use App\Models\System\Empresas;
+use App\Models\Empresas;
 use App\Http\Requests\Seguimiento\Anuncios\{StoreAnuncios, UpdateAnuncios};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class AnunciosController extends Controller{
+
 
     public function index(){
 
@@ -32,7 +33,7 @@ class AnunciosController extends Controller{
                 'imagen' => $anuncio->imagen
             ];
         });
-        $empresas = Empresas::orderBy('name', 'asc')->get();
+        $empresas = Empresas::orderBy('nombre_empresa', 'asc')->get();
         return Inertia::render('Seguimiento/Anuncios/Index', compact('anuncios', 'empresas'));
     }
 

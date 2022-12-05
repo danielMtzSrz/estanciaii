@@ -1,31 +1,27 @@
-CREATE TABLE `Area` (
+CREATE TABLE `area` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `descripcion` varchar(255),
   `imagen` varchar(255),
   `created_at` datetime,
-  `modified_at` datetime
+  `updated_at` datetime
 );
 
-CREATE TABLE `Asesorias` (
+CREATE TABLE `asesorias` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `escuela_id` int,
-  `materia_id` int,
-  `maestro_id` int,
+  `materia_id` bigint,
+  `maestro_id` bigint,
   `descripcion` varchar(255),
   `ubicacion` varchar(255),
   `hora_inicio` datetime,
   `hora_fin` datetime,
   `created_at` datetime,
-  `modified_at` datetime
+  `updated_at` datetime
 );
 
-CREATE TABLE `Empresa_asociada` (
+CREATE TABLE `empresasAsociadas` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `pais_id` int,
-  `ciudad_id` int,
-  `municipio_id` int,
-  `delegacion_id` int,
-  `colonia_id` int,
+  `domicilio_id` bigint,
   `calle` varchar(255),
   `numero_exterior` int,
   `numero_interior` int,
@@ -35,29 +31,29 @@ CREATE TABLE `Empresa_asociada` (
   `rfc` varchar(255),
   `imagen` varchar(255),
   `created_at` datetime,
-  `modified_at` datetime
+  `updated_at` datetime
 );
 
 CREATE TABLE `tipoAnuncio` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `empresa_asociada_id` bigint,
+  `empresasAsociadas_id` bigint,
   `titulo` varchar(255),
   `contenido` varchar(255),
   `imagen` varchar(255),
   `created_at` datetime,
-  `modified_at` datetime
+  `updated_at` datetime
 );
 
-CREATE TABLE `Anuncios` (
+CREATE TABLE `anuncios` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `tipo_anuncio_id` bigint,
   `escuela_id` int,
-  `empresa_asociada_id` bigint,
+  `empresasAsociadas_id` bigint,
   `titulo` varchar(255),
   `contenido` varchar(255),
   `imagen` varchar(255),
   `created_at` datetime,
-  `modified_at` datetime
+  `updated_at` datetime
 );
 
 CREATE TABLE `grupos` (
@@ -451,7 +447,27 @@ CREATE TABLE `users` (
   `deleted_at` timestamp DEFAULT NULL
 );
 
-ALTER TABLE `Anuncios` ADD FOREIGN KEY (`tipo_anuncio_id`) REFERENCES `tipoAnuncio` (`id`);
+CREATE TABLE `maestro` (
+  `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `user_id` bigint,
+  `habilidades_blandas` text,
+  `habilidades_profesionales` text,
+  `experiencia_profesional` text,
+  `educacion` text,
+  `idiomas` text,
+  `contacto` text,
+  `created_at` timestamp DEFAULT NULL,
+  `updated_at` timestamp DEFAULT NULL,
+  `deleted_at` timestamp DEFAULT NULL
+);
+
+ALTER TABLE `asesorias` ADD FOREIGN KEY (`materia_id`) REFERENCES `materias` (`id`);
+
+ALTER TABLE `asesorias` ADD FOREIGN KEY (`maestro_id`) REFERENCES `maestro` (`id`);
+
+ALTER TABLE `empresasAsociadas` ADD FOREIGN KEY (`domicilio_id`) REFERENCES `domicilios` (`id`);
+
+ALTER TABLE `anuncios` ADD FOREIGN KEY (`tipo_anuncio_id`) REFERENCES `tipoAnuncio` (`id`);
 
 ALTER TABLE `grupos` ADD FOREIGN KEY (`carrera_id`) REFERENCES `carreras` (`id`);
 
@@ -521,8 +537,10 @@ ALTER TABLE `users` ADD FOREIGN KEY (`nacionalidad_id`) REFERENCES `paises` (`id
 
 ALTER TABLE `users` ADD FOREIGN KEY (`domicilio_id`) REFERENCES `domicilios` (`id`);
 
+ALTER TABLE `maestro` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
 ALTER TABLE `model_has_permissions` ADD FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE;
 
 ALTER TABLE `model_has_roles` ADD FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
 
-ALTER TABLE `Anuncios` ADD FOREIGN KEY (`empresa_asociada_id`) REFERENCES `Empresa_asociada` (`id`);
+ALTER TABLE `anuncios` ADD FOREIGN KEY (`empresasAsociadas_id`) REFERENCES `empresasAsociadas` (`id`);
