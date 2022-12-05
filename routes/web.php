@@ -1,13 +1,11 @@
 <?php
 
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\EmpresasController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
 // Controladores
 use App\Http\Controllers\System\{UserController, RoleController, PermissionController};
 use App\Http\Controllers\Seguimiento\{AnunciosController, VacantesController};
-
 // Modelos
 use Illuminate\Http\Request;
 
@@ -28,4 +26,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // Rutas de seguimiento
     Route::resource('anuncios', AnunciosController::class);
     Route::resource('vacantes', VacantesController::class);
+
+
+    // Rutas de empresas
+    Route::resource("empresas",EmpresasController::class)->except('show','create','edit');
 });
