@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\GestionAcademica\GrupoMateria;
 
 class Grupo extends Model
 {
@@ -40,7 +41,7 @@ class Grupo extends Model
     // Relación con la tabla GestionAcademica/GrupoMateria
     public function grupoMateria()
     {
-        return $this->hasMany('App\Models\GestionAcademica\GrupoMateria');
+        return $this->hasMany(GrupoMateria::class);
     }
 
     // Relación con la tabla User

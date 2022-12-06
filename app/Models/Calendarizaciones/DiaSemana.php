@@ -20,6 +20,6 @@ class DiaSemana extends Model{
 
     // Relación con el modelo Calendarizaciones/Horarios
     public function horario(){
-        return $this->hasMany('App\Models\Calendarizaciones\Horario');
+        return $this->hasMany(Horario::class);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models\EstructuraAcademica;
 
+use App\Models\Calendarizaciones\Horario;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -40,13 +41,13 @@ class Aula extends Model
     // Relación con la tabla EstructuraAcademica/Grupos
     public function grupo()
     {
-        return $this->hasMany('App\Models\EstructuraAcademica\Grupo');
+        return $this->hasMany(Grupo::class);
     }
 
     // Relación con la tabla Calendarizaciones/Horarios
     public function horario()
     {
-        return $this->hasMany('App\Models\Calendarizaciones\Horario');
+        return $this->hasMany(Horario::class);
     }
 
     // Relación con la tabla EstructuraAcademica/TiposAulas
