@@ -2,6 +2,7 @@
 
 namespace App\Models\Calendarizaciones;
 
+use App\Models\GestionAcademica\GrupoMateria;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -40,7 +41,7 @@ class Periodo extends Model{
 
     // Relación con el modelo GestionAcademica\GrupoMateria
     public function grupoMateria(){
-        return $this->hasMany('App\Models\GestionAcademica\GrupoMateria');
+        return $this->hasMany(GrupoMateria::class);
     }
 
     // Relación con el modelo GestionAcademica\Inscripciones

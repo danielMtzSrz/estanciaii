@@ -2,6 +2,7 @@
 
 namespace App\Models\Calendarizaciones;
 
+use App\Models\EstructuraAcademica\Aula;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -29,11 +30,15 @@ class Horario extends Model{
 
     // Relación con el modelo EstructuraAcademica/Aulas
     public function aula(){
-        return $this->belongsTo('App\Models\EstructuraAcademica\Aula');
+        return $this->belongsTo(Aula::class);
     }
 
     // Relación con el modelo Calendarizaciones/DiasSemana
     public function diaSemana(){
-        return $this->belongsTo('App\Models\Calendarizaciones\DiaSemana');
+        return $this->belongsTo(DiaSemana::class);
+    }
+
+    public function horarioGrupoMateria(){
+        return $this->hasMany(HorarioGrupoMateria::class);
     }
 }
