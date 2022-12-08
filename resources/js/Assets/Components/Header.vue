@@ -296,20 +296,20 @@ export default {
 
                     ]
                 },
-                {
-                    label: "Anuncios",
-                    icon: "pi pi-bell",
-                    command: () => {
-                        Inertia.visit(route("anuncios.index"));
-                    },
-                },
-                {
-                    label: "Vacantes",
-                    icon: "pi pi-inbox",
-                    command: () => {
-                        Inertia.visit(route("vacantes.index"));
-                    },
-                },
+                // {
+                //     label: "Anuncios",
+                //     icon: "pi pi-bell",
+                //     command: () => {
+                //         Inertia.visit(route("anuncios.index"));
+                //     },
+                // },
+                // {
+                //     label: "Vacantes",
+                //     icon: "pi pi-inbox",
+                //     command: () => {
+                //         Inertia.visit(route("vacantes.index"));
+                //     },
+                // },
             ],
         };
     },
