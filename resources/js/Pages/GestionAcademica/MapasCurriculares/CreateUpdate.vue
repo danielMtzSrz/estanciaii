@@ -102,9 +102,9 @@
    import { useForm } from "@inertiajs/inertia-vue3";
    
    import Button from "primevue/button";
-   import InputText from "@/Assets/Components/Forms/InputText.vue";
-   import GenericModal from "@/Assets/Components/GenericModal.vue";
-   import InputNumber from "@/Assets/Components/Forms/InputNumber.vue";
+   import InputText from "@/Components/Forms/InputText.vue";
+   import GenericModal from "@/Components/GenericModal.vue";
+   import InputNumber from "@/Components/Forms/InputNumber.vue";
    
    const loading = ref(null)
    const display = ref(null)

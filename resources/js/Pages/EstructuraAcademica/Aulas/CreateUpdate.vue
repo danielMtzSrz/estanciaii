@@ -60,13 +60,13 @@ import { useForm } from "@inertiajs/inertia-vue3";
 import Button from "primevue/button";
 
 // Inputs
-import Dropdown from '@/Assets/Components/Forms/Dropdown.vue';
-import InputText from "@/Assets/Components/Forms/InputText.vue";
+import Dropdown from '@/Components/Forms/Dropdown.vue';
+import InputText from "@/Components/Forms/InputText.vue";
 import InputNumber from 'primevue/inputnumber';
 import InputSwitch from 'primevue/inputswitch';
 import Checkbox from 'primevue/checkbox';
 
-import GenericModal from '@/Assets/Components/GenericModal.vue';
+import GenericModal from '@/Components/GenericModal.vue';
 
 const edificio = ref(null)
 const tipoAula = ref(null)

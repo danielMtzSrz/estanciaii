@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import BreadcrumbItem from '@/Assets/Components/primevue/Menu/BreadcrumbItem.vue';
+import BreadcrumbItem from '@/Components/primevue/Menu/BreadcrumbItem.vue';
 
 export default {
     name: 'Breadcrumb',

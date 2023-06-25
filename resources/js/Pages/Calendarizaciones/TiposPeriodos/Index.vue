@@ -1,5 +1,5 @@
 <template>
-    <GenericLayout titleModule="Tipo de periodo">
+    <GenericLayout titleModule="Tipos de periodos">
         <template #content>
             <GenericTable :data="tiposPeriodos">
                 <template #headerContent>
@@ -78,8 +78,8 @@ import Button from "primevue/button";
 import InputText from "primevue/inputtext";
 
 // Componentes personalizados
-import GenericLayout from '@/Assets/Components/GenericLayout.vue';
-import GenericTable from '@/Assets/Components/GenericTable.vue';
+import GenericLayout from '@/Layouts/GenericLayout.vue';
+import GenericTable from '@/Components/GenericTable.vue';
 
 // Componentes de los modales
 import FormCreateUpdate from '@/Pages/Calendarizaciones/TiposPeriodos/CreateUpdate.vue';

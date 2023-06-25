@@ -1,6 +1,6 @@
 <template>
 
-   <GenericLayout titleModule="CRUD cuatrimestres">
+   <GenericLayout titleModule="Cuatrimestres">
       <template #content>
         <GenericTable :data="cuatrimestres">
           <template #headerContent>
@@ -77,8 +77,8 @@ import moment from 'moment';
 import Column from "primevue/column";
 import Button from "primevue/button";
 
-import GenericLayout from "@/Assets/Components/GenericLayout.vue";
-import GenericTable from "@/Assets/Components/GenericTable.vue";
+import GenericLayout from "@/Layouts/GenericLayout.vue";
+import GenericTable from "@/Components/GenericTable.vue";
 
 import FormCreateUpdate from "@/Pages/GestionAcademica/Cuatrimestres/CreateUpdate.vue";
 import FormDelete from "@/Pages/GestionAcademica/Cuatrimestres/Delete.vue";

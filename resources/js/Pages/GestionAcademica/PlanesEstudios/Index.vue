@@ -79,8 +79,8 @@
     import Button from "primevue/button";
     import InputText from "primevue/inputtext";
  
-    import GenericLayout from '@/Assets/Components/GenericLayout.vue';
-    import GenericTable from '@/Assets/Components/GenericTable.vue';
+    import GenericLayout from '@/Layouts/GenericLayout.vue';
+    import GenericTable from '@/Components/GenericTable.vue';
  
     import FormCreateUpdate from '@/Pages/GestionAcademica/PlanesEstudios/CreateUpdate.vue';
     import FormDelete from '@/Pages/GestionAcademica/PlanesEstudios/Delete.vue';

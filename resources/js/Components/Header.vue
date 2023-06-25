@@ -1,22 +1,15 @@
 <script setup>
-/* Componentes de Vue */
-import { ref, watch } from "vue";
+// Componentes de Vue
 import { Inertia } from "@inertiajs/inertia";
-import { Head, Link } from "@inertiajs/inertia-vue3";
-/* Componentes de Jetstream */
-import JetApplicationMark from "@/Jetstream/ApplicationMark.vue";
-import JetBanner from "@/Jetstream/Banner.vue";
-import JetDropdown from "@/Jetstream/Dropdown.vue";
-import JetDropdownLink from "@/Jetstream/DropdownLink.vue";
-import JetNavLink from "@/Jetstream/NavLink.vue";
-import JetResponsiveNavLink from "@/Jetstream/ResponsiveNavLink.vue";
-/* Componentes de primevue */
+
+// Componentes de primevue
 import Button from "primevue/button";
-import Sidebar from "primevue/sidebar";
-import PanelMenu from "@/Assets/Components/primevue/Menu/PanelMenu.vue";
 import Menubar from "primevue/menubar";
-import Avatar from "primevue/avatar";
-import UserMenu from "@/Assets/Components/UserMenu.vue";
+import UserMenu from "@/Components/UserMenu.vue";
+import Avatar from 'primevue/avatar'
+
+// Layouts
+import Sidebar from "@/Layouts/Sidebar.vue";
 
 const props = defineProps({
     title: String,
@@ -24,23 +17,10 @@ const props = defineProps({
         type: Boolean,
         default: null,
     },
+    titleModule: String
 });
 
 const emits = defineEmits(["themeColor"]);
-
-const showingNavigationDropdown = ref(false);
-
-const switchToTeam = (team) => {
-    Inertia.put(
-        route("current-team.update"),
-        {
-            team_id: team.id,
-        },
-        {
-            preserveState: false,
-        }
-    );
-};
 
 const logout = () => {
     Inertia.post(route("logout"));
@@ -48,25 +28,13 @@ const logout = () => {
 </script>
 
 <template>
-    <div class="flex my-auto">
+    <div class="d-flex">
         <Menubar :model="items" class="container-fluid">
             <template #start>
-                <Sidebar v-model:visible="visibleLeft" class="ps-2">
-                    <Avatar
-                        :image="$page.props.user.profile_photo_url"
-                        size="xlarge"
-                        class="p-avatar-circle"
-                    ></Avatar>
-                    <div class="my-2">
-                        <p class="h6">{{ $page.props.user.name }}</p>
-                        <small>{{ $page.props.user.email }}</small>
-                    </div>
-                </Sidebar>
-                <Button
-                    icon="pi pi-align-justify"
-                    @click="visibleLeft = true"
-                    class="p-button-text p-button-sm p-button-secondary"
-                />
+                <div class="d-flex">
+                    <!-- <Sidebar :items="items"/> -->
+                    <plaintext class="mx-2 my-0 py-0 text-2xl font-light" style="font-family: Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;">{{ title }}</plaintext>
+                </div>
             </template>
             <template #end>
                 <div class="d-flex align-items-center">
@@ -93,7 +61,6 @@ const logout = () => {
 export default {
     data() {
         return {
-            visibleLeft: false,
             items: [
                 {
                     label: "Sistema",

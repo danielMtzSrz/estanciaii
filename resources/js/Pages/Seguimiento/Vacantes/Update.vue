@@ -135,7 +135,7 @@ import Tooltip from "primevue/tooltip";
 import Dropdown from 'primevue/dropdown';
 import Avatar from 'primevue/avatar';
 import Editor from 'primevue/editor';
-import FileUpload from '@/Assets/Components/primevue/Input/FileUpload.vue';
+import FileUpload from '@/Components/primevue/Input/FileUpload.vue';
 
 export default {
     directives: {

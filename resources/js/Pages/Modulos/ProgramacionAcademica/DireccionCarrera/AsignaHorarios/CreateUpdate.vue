@@ -44,9 +44,9 @@
 import { ref, watch } from 'vue';
 import { useForm } from "@inertiajs/inertia-vue3";
 import Button from "primevue/button";
-import CalendarTime from '@/Assets/Components/Forms/CalendarTime.vue'
-import Dropdown from '@/Assets/Components/Forms/Dropdown.vue';
-import GenericModal from '@/Assets/Components/GenericModal.vue';
+import CalendarTime from '@/Components/Forms/CalendarTime.vue'
+import Dropdown from '@/Components/Forms/Dropdown.vue';
+import GenericModal from '@/Components/GenericModal.vue';
 
 const aula = ref(null)
 const diaSemana = ref(null)

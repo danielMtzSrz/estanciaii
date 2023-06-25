@@ -2,14 +2,17 @@
     <div>
         <Toast />
         <Head :title="title" />
-        <JetBanner />
 
         <div
             class="min-h-screen dark:modoOscur"
             :class="{ modoOscuro: darkMode, 'bg-gray-300' : !darkMode }"
             id="contentMain"
         >
-            <Header :darkMode="darkMode" @themeColor="themeColor"> </Header>
+            <Header 
+                :darkMode="darkMode"
+                @themeColor="themeColor"
+                :title="title"
+            />
 
             <!-- Page Content -->
             <div class="container mt-4">
@@ -23,16 +26,16 @@
 </template>
 
 <script>
-import { computed, ref, watch } from "vue";
+import { computed, watch } from "vue";
 import { Head, usePage } from "@inertiajs/inertia-vue3";
 import JetBanner from "@/Jetstream/Banner.vue";
-import Header from "@/Assets/Components/Header.vue";
+import Header from "@/Components/Header.vue";
 import InputSwitch from "primevue/inputswitch";
-import Breadcrumb from "@/Assets/Components/primevue/Menu/Breadcrumb.vue";
+import Breadcrumb from "@/Components/primevue/Menu/Breadcrumb.vue";
 import Toast from "primevue/toast";
 import Button from "primevue/button";
 import { useToast } from "primevue/usetoast";
-import { Inertia } from "@inertiajs/inertia";
+
 export default {
     mounted() {
         const toast = useToast();
@@ -98,6 +101,7 @@ export default {
     props: {
         title: String,
         breadcrumbItems: Array,
+        titleModule: String,
     },
     methods: {
         theme() {

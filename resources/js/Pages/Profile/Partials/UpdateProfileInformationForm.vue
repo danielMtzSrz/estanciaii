@@ -11,7 +11,7 @@ import JetActionMessage from '@/Jetstream/ActionMessage.vue';
 import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue';
 
 import Button from 'primevue/button';
-import InputText from "@/Assets/Components/Forms/InputText.vue";
+import InputText from "@/Components/Forms/InputText.vue";
 
 const props = defineProps({
     user: Object,

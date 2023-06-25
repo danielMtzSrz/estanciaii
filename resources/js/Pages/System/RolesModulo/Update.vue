@@ -64,7 +64,7 @@ import Divider from 'primevue/divider';
 import Tooltip from "primevue/tooltip";
 
 // Personalizados
-import Checkbox from "@/Assets/Components/primevue/Input/Checkbox.vue";
+import Checkbox from "@/Components/primevue/Input/Checkbox.vue";
 
 export default {
     directives: {

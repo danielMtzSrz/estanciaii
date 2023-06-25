@@ -38,7 +38,7 @@
    import { useForm } from "@inertiajs/inertia-vue3";
 
    import Button from "primevue/button";
-   import GenericModal from "@/Assets/Components/GenericModal.vue";
+   import GenericModal from "@/Components/GenericModal.vue";
    
    const form = useForm()
    const titulo = 'Eliminar cuatrimestre';

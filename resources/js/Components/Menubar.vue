@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import MenubarSub from '@/Assets/Components/MenubarSub.vue';
+import MenubarSub from '@/Components/MenubarSub.vue';
 import {ZIndexUtils} from 'primevue/utils';
 
 export default {

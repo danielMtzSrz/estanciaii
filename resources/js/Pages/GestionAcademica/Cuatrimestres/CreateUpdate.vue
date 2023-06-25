@@ -41,8 +41,8 @@ import { ref, watch } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 
 import Button from "primevue/button";
-import InputText from "@/Assets/Components/Forms/InputText.vue";
-import GenericModal from "@/Assets/Components/GenericModal.vue";
+import InputText from "@/Components/Forms/InputText.vue";
+import GenericModal from "@/Components/GenericModal.vue";
 
 const loading = ref(null)
 const display = ref(null)

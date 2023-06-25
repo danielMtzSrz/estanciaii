@@ -56,12 +56,12 @@ import Column from 'primevue/column';
 import Button from "primevue/button";
 
 // Componentes personalizados
-import GenericLayout from '@/Assets/Components/GenericLayout.vue';
-import GenericTable from '@/Assets/Components/GenericTable.vue';
+import GenericLayout from '@/Layouts/GenericLayout.vue';
+import GenericTable from '@/Components/GenericTable.vue';
 
 // Componentes de los modales
 import FormCreateUpdate from '@/Pages/EstructuraAcademica/Edificios/CreateUpdate.vue';
-import GenericAlert from '@/Assets/Components/GenericAlert.vue';
+import GenericAlert from '@/Components/GenericAlert.vue';
 
 // Variables
 const displayCreateUpdate = ref(null)

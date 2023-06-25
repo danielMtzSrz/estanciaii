@@ -1,21 +1,13 @@
 <template>
-    <app-layout>
-        <div class="text-center mt-3">
-            <p class="display-6">Bienvenido</p>
-        </div>
-
-    </app-layout>
+    <AppLayout>
+        <!-- Code -->
+    </AppLayout>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 
 // Primevue
-import Button from "primevue/button";
-import InputText from "primevue/inputtext";
-import Avatar from "primevue/avatar";
-import Card from 'primevue/card';
-import Image from 'primevue/image';
 import { Inertia } from '@inertiajs/inertia'
 
 // Layout padre

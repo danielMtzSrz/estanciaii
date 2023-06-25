@@ -115,12 +115,12 @@ import { useForm } from "@inertiajs/inertia-vue3";
 import Button from "primevue/button";
 import Tooltip from "primevue/tooltip";
 
-import GenericModal from "@/Assets/Components/GenericModal.vue";
+import GenericModal from "@/Components/GenericModal.vue";
 // Inputs
-import InputColonia from "@/Assets/Components/Forms/InputColonia.vue";
-import Textarea from "@/Assets/Components/Forms/Textarea.vue";
-import InputText from "@/Assets/Components/Forms/InputText.vue";
-import InputNumber from "@/Assets/Components/Forms/InputNumber.vue";
+import InputColonia from "@/Components/Forms/InputColonia.vue";
+import Textarea from "@/Components/Forms/Textarea.vue";
+import InputText from "@/Components/Forms/InputText.vue";
+import InputNumber from "@/Components/Forms/InputNumber.vue";
 
 const loading = ref(null);
 const display = ref(null);

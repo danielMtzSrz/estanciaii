@@ -35,7 +35,7 @@
    
    import Button from "primevue/button";
    
-   import GenericModal from '@/Assets/Components/GenericModal.vue';
+   import GenericModal from '@/Components/GenericModal.vue';
    
    const titulo= 'Eliminar carrera'
    const form = useForm()

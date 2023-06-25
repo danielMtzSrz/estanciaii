@@ -10,7 +10,7 @@ import JetLabel from '@/Jetstream/Label.vue';
 
 import Button from 'primevue/button';
 import Password from 'primevue/password';
-import InputText from "@/Assets/Components/Forms/InputText.vue";
+import InputText from "@/Components/Forms/InputText.vue";
 
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);

@@ -24,21 +24,21 @@ import { Link } from "@inertiajs/inertia-vue3";
 import VueGates from "vue-gates";
 import Permissions from "./Plugins/Permissions";
 
-const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
-    routes: [],
-});
+// Pinia
+import { createPinia } from 'pinia'
 
-const appName =
-    window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
+const 
+    router = createRouter({
+        history: createWebHistory(import.meta.env.BASE_URL),
+        routes: [],
+    }),
+    pinia = createPinia(),
+    appName = window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) =>
-        resolvePageComponent(
-            `./Pages/${name}.vue`,
-            import.meta.glob("./Pages/**/*.vue")
-        ),
+        resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob("./Pages/**/*.vue")),
     setup({ el, app, props, plugin }) {
         return createApp({ render: () => h(app, props) })
             .use(plugin)
@@ -48,6 +48,7 @@ createInertiaApp({
             .use(router)
             .use(VueGates)
             .use(Permissions)
+            .use(pinia)
             .component("Link", Link)
             .directive('tooltip', Tooltip)
             .mount(el);

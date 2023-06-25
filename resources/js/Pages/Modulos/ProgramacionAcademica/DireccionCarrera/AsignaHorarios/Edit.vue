@@ -54,11 +54,11 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import Button from 'primevue/button';
 import Column from 'primevue/column';
 import Panel from 'primevue/panel';
-import TimeTable from "@/Assets/Components/TimeTable.vue"
+import TimeTable from "@/Components/TimeTable.vue"
 
 import FormCreateUpdate from '@/Pages/Modulos/ProgramacionAcademica/DireccionCarrera/AsignaHorarios/CreateUpdate.vue';
-import GenericAlert from '@/Assets/Components/GenericAlert.vue';
-import GenericTable from '@/Assets/Components/GenericTable.vue';
+import GenericAlert from '@/Components/GenericAlert.vue';
+import GenericTable from '@/Components/GenericTable.vue';
 
 const props = defineProps({
     grupoMateria: {

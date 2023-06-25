@@ -63,12 +63,12 @@ import { useForm } from "@inertiajs/inertia-vue3";
 import Button from "primevue/button";
 
 // Inputs
-import Dropdown from '@/Assets/Components/Forms/Dropdown.vue';
-import InputText from "@/Assets/Components/Forms/InputText.vue";
-import Calendar from '@/Assets/Components/Forms/Calendar.vue';
-import Textarea from "@/Assets/Components/Forms/Textarea.vue";
+import Dropdown from '@/Components/Forms/Dropdown.vue';
+import InputText from "@/Components/Forms/InputText.vue";
+import Calendar from '@/Components/Forms/Calendar.vue';
+import Textarea from "@/Components/Forms/Textarea.vue";
 
-import GenericModal from '@/Assets/Components/GenericModal.vue';
+import GenericModal from '@/Components/GenericModal.vue';
 
 const aula = ref(null)
 const solicitante = ref(null)

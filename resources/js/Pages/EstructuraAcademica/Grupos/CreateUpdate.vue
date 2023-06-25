@@ -54,11 +54,11 @@ import { useForm } from "@inertiajs/inertia-vue3";
 import Button from "primevue/button";
 
 // Inputs
-import Dropdown from '@/Assets/Components/Forms/Dropdown.vue';
-import InputText from "@/Assets/Components/Forms/InputText.vue";
+import Dropdown from '@/Components/Forms/Dropdown.vue';
+import InputText from "@/Components/Forms/InputText.vue";
 import InputSwitch from 'primevue/inputswitch';
 
-import GenericModal from '@/Assets/Components/GenericModal.vue';
+import GenericModal from '@/Components/GenericModal.vue';
 
 const carrera = ref(null)
 const aula = ref(null)

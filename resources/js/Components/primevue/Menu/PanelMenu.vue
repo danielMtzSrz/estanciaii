@@ -35,7 +35,7 @@
 
 <script>
 import { Link } from "@inertiajs/inertia-vue3";
-import PanelMenuSub from "@/Assets/Components/primevue/Menu/PanelMenuSub.vue";
+import PanelMenuSub from "@/Components/primevue/Menu/PanelMenuSub.vue";
 import {UniqueComponentId} from 'primevue/utils';
 
 export default {

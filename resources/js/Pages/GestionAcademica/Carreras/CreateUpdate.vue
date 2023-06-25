@@ -70,12 +70,12 @@
    import Button from "primevue/button";
    import Checkbox from 'primevue/checkbox';
    
-   import InputText from "@/Assets/Components/Forms/InputText.vue";
-   import InputNumber from "@/Assets/Components/Forms/InputNumber.vue";
-   import Textarea from "@/Assets/Components/Forms/Textarea.vue";
-   import Dropdown from '@/Assets/Components/Forms/Dropdown.vue';
+   import InputText from "@/Components/Forms/InputText.vue";
+   import InputNumber from "@/Components/Forms/InputNumber.vue";
+   import Textarea from "@/Components/Forms/Textarea.vue";
+   import Dropdown from '@/Components/Forms/Dropdown.vue';
    
-   import GenericModal from '@/Assets/Components/GenericModal.vue';
+   import GenericModal from '@/Components/GenericModal.vue';
    
    const tipoCoordinacion = ref(null)
 
