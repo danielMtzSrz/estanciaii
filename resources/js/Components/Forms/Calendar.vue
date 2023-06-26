@@ -7,11 +7,11 @@
             <Calendar
                 :class="{'p-invalid': errors}"
                 :name="name"
-                @date-select="selected($event)"
-                dateFormat="yy-mm-dd"
+                @date-select="selected"
                 :showTime="showTime"
+                dateFormat="dd-mm-yy"
                 hourFormat="24"
-                v-model="value"
+                v-model="inputValue"
             />
             <label class="mb-2"> {{ label }}</label>
         </span>
@@ -27,7 +27,7 @@ import { ref } from 'vue';
 // Primevue
 import Calendar from 'primevue/calendar';
 
-const inputValue = ref(props.value)
+const inputValue = ref(props.value ? new Date(props.value) : null)
 
 const props = defineProps({
     icon: String,
@@ -60,7 +60,20 @@ const props = defineProps({
 const emits = defineEmits(['input'])
 
 const selected = (event) => {
-    inputValue.value = event.toLocaleDateString("en-CA", { hour12: false, hour: 'numeric', minute: 'numeric'})
-    emits('input', {valueFormat: inputValue.value, valueShow: event});
+    inputValue.value = event
+    let valorFormateado = null
+    if(props.showTime){
+        let month = ("0" + (event.getMonth() + 1)).slice(-2),
+            day   = ("0" + (event.getDate())).slice(-2),
+            year  = event.getFullYear(),
+            hour  = ("0" + (event.getHours())).slice(-2),
+            min   = ("0" + (event.getMinutes())).slice(-2),
+            seg   = "59";
+
+        valorFormateado = year + "-" + month + "-" + day + " " + hour + ":" +  min + ":" + seg;
+    }else{
+        valorFormateado = event.toLocaleDateString("en-CA")
+    }
+    emits('input', {valueFormat: valorFormateado, valueShow: event});
 }
 </script> 

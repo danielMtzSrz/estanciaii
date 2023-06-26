@@ -189,6 +189,8 @@ Propiedades dentro de filters: {}
             >
                 <!-- Table data -->
                 <template #body="{ data, index }">
+                    
+                    <!-- Campo de texto -->
                     <template v-if="item.dataField.type === 'text'">
                         <template v-if="data[item.dataField.field]">
                             {{ data[item.dataField.field] }}
@@ -197,12 +199,18 @@ Propiedades dentro de filters: {}
                             <span class="p-error">Sin definir</span>
                         </template>
                     </template>
+
+                    <!-- Campo de fecha -->
                     <template v-if="item.dataField.type === 'date'">
                         {{ formatDate(data[item.dataField.field]) }}
                     </template>
+
+                    <!-- Campo de fecha con hora -->
                     <template v-if="item.dataField.type === 'datetime'">
                         {{ formatDateTime(data[item.dataField.field]) }}
                     </template>
+
+                    <!-- Campo de imagen -->
                     <template v-else-if="item.dataField.type === 'image'">
                         <Image
                             :src="`/storage/${data[item.dataField.field]}`"
@@ -211,24 +219,21 @@ Propiedades dentro de filters: {}
                             preview
                         />
                     </template>
+
+                    <!-- Campo de Avatar -->
                     <template v-else-if="item.dataField.type === 'avatar'">
                         <div class="flex align-items-center">
                             <Avatar
                                 class="p-avatar-image p-avatar-circle p-avatar-lg"
-                                :image="`${
-                                    data[item.dataField.field]?.substring(
-                                        0,
-                                        4
-                                    ) == 'http'
-                                        ? ''
-                                        : '/storage/'
-                                }${data[item.dataField.field]}`"
+                                :image="`${data[item.dataField.field]?.substring(0, 4) == 'http' ? '' : '/storage/'}${data[item.dataField.field]}`"
                             />
                             <p class="my-0 py-0 ms-3">
                                 {{ data[item.dataField.avatarText] }}
                             </p>
                         </div>
                     </template>
+
+                    <!-- Campo con renderización de HTML -->
                     <template v-else-if="item.dataField.type === 'html'">
                         <Button
                             type="button"
@@ -268,6 +273,8 @@ Propiedades dentro de filters: {}
 
                 <!-- Filtros -->
                 <template #filter="{ filterModel }" v-if="item.filters.active">
+
+                    <!-- Filtro de Texto -->
                     <template v-if="item.filters.type === 'text'">
                         <InputText
                             type="text"
@@ -276,6 +283,8 @@ Propiedades dentro de filters: {}
                             placeholder="Búscar"
                         />
                     </template>
+
+                    <!-- Filtro numérico -->
                     <template v-else-if="item.filters.type === 'numeric'">
                         <InputNumber
                             v-model="filterModel.value"
@@ -296,6 +305,8 @@ Propiedades dentro de filters: {}
                             placeholder="Búscar"
                         />
                     </template>
+
+                    <!-- Filtro de fecha -->
                     <template v-else-if="item.filters.type === 'date'">
                         <Calendar
                             v-model="filterModel.value"
@@ -397,30 +408,26 @@ const props = defineProps({
     },
 });
 
-const openModal = (index) => (displayHTML.value[index] = true);
-const closeModal = (index) => (displayHTML.value[index] = false);
-const formatDate = (fecha) => moment(fecha).format("D [de] MMM YYYY");
-const formatDateTime = (fecha) =>
-    moment(fecha).format("D [de] MMM, YYYY - h:mm:ss a");
+const openModal      = (index) => displayHTML.value[index] = true;
+const closeModal     = (index) => displayHTML.value[index] = false;
+const formatDate     = (fecha) => moment(fecha).format("D [de] MMM YYYY");
+const formatDateTime = (fecha) => moment(fecha).format("D [de] MMM, YYYY - h:mm:ss a");
 
 moment.locale("es", {
-    months: "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split(
-        "_"
-    ),
-    monthsShort:
-        "Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dic.".split("_"),
-    weekdays: "Domingo_Lunes_Martes_Miercoles_Jueves_Viernes_Sabado".split("_"),
-    weekdaysShort: "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
-    weekdaysMin: "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
+    months : "Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre".split("_"),
+    monthsShort : "Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dic.".split("_"),
+    weekdays : "Domingo_Lunes_Martes_Miercoles_Jueves_Viernes_Sabado".split("_"),
+    weekdaysShort : "Dom._Lun._Mar._Mier._Jue._Vier._Sab.".split("_"),
+    weekdaysMin : "Do_Lu_Ma_Mi_Ju_Vi_Sa".split("_"),
 });
 
 const dat = computed(() => {
     let dat = props.data;
     props.items
-        // filtra por las fechas
+        // Filtra por las fechas
         .filter((item) => item.filters.type === "date")
         .forEach(({ dataField }) => {
-            // cambia las fechas de string a Date
+            // Cambia las fechas de String a Date
             dat = props?.data?.map((dato) => {
                 dato[dataField.field] = new Date(dato[dataField.field]);
                 return dato;
@@ -429,8 +436,10 @@ const dat = computed(() => {
     return dat
 });
 
+// Emits
 const emits = defineEmits(["rowSelect", "rowUnselect"]);
 
-const onRowSelect = (event) => emits("rowSelect", event);
+// Methods
+const onRowSelect   = (event) => emits("rowSelect", event);
 const onRowUnselect = (event) => emits("rowUnselect", event);
 </script>

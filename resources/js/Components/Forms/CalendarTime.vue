@@ -10,7 +10,7 @@
                 @date-select="selected($event)"
                 hourFormat="24"
                 :timeOnly="true"
-                v-model="value"
+                v-model="inputValue"
             />
             <label class="mb-2"> {{ label }}</label>
         </span>
@@ -55,7 +55,15 @@ const props = defineProps({
 const emits = defineEmits(['input'])
 
 const selected = (event) => {
-    inputValue.value = event.toLocaleTimeString("en-CA", { hour12: false, hour: 'numeric', minute: 'numeric'})
-    emits('input', {valueFormat: inputValue.value, valueShow: event});
+    inputValue.value = event
+
+    let valorFormateado = null,
+        hour = ("0" + (event.getHours())).slice(-2),
+        min  = ("0" + (event.getMinutes())).slice(-2),
+        seg  = "00"
+
+    valorFormateado = hour + ":" +  min + ":" + seg;
+
+    emits('input', {valueFormat: valorFormateado, valueShow: event});
 }
 </script> 

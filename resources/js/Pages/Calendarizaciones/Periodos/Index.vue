@@ -76,7 +76,6 @@ import {ref, onMounted} from 'vue';
 // Componentes de primevue
 import Column from 'primevue/column';
 import Button from "primevue/button";
-import InputText from "primevue/inputtext";
 
 // Componentes personalizados
 import GenericLayout from '@/Layouts/GenericLayout.vue';
@@ -119,7 +118,6 @@ onMounted(() => {
         {field: 'id', header: 'ID', sortable: true},
         {field: 'tipoPeriodo.nombre', header: 'Tipo de periodo', sortable: true},
         {field: 'titulo', header: 'Título', sortable: true},
-        {field: 'descripcion', header: 'Descripción', sortable: true},
         {field: 'fecha_inicio', header: 'Fecha inicio', sortable: true},
         {field: 'fecha_fin', header: 'Fecha fin', sortable: true},
     ];

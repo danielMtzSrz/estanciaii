@@ -33,7 +33,7 @@ const logout = () => {
             <template #start>
                 <div class="d-flex">
                     <!-- <Sidebar :items="items"/> -->
-                    <plaintext class="mx-2 my-0 py-0 text-2xl font-light" style="font-family: Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;">{{ title }}</plaintext>
+                    <plaintext class="mx-2 my-0 py-0 text-2xl font-light" style="font-family: Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;">{{ title ?? "Bienvenido" }}</plaintext>
                 </div>
             </template>
             <template #end>
