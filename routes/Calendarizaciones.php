@@ -19,15 +19,7 @@ Route::name('TiposPeriodos.')->prefix('TiposPeriodos')->group(function () {
     Route::get('eliminados', [TiposPeriodosController::class, 'trashed'])->name('trashed');
     Route::post('restablecer/{horarios}', [TiposPeriodosController::class, 'restore'])->name('restore');
     Route::delete('forzarEliminado/{horarios}', [TiposPeriodosController::class, 'forceDestroy'])->name('forceDelete');
-}); 
-
-// Días de la semana
-Route::resource("DiasSemana", DiaSemanaController::class)->except(['show', 'create', 'edit']);
-Route::name('DiasSemana.')->prefix('DiasSemana')->group(function () {
-    Route::get('eliminados', [DiaSemanaController::class, 'trashed'])->name('trashed');
-    Route::post('restablecer/{horarios}', [DiaSemanaController::class, 'restore'])->name('restore');
-    Route::delete('forzarEliminado/{horarios}', [DiaSemanaController::class, 'forceDestroy'])->name('forceDelete');
-}); 
+});
 
 // Tipos de convocatorias
 Route::resource("TipoConv", TiposConvocatoriasController::class)->except(['show', 'create', 'edit']);

@@ -20,15 +20,8 @@ class Colonia extends Model
         'nombre',
     ];
 
-
     public function municipio()
     {
         return $this->belongsTo(Municipio::class);
     }
-
-    public function domicilio()
-    {
-        return $this->hasMany(Domicilio::class);
-    }
-
 }

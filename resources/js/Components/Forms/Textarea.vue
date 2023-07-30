@@ -1,51 +1,57 @@
 <template>
-    <div class="p-inputgroup">
-        <span v-if="icon" class="p-inputgroup-addon">
-            <i :class="icon"></i>
-        </span>
-        <span class="p-float-label">
-            <Textarea
-                :id="id"
-                :name="name"
-                :class="{'p-invalid': errors}"
-                v-model="inputValue"
-                :autoResize="true"
-                rows="5"
-                cols="30"
-                v-tooltip.top="tooltip"
-            />
-            <label>{{ label }}</label>
-        </span>
+    <div class="mb-4">
+        <div class="p-inputgroup">
+            <span v-if="icon" class="p-inputgroup-addon">
+                <i :class="icon"></i>
+            </span>
+            <span class="p-float-label">
+                <Textarea
+                    :id="id"
+                    :name="name"
+                    :class="{ 'p-invalid': errors }"
+                    v-model="inputValue"
+                    :autoResize="true"
+                    rows="5"
+                    cols="30"
+                    v-tooltip.top="tooltip"
+                />
+                <label>{{ label }}</label>
+            </span>
+        </div>
+        <small class="p-error" v-if="errors">
+            {{ errors }}
+        </small>
     </div>
-    <small class="p-error" v-if="errors">
-        {{errors}}
-    </small>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+// Vue
+import { computed } from "vue";
+
 // Primevue
 import Textarea from "primevue/textarea";
-
-const inputValue = ref(props.value)
 
 const props = defineProps({
     icon: String,
     errors: {
         type: [Object, String],
-        default: null
+        default: null,
     },
     label: {
         type: String,
-        default: "Falta agregar el label"
+        default: "Falta agregar el label",
     },
-    tooltip : {
+    formModel: {
+        type: Object,
+        default: null,
+    },
+    tooltip: {
         default: String,
-        default: null
+        default: null,
     },
-    value : {
+    value: {
         type: String,
-        default: null
+        default: null,
     },
     name: {
         type: String,
@@ -53,15 +59,19 @@ const props = defineProps({
     },
     id: {
         type: String,
-        default: null
-    }
+        default: null,
+    },
+    modelValue: String,
+});
+
+const emits = defineEmits(["update:modelValue"]);
+
+const inputValue = computed({
+  get() {
+    return props.modelValue
+  },
+  set(value) {
+    emits('update:modelValue', value)
+  }
 })
-
-const emits = defineEmits(['input'])
-
-watch(inputValue, (newVal, oldVal) => {
-    inputValue.value = newVal
-    emits('input', inputValue);
-})
-
 </script>

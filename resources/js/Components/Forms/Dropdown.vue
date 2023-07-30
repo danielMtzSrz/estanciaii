@@ -13,29 +13,28 @@ Ejemplo:
 <Dropdown 
     label="Tipo de periodo"
     :data="dataModal.dataTipoPeriodo"
-    :value="tipoPeriodo"
-    :errors="form.errors.tipo_periodo_id"
     textDropdown="nombre"
-    @input="form.tipo_periodo_id = $event.id, tipoPeriodo=$event"
+    v-model="tipoPeriodo"
+    :errors="form.errors.tipo_periodo_id"
 /> 
 -->
 
 <template>
-    <label class="mb-2"> {{ label }}</label>
-    <div class="p-inputgroup">
-        <span v-if="icon" class="p-inputgroup-addon">
-            <i :class="icon"></i>
-        </span>
-        <span class="p-float-label">
+    <div class="mb-4">
+        <div class="p-inputgroup">
+            <span v-if="icon" class="p-inputgroup-addon">
+                <i :class="icon"></i>
+            </span>
+        
             <Dropdown
                 :class="{'p-invalid': errors}"
                 :options="data"
                 :optionLabel="textDropdown"
-                placeholder="Seleccionar..."
+                :placeholder="placeholder"
                 :filter="true"
                 filterPlaceholder="Buscar..."
                 v-model="inputValue"
-                @change="selected($event)" 
+                :disabled="disabled"
             >
                 <template #value="slotProps">
                     <div class="p-dropdown-car-value" v-if="slotProps.value">
@@ -46,14 +45,14 @@ Ejemplo:
                                 :image="'/storage/'+slotProps.value[imageDropdown]"
                                 class="p-avatar-image p-avatar-circle"
                             />
-                            <span class="ms-2">{{slotProps.value[textDropdown]}}</span>
+                            <span class="ms-2">{{ slotProps.value[textDropdown] }}</span>
                         </div>
                     </div>
                     <span v-else>
-                        {{slotProps.placeholder}}
+                        {{ slotProps.placeholder }}
                     </span>
                 </template>
-                <template #option="slotProps" @click="selectId">
+                <template #option="slotProps">
                     <div class="flex p-dropdown-car-option">
                         <Avatar 
                             v-if="slotProps.option[imageDropdown]"
@@ -61,25 +60,24 @@ Ejemplo:
                             :image="'/storage/'+slotProps.option[imageDropdown]"
                             class="p-avatar-image p-avatar-circle"
                         />
-                        <span class="ms-2">{{slotProps.option[textDropdown]}}</span>
+                        <span class="ms-2">{{ slotProps.option[textDropdown] }}</span>
                     </div>
                 </template>
             </Dropdown>
-        </span>
+        </div>
+        <small class="p-error" v-if="errors">
+            {{ errors }}
+        </small>
     </div>
-    <small class="p-error" v-if="errors">
-        {{errors}}
-    </small>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+// Vue
+import { computed } from 'vue';
+
 // Primevue
 import Dropdown from 'primevue/dropdown'
 import Avatar from 'primevue/avatar'
-import Tooltip from "primevue/tooltip";
-
-const inputValue = ref(props.value)
 
 const props = defineProps({
     icon: String,
@@ -110,13 +108,31 @@ const props = defineProps({
     icon: {
         type: String,
         default: null
+    },
+    disabled: {
+        type: Boolean,
+        default: false
+    },
+    placeholder: {
+        type: String,
+        default: "Seleccionar "
+    },
+    modelValue: Object,
+})
+
+const placeholder = computed(() => {
+    return `${props.placeholder} ${props.label}`
+})
+
+const inputValue = computed({
+    get() {
+        return props.modelValue
+    },
+    set(value) {
+        emits('update:modelValue', value)
     }
 })
 
-const selected = (event) => {
-    inputValue.value = event?.value ?? null
-    emits('input', inputValue.value);
-}
+const emits = defineEmits(['update:modelValue'])
 
-const emits = defineEmits(['input'])
 </script> 

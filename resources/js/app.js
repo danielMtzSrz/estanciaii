@@ -20,6 +20,9 @@ import ToastService from "primevue/toastservice";
 import Tooltip from "primevue/tooltip";
 import { Link } from "@inertiajs/inertia-vue3";
 
+// Componentes usados generalmente
+import Button from 'primevue/button'
+
 // Roles y permisos
 import VueGates from "vue-gates";
 import Permissions from "./Plugins/Permissions";
@@ -49,8 +52,12 @@ createInertiaApp({
             .use(VueGates)
             .use(Permissions)
             .use(pinia)
-            .component("Link", Link)
+            // Directives
             .directive('tooltip', Tooltip)
+            
+            // Components
+            .component("Link", Link)
+            .component("Button", Button)
             .mount(el);
     },
 });

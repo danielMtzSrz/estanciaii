@@ -41,7 +41,7 @@ class Domicilios extends Controller
     {
 
         $colonias = Colonia::where('cp','like',"{$cp}%")
-            ->with(['municipio' =>['estado']])
+            ->with(['municipio' => ['estado']])
             ->get();
 
         return response()->json($colonias);

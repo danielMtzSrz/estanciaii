@@ -1,59 +1,64 @@
-<template>
-    <div class="p-inputgroup my-4">
-        <span v-if="icon" class="p-inputgroup-addon">
-            <i :class="icon"></i>
-        </span>
-        <span class="p-float-label">
-            <InputText
-                :class="{'p-invalid': errors}"
-                :name="name"
-                :id="id"
-                type="text"
-                v-model="inputValue"
-                v-tooltip.top="tooltip"
-                :disabled="disabled"
-            />
-            <label>{{ label }}</label>
-        </span>
+<!-- 
+import InputText from "@/Assets/Components/Forms/InputText.vue";
+<InputText
+    icon="pi pi-user"
+    label="Nombre"
+    name="name"
+    :errors="form.errors.name"
+    v-model="value"
+/>
+ -->
+
+ <template>
+    <div class="mb-4">
+        <div class="p-inputgroup">
+            <span v-if="icon" class="p-inputgroup-addon">
+                <i :class="icon"></i>
+            </span>
+            <span class="p-float-label">
+                <InputText
+                    :class="{ 'p-invalid': errors }"
+                    :name="name"
+                    :id="id"
+                    type="text"
+                    v-model="inputValue"
+                    v-tooltip.top="tooltip"
+                    :disabled="disabled"
+                />
+                <label>{{ label }}</label>
+            </span>
+        </div>
+        <small class="p-error mb-2" v-if="errors">
+            {{ errors }}
+        </small>
     </div>
-    <small class="p-error" v-if="errors">
-        {{errors}}
-    </small>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+// Vue
+import { computed } from "vue";
+
 // Primevue
 import InputText from "primevue/inputtext";
-import Tooltip from "primevue/tooltip";
-
-const inputValue = ref(props.value)
 
 const props = defineProps({
     icon: String,
-    disabled:{
-        type: Boolean,
-        default: false
-    },
-    errors: {
-        type: Object,
-        default: null
-    },
+    errors: null,
     label: {
         type: String,
-        default: "Falta agregar el label"
+        default: "Falta agregar el label",
     },
-    formModel : {
-        type : Object,
-        default: null
+    formModel: {
+        type: Object,
+        default: null,
     },
-    tooltip : {
+    tooltip: {
         default: String,
-        default: null
+        default: null,
     },
-    value : {
+    value: {
         type: String,
-        default: null
+        default: null,
     },
     name: {
         type: String,
@@ -61,23 +66,23 @@ const props = defineProps({
     },
     id: {
         type: String,
-        default: null
-    }
-})
-
-const emits = defineEmits(['input'])
-
-watch(inputValue, (newVal, oldVal) => {
-    inputValue.value = newVal
-    emits('input', inputValue);
-})
-
-</script> 
-
-<script>
-export default {
-    directives: {
-        tooltip: Tooltip,
+        default: null,
     },
-}
+    disabled: {
+        type: Boolean,
+        default: false,
+    },
+    modelValue: null,
+});
+
+const emits = defineEmits(["update:modelValue"]);
+
+const inputValue = computed({
+  get() {
+    return props.modelValue
+  },
+  set(value) {
+    emits('update:modelValue', value)
+  }
+})
 </script>

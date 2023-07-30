@@ -33,7 +33,7 @@ const logout = () => {
             <template #start>
                 <div class="d-flex">
                     <!-- <Sidebar :items="items"/> -->
-                    <plaintext class="mx-2 my-0 py-0 text-2xl font-light" style="font-family: Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;">{{ title ?? "Bienvenido" }}</plaintext>
+                    <span class="mx-2 my-0 py-0 text-2xl font-light" style="font-family: Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;">{{ title ?? "Bienvenido" }}</span>
                 </div>
             </template>
             <template #end>
@@ -87,6 +87,13 @@ export default {
                                 Inertia.visit(route("permission.index"));
                             },
                         },
+                        {
+                            label: "Empresas asociadas",
+                            icon: "pi pi-unlock",
+                            command: () => {
+                                Inertia.visit(route("empresas.index"));
+                            },
+                        },
                     ],
                 },
                 {
@@ -110,15 +117,6 @@ export default {
                                     route(
                                         "Calendarizaciones.TiposPeriodos.index"
                                     )
-                                );
-                            },
-                        },
-                        {
-                            label: "Días de la semana",
-                            icon: "bi bi-calendar2-week",
-                            command: () => {
-                                this.$inertia.visit(
-                                    route("Calendarizaciones.DiasSemana.index")
                                 );
                             },
                         },

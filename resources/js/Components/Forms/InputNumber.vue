@@ -1,33 +1,35 @@
 <template>
-    <div class="p-inputgroup">
-        <span v-if="icon" class="p-inputgroup-addon">
-            <i :class="icon"></i>
-        </span>
-        <span class="p-float-label my-3">
-            <InputNumber
-                :class="{'p-invalid': errors}"
-                :name="name"
-                :id="id"
-                :mode="mode"
-                v-model="inputValue"
-                v-tooltip.top="tooltip"
-                :disabled="disabled"
-            />
-            <label>{{ label }}</label>
-        </span>
+    <div class="mb-4">
+        <div class="p-inputgroup">
+            <span v-if="icon" class="p-inputgroup-addon">
+                <i :class="icon"></i>
+            </span>
+            <span class="p-float-label">
+                <InputNumber
+                    :class="{'p-invalid': errors}"
+                    :name="name"
+                    :id="id"
+                    :mode="mode"
+                    v-model="inputValue"
+                    v-tooltip.top="tooltip"
+                    :disabled="disabled"
+                    :useGrouping="useGrouping"
+                />
+                <label>{{ label }}</label>
+            </span>
+        </div>
+        <small class="p-error mb-2" v-if="errors">
+            {{errors}}
+        </small>
     </div>
-    <small class="p-error" v-if="errors">
-        {{errors}}
-    </small>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+// Vue
+import { computed } from 'vue';
 
+// Primevue
 import InputNumber from "primevue/inputnumber";
-import Tooltip from "primevue/tooltip";
-
-const inputValue = ref(props.value)
 
 const props = defineProps({
     icon: String,
@@ -36,7 +38,7 @@ const props = defineProps({
         default: false
     },
     errors: {
-        type: Object,
+        type: [Object, String],
         default: null
     },
     label: {
@@ -66,22 +68,22 @@ const props = defineProps({
     mode:{
         type: String,
         default: "decimal"
-    }
-})
-
-const emits = defineEmits(['input'])
-
-watch(inputValue, (newVal, oldVal) => {
-    inputValue.value = newVal
-    emits('input', inputValue);
-})
-
-</script> 
-
-<script>
-export default {
-    directives: {
-        tooltip: Tooltip,
     },
-}
+    useGrouping: {
+        type: Boolean,
+        default: true
+    },
+    modelValue: Number
+})
+
+const emits = defineEmits(['input', 'update:modelValue'])
+
+const inputValue = computed({
+  get() {
+    return props.modelValue
+  },
+  set(value) {
+    emits('update:modelValue', value)
+  }
+})
 </script>

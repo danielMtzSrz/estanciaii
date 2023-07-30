@@ -29,5 +29,5 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 
     // Rutas de empresas
-    Route::resource("empresas",EmpresasController::class)->except('show','create','edit');
+    Route::resource("empresas", EmpresasController::class)->except('show','create','edit');
 });
