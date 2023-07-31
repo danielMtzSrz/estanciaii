@@ -15,6 +15,7 @@ class UpdatePermission extends FormRequest
     public function rules()
     {
         return [
+            'module_name' => 'required',
             'name' => 'required | string | max:255 | unique:permissions,name,' . $this->route('permission'),
             'description' => 'required | string',
         ];

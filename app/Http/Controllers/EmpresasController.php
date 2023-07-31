@@ -32,14 +32,7 @@ class EmpresasController extends Controller
             $empresa->save();
         }
 
-        return back()->with(
-            [
-                'summary' => '¡Éxito!',
-                'detail' => 'Creado correctamente',
-                'severity' => 'success',
-                'life' => 5000
-            ]
-        );
+        return back()->with(config('messages.mensaje_exito'));
     }
 
     public function update(StoreEmpresasRequest $request, Empresas $empresa)
@@ -56,14 +49,7 @@ class EmpresasController extends Controller
             $empresa->save();
         }
 
-        return back()->with(
-            [
-                'summary' => '¡Éxito!',
-                'detail' => 'Actualizado correctamente',
-                'severity' => 'success',
-                'life' => 5000
-            ]
-        );
+        return back()->with(config('messages.mensaje_actualizar'));
     }
 
     public function destroy(Empresas $empresa)
@@ -72,13 +58,6 @@ class EmpresasController extends Controller
 
         $empresa->delete();
 
-        return back()->with(
-            [
-                'summary' => '¡Éxito!',
-                'severity' => 'success',
-                'detail' => 'Eliminado correctamente',
-                'life' => 5000
-            ]
-        );
+        return back()->with(config('messages.mensaje_eliminar'));
     }
 }

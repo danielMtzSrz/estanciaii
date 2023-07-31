@@ -277,6 +277,7 @@ CREATE TABLE `password_resets` (
 
 CREATE TABLE `permissions` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `module_name` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `guard_name` varchar(255) NOT NULL,
   `description` text NOT NULL,
