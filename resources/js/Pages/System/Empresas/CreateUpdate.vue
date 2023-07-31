@@ -1,7 +1,7 @@
 <template>
     <GenericModal
-        :dataModal="dataModal"
-        @closeModal="cerrarModal()" 
+        :data_modal="data_modal"
+        @closeModal="closeModal()" 
         :header="titulo"
     >
         <template #content>
@@ -130,7 +130,7 @@
                         type="button"
                         label="Cancelar"
                         class="p-button-text p-button-raised p-button-rounded p-button-warning"
-                        @click="cerrarModal()"
+                        @click="closeModal()"
                     />
                     <Button
                         type="submit"
@@ -190,7 +190,7 @@ const ruta = ref(null),
 
 // Props
 const props = defineProps({
-    dataModal: {
+    data_modal: {
         type: Object,
         default: null,
     },
@@ -200,7 +200,7 @@ const props = defineProps({
 const emits = defineEmits(["closeModal"]);
 
 // Methods
-const cerrarModal = () => {
+const closeModal = () => {
     emits("closeModal");
     form.reset();
     form.errors = {}
@@ -208,13 +208,13 @@ const cerrarModal = () => {
 
 const submit = () => {
 
-    if (!props.dataModal.dataRegistro) {
+    if (!props.data_modal.data_registro) {
         form.transform((data) => ({
             ...data,
             colonia_id: colonia_seleccionada.value?.id
         })).post(route(ruta.value), {
             onSuccess: () => {
-                cerrarModal();
+                closeModal();
             },
         });
 
@@ -222,25 +222,25 @@ const submit = () => {
         form.transform((data) => ({
             ...data,
             colonia_id: colonia_seleccionada.value?.id
-        })).put(route(ruta.value, props.dataModal.dataRegistro), {
+        })).put(route(ruta.value, props.data_modal.data_registro), {
             onSuccess: () => {
-                cerrarModal();
+                closeModal();
             },
         });
     }
 };
 
 // Watchers
-watch(() => props.dataModal, async (newVal) => {
-    ruta.value = !newVal.dataRegistro ? 'empresas.store' : 'empresas.update'
-    titulo.value = !newVal.dataRegistro ? 'Nueva Empresa' : 'Actualizar Empresa'
+watch(() => props.data_modal, async (newVal) => {
+    ruta.value = !newVal.data_registro ? 'empresas.store' : 'empresas.update'
+    titulo.value = !newVal.data_registro ? 'Nueva Empresa' : 'Actualizar Empresa'
     
     const { data } = await axios.get(`/api/domicilio/paises`);
     data_paises.value = data
     
 })
 
-watch(() => props.dataModal.dataRegistro, (newVal) => {
+watch(() => props.data_modal.data_registro, (newVal) => {
     form.reset()
     
     form.colonia_id = newVal?.colonia_id ?? null

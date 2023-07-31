@@ -7,7 +7,7 @@
         :showHeader="true"
         :header="header"
         :maximizable="maximizable"
-        v-model:visible="dataModal.display"
+        v-model:visible="data_modal.display"
         v-on:update:visible="close"
     >
         <slot name="content"/>
@@ -21,7 +21,7 @@
 import Dialog from "primevue/dialog";
     
 const props = defineProps({
-    dataModal: Object,
+    data_modal: Object,
     maximizable: {
         type: Boolean,
         default: false

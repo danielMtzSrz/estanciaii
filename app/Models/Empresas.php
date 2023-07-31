@@ -54,7 +54,7 @@ class Empresas extends Model
 
     public function getCpColoniaAttribute()
     {
-        return $this->colonia->nombre;
+        return $this->colonia->cp;
     }
 
     // Scopes

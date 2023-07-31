@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Toast />
+        <Toast position="bottom-right"/>
         <Head :title="title" />
 
         <div

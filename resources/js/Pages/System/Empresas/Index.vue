@@ -79,7 +79,15 @@
                         type="button"
                         icon="pi pi-trash"
                         class="p-button-danger p-button-text p-button-raised p-button-rounded"
-                        @click="modalEliminar({display: true, data: data})"
+                        @click="modalGenericAlert({
+                            data: data, 
+                            display: true, 
+                            proceso: {
+                                'proceso': 'delete',
+                                'ruta': 'empresas.destroy',
+                                'exta_info': `${data?.nombre_empresa}, ${data?.direccion}`
+                            }
+                        })"
                     />
                 </template>
             </DynamicTable>
@@ -87,20 +95,20 @@
 
         <template #footer>
             <CreateUpdate
-                :dataModal="{
-                    display: displayCreateUpdate,
-                    dataRegistro: dataRegistro,
+                :data_modal="{
+                    display: display_create_update,
+                    data_registro: data_registro,
                 }"
                 @closeModal="modalCreateUpdate({display: false, data: null})"
             />
             
             <GenericAlert
-                :dataModal="{
-                    display: displayGenericAlert,
-                    dataRegistro : dataRegistro,
-                    dataProceso : dataProceso
+                :data_modal="{
+                    display: display_generic_alert,
+                    data_registro : data_registro,
+                    data_proceso : data_proceso
                 }"
-                v-on:visible="(visible) => modalGenericAlert({display: false})"
+                @closeModal="modalGenericAlert({display: false, data: null, data_proceso: null})"
             />
         </template>
     </GenericLayout>
@@ -119,10 +127,10 @@ import GenericAlert from "@/Components/GenericAlert.vue";
 import CreateUpdate from "@/Pages/System/Empresas/CreateUpdate.vue";
 
 // Variables
-const displayCreateUpdate = ref(false);
-const dataProceso = ref(null);
-const dataRegistro = ref(null);
-const displayGenericAlert = ref(null)
+const display_create_update = ref(false);
+const data_proceso = ref(null);
+const data_registro = ref(null);
+const display_generic_alert = ref(null)
 
 // Propiedades
 const props = defineProps({
@@ -134,13 +142,13 @@ const props = defineProps({
 
 // Métodos
 const modalCreateUpdate = (event) => {
-    displayCreateUpdate.value = event.display;
-    dataRegistro.value = event?.data ?? null;
+    display_create_update.value = event.display;
+    data_registro.value = event?.data ?? null;
 }
 
 const modalGenericAlert = (event) => {
-    dataRegistro.value = event.data;
-    displayGenericAlert.value = event.display;
-    dataProceso.value = event.proceso;
+    data_registro.value = event.data;
+    display_generic_alert.value = event.display;
+    data_proceso.value = event.proceso;
 }
 </script>

@@ -1,25 +1,31 @@
 <template>
-    <GenericModal :dataModal="dataModal" @cerrarModal="cerrarModal">
-        <template #header>
-            <h3 class="font-bold">{{ alertProcess?.alertTitle }}</h3>
-        </template>
+    <GenericModal 
+        :data_modal="data_modal" 
+        @closeModal="closeModal()"
+        :header="alert_process?.alert_title"
+    >
         <template #content>
             <div class="d-flex align-items-center">
-                <i class="pi pi-exclamation-triangle"/>&nbsp;
-                <span v-html="`¿Seguro que desea <strong>${alertProcess?.textAlert}</strong> el registro <strong>${dataModal.dataProceso?.registro ?? null}?</strong>`"></span>
+                <i class="pi pi-exclamation-triangle me-2"/>&nbsp;
+                <span v-html="`
+                        ¿Seguro que desea <strong>${alert_process?.text_alert}</strong> el registro?
+                        <br>
+                        ${ data_modal?.data_proceso?.exta_info ?? '' }
+                    `"
+                />
             </div>
             <div class="float-end space-x-2 mt-3">
                 <Button
                     type="button"
                     label="Cancelar"
                     class="p-button-text p-button-raised p-button-rounded p-button-warning" 
-                    @click="cerrarModal()"
+                    @click="closeModal()"
                 />
                 <Button 
                     type="submit"
-                    :icon="alertProcess?.icon"
-                    :label="alertProcess?.alertTitle"
-                    :class="`p-button-text p-button-raised p-button-rounded p-button-${alertProcess?.color}`"
+                    :icon="alert_process?.icon"
+                    :label="alert_process?.alert_title"
+                    :class="`p-button-text p-button-raised p-button-rounded p-button-${alert_process?.color}`"
                     @click="submit()"
                     :loading="form.processing"
                 />
@@ -42,67 +48,67 @@ import GenericModal from '@/Components/GenericModal.vue';
 
 const form = useForm()
 const proceso = ref(null)
-const alertProcess = ref(null)
+const alert_process = ref(null)
 
 const props = defineProps({
-    dataModal: Object,
+    data_modal: Object,
 })
 
-const emits = defineEmits(['visible'])
+const emits = defineEmits(['closeModal'])
 
 // Métodos
-const cerrarModal = () => {
-    emits("visible", false);
+const closeModal = () => {
+    emits("closeModal");
 }
 const submit = () => {
     if(proceso.value == 'FORCEDELETE' || proceso.value == 'DESTROY' || proceso.value == 'DELETE'){
-        form.delete(route(props.dataModal.dataProceso.ruta, props.dataModal.dataRegistro), {
+        form.delete(route(props.data_modal.data_proceso.ruta, props.data_modal.data_registro), {
             onSuccess: () => {
-                cerrarModal();
+                closeModal();
             },
         });
     }else if(proceso.value == 'RESTORE'){
-        form.post(route(props.dataModal.dataProceso.ruta, props.dataModal.dataRegistro), {
+        form.post(route(props.data_modal.data_proceso.ruta, props.data_modal.data_registro), {
             onSuccess: () => {
-                cerrarModal();
+                closeModal();
             },
         });
     }
 }
 
-const procesoExecute = () => {
-    const dataProcess = {
+const proceso_execute = () => {
+    const data_process = {
         'FORCEDELETE' : {
-            'alertTitle' : 'Eliminar definitivamente',
-            'textAlert' : 'ELIMINAR DEFINITIVAMENTE',
+            'alert_title' : 'Eliminar definitivamente',
+            'text_alert' : 'ELIMINAR DEFINITIVAMENTE',
             'icon' : 'pi pi-trash',
             'color' : 'danger'
         },
         'RESTORE' : {
-            'alertTitle' : 'Restaurar',
-            'textAlert' : 'restaurar',
+            'alert_title' : 'Restaurar',
+            'text_alert' : 'restaurar',
             'icon' : 'bi bi-arrow-counterclockwise',
             'color' : 'success'
         },
         'DELETE' : {
-            'alertTitle' : 'Eliminar',
-            'textAlert' : 'eliminar',
+            'alert_title' : 'Eliminar',
+            'text_alert' : 'eliminar',
             'icon' : 'pi pi-trash',
             'color' : 'danger'
         },
         'DESTROY' : {
-            'alertTitle' : 'Eliminar',
-            'textAlert' : 'eliminar',
+            'alert_title' : 'Eliminar',
+            'text_alert' : 'eliminar',
             'icon' : 'pi pi-trash',
             'color' : 'danger'
         }
     }
-    alertProcess.value = dataProcess[proceso.value]
+    alert_process.value = data_process[proceso.value]
 }
 
 // Watchers
-watch(() => props.dataModal.dataProceso, (newVal) => {
+watch(() => props.data_modal.data_proceso, (newVal) => {
     proceso.value = newVal?.proceso.toUpperCase() ?? null
-    procesoExecute()
+    proceso_execute()
 })
 </script>

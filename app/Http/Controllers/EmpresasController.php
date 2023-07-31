@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Empresas;
 use App\Http\Requests\System\Empresas\StoreEmpresasRequest;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 use Inertia\Inertia;
 
@@ -22,16 +24,7 @@ class EmpresasController extends Controller
     public function store(StoreEmpresasRequest $request)
     {
         // Crear empresa
-        $empresa = Empresas::create([
-            'colonia_id'      => $data['colonia_id'],
-            'nombre_empresa'  => $data['nombre_empresa'],
-            'razon_social'    => $data['razon_social'],
-            'rfc'             => $data['rfc'],
-            'calle'           => $data['calle'],
-            'numero_exterior' => $data['numero_exterior'],
-            'numero_interior' => $data['numero_interior'],
-            'codigo_postal'   => $data['codigo_postal']
-        ]);
+        $empresa = Empresas::create($request->validated());
 
         // Cargar imagen
         if($request->file('imagen')){
@@ -41,18 +34,16 @@ class EmpresasController extends Controller
 
         return back()->with(
             [
-                'backgroundNotification' => 'success',
-                'titleNotification' => '¡Exito!',
-                'messageNotification' => 'Creado correctamente',
-                'lifeNotification' => 5000,
+                'summary' => '¡Éxito!',
+                'detail' => 'Creado correctamente',
+                'severity' => 'success',
+                'life' => 5000
             ]
         );
     }
 
     public function update(StoreEmpresasRequest $request, Empresas $empresa)
     {
-
-        dd($request->all());
 
         if($request->file('imagen')){
             Storage::disk('public')->delete($empresa->imagen);
@@ -67,10 +58,10 @@ class EmpresasController extends Controller
 
         return back()->with(
             [
-                'backgroundNotification' => 'success',
-                'titleNotification' => '¡Exito!',
-                'messageNotification' => 'Actualizado correctamente',
-                'lifeNotification' => 5000,
+                'summary' => '¡Éxito!',
+                'detail' => 'Actualizado correctamente',
+                'severity' => 'success',
+                'life' => 5000
             ]
         );
     }
