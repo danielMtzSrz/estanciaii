@@ -15,28 +15,22 @@ class RoleController extends Controller
 
     public function index()
     {
+        
+        $roles = Role::orderBy('name', 'asc')
+            ->get()
+            ->map(function($role){
+                $role_array = $role->toArray();
+                $role_array['permisos'] = $role->permissions;
+                
+                return collect($role_array);
+            });
+        
+        // dd($roles);
 
-        session(['breadcrumbItems' => [
-            [
-                'label' => 'Roles',
-                'url' => route('role.index'),
-
-            ]
-        ]]);
-
-        $roles = Role::orderBy('name', 'asc')->get();
-        $permisos = Permission::orderBy('description', 'asc')->get();
+        $data_permisos = Permission::orderBy('description', 'asc')->get();
         $role_has_permission = DB::table('role_has_permissions')->get();
 
-        return Inertia::render('System/RolesModulo/Index', compact('roles', 'permisos', 'role_has_permission'));
-    }
-
-    public function create()
-    {
-
-        $permisos = Permission::all();
-
-        return Inertia::render('System/RolesModulo/Create', compact('permisos'));
+        return Inertia::render('System/RolesModulo/Index', compact('roles', 'data_permisos', 'role_has_permission'));
     }
 
     public function store(StoreRoles $request)

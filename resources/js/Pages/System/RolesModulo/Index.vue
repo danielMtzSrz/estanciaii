@@ -1,209 +1,195 @@
 <template>
-    <Head title="Usuarios"></Head>
-    <app-layout>
-        <h1 class="display-6 text-center my-2">Roles</h1>
-        <div class="card mb-4">
-            <DataTable
-                class="p-datatable-sm mt-4 mb-4"
-                :value="roles"
-                :paginator="true"
-                :rows="10"
-                :resizableColumns="true"
-                columnResizeMode="fit | expand"
-                :loading="loading"
-                responsiveLayout="scroll"
-                v-model:filters="filter"
-            >
-                <!-- Configuración por defecto -->
-                <template #empty>
-                    <span class="text-red-500"
-                        >No se encontraron registros</span
-                    >
+    <GenericLayout titleModule="Permisos">
+        <template #content>
+            <DynamicTable
+            :data="roles"
+            :items="items"
+            titleModule="Roles"
+    >
+        <template #header>
+            <Button
+                type="button"
+                label="Nuevo"
+                icon="pi pi-plus"
+                class="p-button-raised p-button-rounded p-button-success p-button-sm p-button-text"
+                @click="modalCreateUpdate({display: true})"
+            />
+            
+        </template>
+        <template #columns>
+            <Column header="Permisos" headerStyle="width: 8em" bodyStyle="text-align: center">
+                <template #body="{ data }">
+                    <Button
+                        icon="pi pi-external-link" 
+                        label="Ver permisos"
+                        class="p-button-raised p-button-rounded p-button-text p-button-sm p-button-info"
+                        @click="verPermisos({data: data.permisos, display: true})"
+                    />
                 </template>
-                <template #loading> Cargando... </template>
-                <!-- Fin de la configuración por defecto -->
-                <template #header>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <Link :href="route('role.create')">
-                                <Button
-                                    type="button"
-                                    label="Nuevo"
-                                    icon="pi pi-plus"
-                                    class="p-button-raised p-button-rounded p-button-success p-button-sm"
-                                />
-                            </Link>
-                        </div>
-                        <div class="col-sm-6 flex justify-end my-2">
-                            <span class="p-input-icon-left">
-                                <i class="pi pi-search" />
-                                <InputText
-                                    v-model="filter['global'].value"
-                                    placeholder="Busqueda"
-                                />
-                            </span>
-                            <Button
-                                type="button"
-                                icon="pi pi-filter-slash"
-                                label=""
-                                class="p-button-outlined"
-                                @click="clearFilter()"
-                                v-tooltip.bottom="'Limpiar búsqueda'"
-                            />
-                        </div>
-                    </div>
-                </template>
-                <Column field="id" header="ID" :sortable="true"></Column>
-                <Column field="name" header="Nombre" :sortable="true"></Column>
-                <Column header="Permisos">
-                    <template #body="slotProps">
-                        <Button 
-                                type="button" 
-                                class="p-button-text p-button-raised p-button-rounded"
-                                icon="pi pi-eye" label="Mostrar"
-                                @click="toggle"
-                                v-on:click="asignarData(slotProps.data.id)"
-                                aria:haspopup="true"
-                                :aria-controls="'overlay_panel_'+slotProps.data.id"
-                                :dataRolesOverlay="slotProps.data" />
-                        <OverlayPanel ref="op" appendTo="body" :showCloseIcon="true" :id="'overlay_panel_'+slotProps.data.id" style="width: 450px" :breakpoints="{'960px': '75vw'}">
-                            
-                            <ol v-for="permiso in permisos" :key="permiso">
-                                <div v-for="permisoAsignado in dataPermisosAsignados" :key="permisoAsignado">
-                                    <li v-if="permisoAsignado == permiso.id">{{ permiso.description }}</li>
-                                </div>
-                            </ol>
-                            <p v-if="dataPermisosAsignados == 0" class="text-red-400">El rol no tiene permisos asignados</p>
-                        </OverlayPanel>
-                    </template>
-                </Column>
-                <Column headerStyle="width: 8em" bodyStyle="text-align: center">
-                    <template #body="slotProps">
-                        <Link :href="route('role.edit', slotProps.data)">
-                            <Button
-                                type="button"
-                                icon="pi pi-pencil"
-                                class="p-button-warning p-button-text p-button-raised p-button-rounded"
-                            />
-                        </Link>
-                        <Button
-                            type="button"
-                            icon="pi pi-trash"
-                            class="p-button-danger p-button-text p-button-raised p-button-rounded"
-                            @click="modalEliminar(slotProps.data, true)"
-                        />
-                    </template>
-                </Column>
-                <template #footer>
-                    <div>
-                        Total de registros: {{ roles ? roles.length : 0 }}
-                    </div>
-                </template>
-            </DataTable>
-        </div>
+            </Column>
+        </template>
+        <template #buttons="{ data }">
+            <Button
+                type="button"
+                icon="pi pi-pencil"
+                class="p-button-warning p-button-text p-button-raised p-button-rounded"
+                v-tooltip.top="'Actualizar'"
+                @click="modalCreateUpdate({display: true, data: data})"
+            />
+            <Button
+                type="button"
+                icon="pi pi-trash"
+                class="p-button-danger p-button-text p-button-raised p-button-rounded"
+                @click="modalGenericAlert({
+                    data: data, 
+                    display: true, 
+                    proceso: {
+                        'proceso': 'delete',
+                        'ruta': 'permission.destroy',
+                    }
+                })"
+            />
+        </template>
+    </DynamicTable>
+        </template>
 
-        <!-- Modal eliminar -->
-        <modal-borrar
-            :dataModal="{ display: displayEliminar, dataRol : usuarioData }"
-            v-on:visible="(visible) => modalEliminar(visible)"
-        ></modal-borrar>
-        <!-- Fin modal eliminar -->
-    </app-layout>
+        <template #footer>
+           <CreateUpdate
+                :data_modal="{
+                    display: display_create_update,
+                    data_registro: data_registro,
+                    data_permisos: data_permisos
+                }"
+                @closeModal="modalCreateUpdate({display: false, data: null})"
+            />
+            <GenericAlert
+                :data_modal="{
+                    display: display_generic_alert,
+                    data_registro : data_registro,
+                    data_proceso : data_proceso
+                }"
+                @closeModal="modalGenericAlert({display: false, data: null, data_proceso: null})"
+            />
+            <Dialog 
+                header="Permisos" 
+                v-model:visible="display_ver_permisos"
+                :breakpoints="{'960px': '75vw', '640px': '90vw'}" 
+                :style="{width: '75vw'}"
+                :modal="true"
+            >
+                <DataView :value="data_ver_permisos" layout="grid" :paginator="true" :rows="24" :rowsPerPageOptions="[8, 12, 20, 24, 40]">
+                    <template #grid="slotProps">
+                        <div class="col-12 md:col-3">
+                            <div class="field-checkbox d-flex mb-5 mx-3">
+                                <li>{{ slotProps.data.description}}</li>
+                            </div>
+                        </div>
+                    </template>
+                </DataView>
+            </Dialog>
+        </template>
+    </GenericLayout>
 </template>
 
-<script>
+<script setup>
+// Vue
+import { ref } from 'vue';
 
-// Layout padre
-import AppLayout from "@/Layouts/AppLayout.vue";
+// Layouts
+import GenericLayout from "@/Layouts/GenericLayout.vue";
+import DynamicTable from "@/Components/DynamicTable.vue";
 
-// Inertia
-import { Head, Link, usePage } from "@inertiajs/inertia-vue3";
-import { computed } from "vue";
+import GenericAlert from "@/Components/GenericAlert.vue";
+
+// Componentes de los modales
+import CreateUpdate from "@/Pages/System/RolesModulo/CreateUpdate.vue";
 
 // Primevue
-import DataTable from "primevue/datatable";
-import Column from "primevue/column";
-import Button from "primevue/button";
-import InputText from "primevue/inputtext";
-import { FilterMatchMode, FilterOperator } from "primevue/api";
-import Tooltip from "primevue/tooltip";
-import OverlayPanel from 'primevue/overlaypanel';
+import Column from 'primevue/column';
+import Dialog from 'primevue/dialog';
+import Button from 'primevue/button';
+import DataView from 'primevue/dataview';
 
-// Componentes para los modales de los CRUD
-import ModalCrear from "@/Pages/System/Usuario/Create.vue";
-import ModalActualizar from "@/Pages/System/Usuario/Update.vue";
-import ModalBorrar from "@/Pages/System/RolesModulo/Delete.vue";
+// Variables para guardar la respuesta de Axios
+const data = ref(null)
 
-export default {
-    directives: {
-        tooltip: Tooltip,
+// Variables para los modales
+const display_create_update = ref(false), display_generic_alert = ref(false), display_ver_permisos = ref(false);
+const data_registro = ref(null), data_proceso = ref(null), data_ver_permisos = ref(null)
+
+// Métodos
+const modalCreateUpdate = (event) => {
+    display_create_update.value = event.display;
+    data_registro.value = event?.data ?? null;
+}
+
+const modalGenericAlert = (event) => {
+    data_registro.value = event.data;
+    display_generic_alert.value = event.display;
+    data_proceso.value = event.proceso;
+}
+
+const verPermisos = (event) => {
+    display_ver_permisos.value = event.display
+    data_ver_permisos.value = event.data
+}
+
+// Propiedades
+const props = defineProps({
+    dataPage: {
+        type: Object,
+        default: null
     },
-    data() {
-        return {
-            loading : null,
-            displayEliminar : null,
-            usuarioData : null,
-            filter : null,
-            dataRolesOverlay : null,
-            dataPermisosAsignados: null,
-        };
+    data_permisos: {
+        type: Object,
+        default: null
     },
-    components: {
-        AppLayout,
-        Head,
-        Link,
-        DataTable,
-        Column,
-        Button,
-        InputText,
-        OverlayPanel,
-        ModalBorrar,
-    },
-    props: {
-        title: String,
-        roles: Object,
-        permisos: Object,
-        role_has_permission: Object,
-    },
-    created() {
-        this.initFilter();
-    },
-    updated(){
-        this.displayActualizar = false;
-    },
-    mounted() {
-        this.loading = true;
-        setTimeout((this.loading = false), 2000);
-    },
-    methods: {
-        modalEliminar(data, show) {
-            this.usuarioData = data;
-            return (this.displayEliminar = show);
+    roles: {
+        type: Object,
+        default: null
+    }
+})
+
+// Array-Object para los items del DataTable
+const items = ref([
+    {
+        dataField: {
+            field: 'id',
+            header : 'ID',
+            sortable: true,
+            type: 'text',
         },
-        // Filtros del dataTable
-        clearFilter() {
-            this.initFilter();
+        filters: {
+            active: true,
+            type: 'numeric',
+            minFractionDigits: 0,
+            maxFractionDigits: 0,
         },
-        initFilter() {
-            this.filter = {
-                global: {
-                    value: null,
-                    matchMode: FilterMatchMode.CONTAINS,
-                },
-            };
-        },
-        asignarData(id){
-            let role_has_permission = this.role_has_permission
-            let permisosAsinadosRol = role_has_permission.map(function(el) {
-                if(el.role_id == id){
-                    return el.permission_id;
-                }
-            });
-            this.dataPermisosAsignados = permisosAsinadosRol.filter((el) => el != undefined);
-        },
-        toggle(event) {
-            this.$refs.op.toggle(event);
-        }
     },
-};
+    {
+        dataField: {
+            field: 'name',
+            header : 'Nombre',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'text',
+        },
+    },
+    {
+        dataField: {
+            field: 'guard_name',
+            header : 'guard',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'text',
+        },
+    },
+])
+
 </script>

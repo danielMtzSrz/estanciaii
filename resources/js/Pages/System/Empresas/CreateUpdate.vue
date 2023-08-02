@@ -174,6 +174,7 @@ const data_paises = ref(null), pais_seleccionado = ref(null),
 const imagenActual = ref(null)
 
 const form = useForm({
+    _method: null,
     colonia_id: null,
     calle: null,
     numero_exterior: null,
@@ -243,6 +244,8 @@ watch(() => props.data_modal, async (newVal) => {
 watch(() => props.data_modal.data_registro, (newVal) => {
     form.reset()
     
+    form._method = newVal ? "put" : null
+
     form.colonia_id = newVal?.colonia_id ?? null
     form.calle = newVal?.calle ?? null
     form.numero_exterior = newVal?.numero_exterior ?? null
