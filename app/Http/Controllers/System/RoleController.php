@@ -24,59 +24,24 @@ class RoleController extends Controller
                 
                 return collect($role_array);
             });
-        
-        // dd($roles);
 
         $data_permisos = Permission::orderBy('description', 'asc')->get();
-        $role_has_permission = DB::table('role_has_permissions')->get();
 
-        return Inertia::render('System/RolesModulo/Index', compact('roles', 'data_permisos', 'role_has_permission'));
+        return Inertia::render('System/RolesModulo/Index', compact('roles', 'data_permisos'));
     }
 
     public function store(StoreRoles $request)
     {
 
-        try {
+        $role = Role::create($request->validated());
 
-            $rol = Role::where('name', $request->name)->get();
+        $role->permissions()->sync($request->permissions);
 
-            if (count($rol)) {
-                return back()->with(
-                    [
-                        'summary' => 'Error',
-                        'severity' => 'error',
-                        'detail' => 'El rol ya existe',
-                        'life' => 5000
-                    ]
-                );
-            }
-
-            $role = Role::create($request->validated());
-
-            $role->permissions()->sync($request->permissions);
-
-            return back()->with(
-                [
-                    'summary' => 'Creado correctamente',
-                    'severity' => 'success',
-                    'detail' => 'El rol ha sido creado correctamente',
-                    'life' => 5000
-                ]
-            );
-        } catch (Error $e) {
-        }
-        return Inertia::render('System/Roles/Index', compact('roles'));
+        return back()->with(config('messages.mensaje_exito'));
     }
-
-    public function show($id)
-    {
-        //
-    }
-
 
     public function edit(Role $role)
     {
-
         $permisos = Permission::orderBy('description', 'desc')->get();
         $role_has_permission = DB::table('role_has_permissions')->where('role_id', $role->id)->select('permission_id')->get();
 
@@ -85,40 +50,18 @@ class RoleController extends Controller
 
     public function update(UpdateRoles $request, Role $role)
     {
-        try {
+        $role->update($request->validated());
 
-            $role->update($request->validated());
+        $role->permissions()->sync($request->permissions);
 
-            $role->permissions()->sync($request->permissions);
-
-            return back()->with(
-                [
-                    'summary' => 'Modificado correctamente',
-                    'severity' => 'success',
-                    'detail' => 'El rol ha sido modificado correctamente',
-                    'life' => 5000
-                ]
-            );
-        } catch (Error $e) {
-            dd($e);
-        }
+        return back()->with(config('messages.mensaje_actualizar'));        
     }
 
 
     public function destroy(Role $role)
     {
-        try {
-            $role->delete();
+        $role->delete();
 
-            return back()->with(
-                [
-                    'summary' => 'Eliminado correctamente',
-                    'severity' => 'success',
-                    'detail' => 'El rol ha sido eliminado correctamente',
-                    'life' => 5000
-                ]
-            );
-        } catch (Error $e) {
-        }
+        return back()->with(config('messages.mensaje_eliminar'));
     }
 }

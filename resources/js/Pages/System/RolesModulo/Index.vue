@@ -1,56 +1,60 @@
 <template>
-    <GenericLayout titleModule="Permisos">
+    <GenericLayout titleModule="Roles">
         <template #content>
             <DynamicTable
-            :data="roles"
-            :items="items"
-            titleModule="Roles"
-    >
-        <template #header>
-            <Button
-                type="button"
-                label="Nuevo"
-                icon="pi pi-plus"
-                class="p-button-raised p-button-rounded p-button-success p-button-sm p-button-text"
-                @click="modalCreateUpdate({display: true})"
-            />
-            
-        </template>
-        <template #columns>
-            <Column header="Permisos" headerStyle="width: 8em" bodyStyle="text-align: center">
-                <template #body="{ data }">
+                :data="roles"
+                :items="items"
+                titleModule="Roles"
+            >
+                <template #header>
                     <Button
-                        icon="pi pi-external-link" 
-                        label="Ver permisos"
-                        class="p-button-raised p-button-rounded p-button-text p-button-sm p-button-info"
-                        @click="verPermisos({data: data.permisos, display: true})"
+                        type="button"
+                        label="Nuevo"
+                        icon="pi pi-plus"
+                        class="p-button-raised p-button-rounded p-button-success p-button-sm p-button-text"
+                        @click="modalCreateUpdate({display: true})"
+                    />
+                    
+                </template>
+
+                <template #columns>
+                    <Column header="Permisos" headerStyle="width: 8em" bodyStyle="text-align: center">
+                        <template #body="{ data }">
+                            <Button
+                                icon="pi pi-external-link" 
+                                label="Ver permisos"
+                                class="p-button-raised p-button-rounded p-button-text p-button-sm p-button-info"
+                                @click="verPermisos({data: data.permisos, display: true})"
+                            />
+                        </template>
+                    </Column>
+                </template>
+
+                <template #buttons="{ data }">
+                    <Button
+                        type="button"
+                        icon="pi pi-pencil"
+                        class="p-button-warning p-button-text p-button-raised p-button-rounded"
+                        v-tooltip.top="'Actualizar'"
+                        @click="modalCreateUpdate({display: true, data: data})"
+                    />
+
+                    <Button
+                        type="button"
+                        icon="pi pi-trash"
+                        class="p-button-danger p-button-text p-button-raised p-button-rounded"
+                        @click="modalGenericAlert({
+                            data: data, 
+                            display: true, 
+                            proceso: {
+                                'proceso': 'delete',
+                                'ruta': 'role.destroy',
+                            }
+                        })"
                     />
                 </template>
-            </Column>
-        </template>
-        <template #buttons="{ data }">
-            <Button
-                type="button"
-                icon="pi pi-pencil"
-                class="p-button-warning p-button-text p-button-raised p-button-rounded"
-                v-tooltip.top="'Actualizar'"
-                @click="modalCreateUpdate({display: true, data: data})"
-            />
-            <Button
-                type="button"
-                icon="pi pi-trash"
-                class="p-button-danger p-button-text p-button-raised p-button-rounded"
-                @click="modalGenericAlert({
-                    data: data, 
-                    display: true, 
-                    proceso: {
-                        'proceso': 'delete',
-                        'ruta': 'permission.destroy',
-                    }
-                })"
-            />
-        </template>
-    </DynamicTable>
+            </DynamicTable>
+
         </template>
 
         <template #footer>
@@ -62,6 +66,7 @@
                 }"
                 @closeModal="modalCreateUpdate({display: false, data: null})"
             />
+            
             <GenericAlert
                 :data_modal="{
                     display: display_generic_alert,
@@ -70,6 +75,7 @@
                 }"
                 @closeModal="modalGenericAlert({display: false, data: null, data_proceso: null})"
             />
+
             <Dialog 
                 header="Permisos" 
                 v-model:visible="display_ver_permisos"

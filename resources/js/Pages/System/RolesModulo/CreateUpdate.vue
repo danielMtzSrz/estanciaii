@@ -141,12 +141,14 @@ watch(() => props.data_modal, (newVal) => {
 
 watch(() => props.data_modal.data_registro, (newVal) => {
 
+    console.log(props.data_modal.data_permisos)
+
     form.reset();
 
     form.id = newVal?.id ?? null
     form.name = newVal?.name ?? null
     props.data_modal.data_permisos.forEach(permiso => {
-        props.data_modal.data_registro?.permissions.find(el => el.id == permiso.id) && form.permissions.push(permiso.id)
+        props.data_modal?.data_registro?.permisos.find(el => el.id == permiso.id) && form.permissions.push(permiso.id)
     })
 })
 </script>

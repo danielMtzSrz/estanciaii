@@ -32,9 +32,7 @@ const props = defineProps({
     }
 })
 
-const close = () => {
-    emits('closeModal')
-}
+const close = () => emits('closeModal')
 
 const emits = defineEmits(['closeModal'])
 </script>
