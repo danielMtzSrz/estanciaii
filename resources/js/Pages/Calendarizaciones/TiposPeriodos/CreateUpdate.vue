@@ -1,27 +1,15 @@
 <template>
-    <GenericModal :dataModal="dataModal" @cerrarModal="cerrarModal" :title="titulo">
-        <template #header>
-            <h3 class="font-bold">{{ titulo }}</h3>
-        </template>
+    <GenericModal :data_modal="data_modal" @closeModal="closeModal" :header="titulo">
         <template #content>
             <form @submit.prevent="submit(false)">
-                <div class="row p-fluid">
+                <div class="row p-fluid pt-4">
                     <!-- Input name -->
-                    <div class="mt-4 col-md-6">
+                    <div class="col-md-12">
                         <InputText 
                             label="Tipo de perodo"
                             name="name"
+                            v-model="form.nombre"
                             :errors="form.errors.nombre"
-                            :value="form.nombre"
-                            @input="form.nombre = $event"
-                        />
-                    </div>
-                    <!-- Fin input name -->
-                    <div class="mt-4 col-md-3">
-                        <label>Color:&nbsp;<span>{{ form.color.toUpperCase() }}</span>&nbsp;</label>
-                        <ColorPicker
-                            v-model="form.color"
-                            
                         />
                     </div>
                     <!-- Input description -->
@@ -29,9 +17,8 @@
                         <Textarea
                             label="Descripción del periodo"
                             name="name"
+                            v-model="form.descripcion"
                             :errors="form.errors.descripcion"
-                            :value="form.descripcion"
-                            @input="form.descripcion = $event"
                         />
                     </div>
                     <!-- Fin input description -->
@@ -41,7 +28,7 @@
                         type="button"
                         label="Cancelar"
                         class="p-button-text p-button-raised p-button-rounded p-button-warning"
-                        @click="cerrarModal()"
+                        @click="closeModal()"
                     />
                     <Button
                         type="submit"
@@ -82,7 +69,7 @@ const ruta = ref(null)
 const titulo = ref(null)
     
 const props = defineProps({
-    dataModal: {
+    data_modal: {
         type: Object,
         default: null
     },
@@ -90,41 +77,41 @@ const props = defineProps({
 
 const emits = defineEmits(['visible'])
 
-const cerrarModal = () => {
+const closeModal = () => {
     emits("visible", false);
     form.reset();
 }
 const submit = () => {
-    if(!props.dataModal.dataRegistro){
+    if(!props.data_modal.data_registro){
         form.transform((data) => ({
             ...data,
             color: "#"+data.color.toUpperCase(),
         })).post(route(ruta.value), {
             onSuccess: () => {
-                cerrarModal();
+                closeModal();
             },
         });
     }else{
         form.transform((data) => ({
             ...data,
             color: data.color.includes("#") ? data.color.toUpperCase() : "#"+data.color.toUpperCase(),
-        })).put(route(ruta.value, props.dataModal.dataRegistro), {
+        })).put(route(ruta.value, props.data_modal.data_registro), {
             onSuccess: () => {
-                cerrarModal();
+                closeModal();
             },
         });
     }
 }
 
-watch(() => props.dataModal, (newVal, oldVal) => {
+watch(() => props.data_modal, (newVal, oldVal) => {
     form.reset();
         
-    ruta.value = !props.dataModal.dataRegistro ? 'Calendarizaciones.TiposPeriodos.store' : 'Calendarizaciones.TiposPeriodos.update'
-    titulo.value = !props.dataModal.dataRegistro ? 'Nuevo tipo de periodo' : 'Actualizar tipo de periodo'
+    ruta.value = !props.data_modal.data_registro ? 'Calendarizaciones.TiposPeriodos.store' : 'Calendarizaciones.TiposPeriodos.update'
+    titulo.value = !props.data_modal.data_registro ? 'Nuevo tipo de periodo' : 'Actualizar tipo de periodo'
 
     // En caso de que se modifique el registro se llenarán estos campos correspondientes al form.
-    form.nombre = newVal.dataRegistro?.nombre ?? ""
-    form.descripcion = newVal.dataRegistro?.descripcion ?? ""
-    form.color = newVal.dataRegistro?.color ?? ""
+    form.nombre = newVal.data_registro?.nombre ?? ""
+    form.descripcion = newVal.data_registro?.descripcion ?? ""
+    form.color = newVal.data_registro?.color ?? ""
 })
 </script>

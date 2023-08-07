@@ -12,96 +12,50 @@ use Illuminate\Support\Facades\Redirect;
 
 class TiposPeriodosController extends Controller{
 
-    public function index(){
+    public function index()
+    {
         $tiposPeriodos = TipoPeriodo::all();
         return Inertia::render('Calendarizaciones/TiposPeriodos/Index', compact('tiposPeriodos'));
     }
 
-    public function create(){
-        //
+    public function store(StoreTipoPeriodoRequest $request)
+    {
+        TipoPeriodo::create([
+            'nombre' => $request->nombre,
+            'descripcion' => $request->descripcion,
+        ]);
+
+        return back()->with(config('messages.mensaje_exito'));
     }
 
-    public function store(StoreTipoPeriodoRequest $request){
-        
-        try {
- 
-            TipoPeriodo::create([
-                'nombre' => $request->nombre,
-                'descripcion' => $request->descripcion,
-                'color' => $request->color
-            ]);
-
-            return back()->with(
-                [
-                    'backgroundNotification' => 'success',
-                    'titleNotification' => '¡Éxito!',
-                    'messageNotification' => 'Tipo de periodo creado correctamente',
-                    'lifeNotification' => 5000
-                ]
-            );
-        } catch (Error $e) {
-            dd($e);
-        }
-    }
-
-    public function show(TipoPeriodo $tipoPeriodo){
-        //
-    }
-
-    public function edit(TipoPeriodo $tipoPeriodo){
-        //
-    }
-
-    public function update(UpdateTipoPeriodoRequest $request, $id){
-        
+    public function update(UpdateTipoPeriodoRequest $request, $id)
+    {
         $tipoPeriodo = TipoPeriodo::find($id);
 
-        try {
- 
-            $tipoPeriodo->update($request->validated());
+        $tipoPeriodo->update($request->validated());
 
-            return back()->with(
-                [
-                    'backgroundNotification' => 'success',
-                    'titleNotification' => '¡Éxito!',
-                    'messageNotification' => 'Tipo de periodo modificado correctamente',
-                    'lifeNotification' => 5000
-                ]
-            );
-        } catch (Error $e) {
-            dd($e);
-        }
+        return back()->with(config('messages.mensaje_actualizar'));
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         $tipoPeriodo = TipoPeriodo::find($id);
         
-        try {
- 
-            $tipoPeriodo->delete();
+        $tipoPeriodo->delete();
 
-            return back()->with(
-                [
-                    'backgroundNotification' => 'success',
-                    'titleNotification' => '¡Éxito!',
-                    'messageNotification' => 'Tipo de periodo eliminado correctamente',
-                    'lifeNotification' => 5000
-                ]
-            );
-        } catch (Error $e) {
-            dd($e);
-        }
+        return back()->with(config('messages.mensaje_eliminar'));
+        
     }
 
-    public function trashed(){
-
+    public function trashed()
+    {
         $tipoPeriodo = TipoPeriodo::onlyTrashed()->get();
 
         return Inertia::render("Calendarizaciones/TiposPeriodos/Trashed", compact('tipoPeriodo'));
     }
 
-    public function restore($id){
-        
+    public function restore($id)
+    {   
         $tipoPeriodo = TipoPeriodo::withTrashed()->findOrFail($id);
         $tipoPeriodo->restore();
 
@@ -115,8 +69,8 @@ class TiposPeriodosController extends Controller{
         );
     }
 
-    public function forceDestroy($id){
-        
+    public function forceDestroy($id)
+    {    
         $tipoPeriodo = TipoPeriodo::withTrashed()->findOrFail($id);
         $tipoPeriodo->forceDelete();
 

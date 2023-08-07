@@ -16,87 +16,40 @@ class TiposConvocatoriasController extends Controller{
         return Inertia::render('Calendarizaciones/TiposConvocatorias/Index', compact('tiposConvocatorias'));
     }
 
-    public function create(){
-        //
-    }
-
     public function store(StoreTiposConvocatoriasRequest $request){
-        
-        try {
  
-            TipoConvocatoria::create($request->validated());
+        TipoConvocatoria::create($request->validated());
 
-            return back()->with(
-                [
-                    'backgroundNotification' => 'success',
-                    'titleNotification' => '¡Éxito!',
-                    'messageNotification' => 'Tipo de convocatoria creada correctamente',
-                    'lifeNotification' => 5000
-                ]
-            );
-        } catch (Error $e) {
-            dd($e);
-        }
-    }
-
-    public function show(TipoConvocatoria $tipoConvocatoria){
-        //
-    }
-
-    public function edit(TipoConvocatoria $tipoConvocatoria){
-        //
+        return back()->with(config('messages.mensaje_exito'));
     }
 
     public function update(UpdateTiposConvocatoriasRequest $request, $id){
         
         $tipoConvocatoria = TipoConvocatoria::find($id);
 
-        try {
- 
-            $tipoConvocatoria->update($request->validated());
+        $tipoConvocatoria->update($request->validated());
 
-            return back()->with(
-                [
-                    'backgroundNotification' => 'success',
-                    'titleNotification' => '¡Éxito!',
-                    'messageNotification' => 'Tipo de convocatoria modificado correctamente',
-                    'lifeNotification' => 5000
-                ]
-            );
-        } catch (Error $e) {
-            dd($e);
-        }
+        return back()->with(config('messages.mensaje_actualizar'));
     }
 
     public function destroy($id){
         $tipoConvocatoria = TipoConvocatoria::find($id);
         
-        try {
- 
-            $tipoConvocatoria->delete();
+        $tipoConvocatoria->delete();
 
-            return back()->with(
-                [
-                    'backgroundNotification' => 'success',
-                    'titleNotification' => '¡Éxito!',
-                    'messageNotification' => 'Tipo de convocatoria eliminado correctamente',
-                    'lifeNotification' => 5000
-                ]
-            );
-        } catch (Error $e) {
-            dd($e);
-        }
+        return back()->with(config('messages.mensaje_eliminar'));
+        
     }
 
-    public function trashed(){
-
+    public function trashed()
+    {
         $tipoConvocatoria = TipoConvocatoria::onlyTrashed()->get();
 
         return Inertia::render("Calendarizaciones/TiposConvocatorias/Trashed", compact('tipoConvocatoria'));
     }
 
-    public function restore($id){
-        
+    public function restore($id)
+    {   
         $tipoConvocatoria = TipoConvocatoria::withTrashed()->findOrFail($id);
         $tipoConvocatoria->restore();
 

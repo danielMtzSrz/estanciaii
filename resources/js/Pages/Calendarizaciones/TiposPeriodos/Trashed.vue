@@ -30,29 +30,31 @@
                             v-permission="'permission.update'" -->
                             <Button
                                 type="button"
-                                icon="bi bi-arrow-counterclockwise"
-                                class="p-button-success p-button-text p-button-raised p-button-rounded"
+                                icon="pi pi-trash"
+                                class="p-button-danger p-button-text p-button-raised p-button-rounded"
                                 v-tooltip.top="'Restaurar'"
-                                @click="modalGenericAlert(slotProps.data, true, 
-                                    {
-                                    'proceso': 'restore',
-                                    'ruta': 'Calendarizaciones.TiposPeriodos.restore',
-                                    'registro': `${slotProps.data.nombre}`
+                                @click="modalGenericAlert({
+                                    data: slotProps.data, 
+                                    display: true, 
+                                    proceso: {
+                                        'proceso': 'restore',
+                                        'ruta': 'Calendarizaciones.TiposPeriodos.restore',
                                     }
-                                )"
+                                })"
                             />
                             <Button
                                 type="button"
                                 icon="pi pi-trash"
                                 class="p-button-danger p-button-text p-button-raised p-button-rounded"
                                 v-tooltip.top="'Eliminar definitivamente'"
-                                @click="modalGenericAlert(slotProps.data, true, 
-                                    {
-                                    'proceso': 'forceDelete',
-                                    'ruta': 'Calendarizaciones.TiposPeriodos.forceDelete',
-                                    'registro': `${slotProps.data.nombre}`
+                                @click="modalGenericAlert({
+                                    data: slotProps.data, 
+                                    display: true, 
+                                    proceso: {
+                                        'proceso': 'forceDelete',
+                                        'ruta': 'Calendarizaciones.TiposPeriodos.forceDelete',
                                     }
-                                )"
+                                })"
                             />
                         </template>
                     </Column>
@@ -63,12 +65,12 @@
         <template #footer>
             <!-- Modal eliminar -->
             <GenericAlert
-                :dataModal="{
-                    display: displayAlert,
-                    dataRegistro : dataRegistro,
-                    dataProceso : dataProceso
+                :data_modal="{
+                    display: display_generic_alert,
+                    data_registro : data_registro,
+                    data_proceso : data_proceso
                 }"
-                v-on:visible="(visible) => modalGenericAlert(null, visible, null)"
+                @closeModal="modalGenericAlert({display: false, data: null, data_proceso: null})"
             />
         </template>
     </GenericLayout>
@@ -80,7 +82,6 @@ import {ref, onMounted} from 'vue';
 // Componentes de primevue
 import Column from 'primevue/column';
 import Button from "primevue/button";
-import InputText from "primevue/inputtext";
 
 // Componentes personalizados
 import GenericLayout from '@/Layouts/GenericLayout.vue';
@@ -90,9 +91,9 @@ import GenericAlert from '@/Components/GenericAlert.vue';
 import moment from 'moment'
 
 // Variables
-const displayAlert = ref(null)
-const dataProceso = ref(null)
-const dataRegistro = ref(null)
+const display_generic_alert = ref(null)
+const data_proceso = ref(null)
+const data_registro = ref(null)
 const columns = ref(null)
 
 // Propiedades
@@ -104,10 +105,10 @@ const props = defineProps({
 })
 
 // Métodos
-const modalGenericAlert = (data, show, dataProcess) => {
-    dataRegistro.value = data
-    displayAlert.value = show
-    dataProceso.value = dataProcess
+const modalGenericAlert = (event) => {
+    data_registro.value = event.data;
+    display_generic_alert.value = event.display;
+    data_proceso.value = event.proceso;
 }
 
 onMounted(() => {

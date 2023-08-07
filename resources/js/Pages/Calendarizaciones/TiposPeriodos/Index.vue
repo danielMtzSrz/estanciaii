@@ -10,14 +10,6 @@
                         class="p-button-raised p-button-rounded p-button-text p-button-success p-button-sm"
                         @click="modalCreateUpdate(null, true)"
                     />
-                    <Link :href="route('Calendarizaciones.TiposPeriodos.trashed')">
-                        <Button 
-                            type="button"
-                            label="Papelera"
-                            icon="pi pi-trash"
-                            class="p-button-raised p-button-rounded p-button-text p-button-help p-button-sm" 
-                        />
-                    </Link>
                 </template>
                 <template #content>
                     <Column v-for="col of columns" :field="col.field" :header="col.header" :key="col.field" :sortable="col.sortable"></Column>
@@ -40,7 +32,14 @@
                                 type="button"
                                 icon="pi pi-trash"
                                 class="p-button-danger p-button-text p-button-raised p-button-rounded"
-                                @click="modalEliminar(slotProps.data, true)"
+                                @click="modalGenericAlert({
+                                    data: slotProps.data, 
+                                    display: true, 
+                                    proceso: {
+                                        'proceso': 'delete',
+                                        'ruta': 'Calendarizaciones.TiposPeriodos.destroy',
+                                    }
+                                })"
                             />
                         </template>
                     </Column>
@@ -51,19 +50,20 @@
         <template #footer>
             <!-- Modal crear - actualizar -->
             <form-create-update
-                :dataModal="{
-                    display: displayCreateUpdate,
-                    dataRegistro: dataRegistro
+                :data_modal="{
+                    display: display_create_update,
+                    data_registro: data_registro
                 }"
                 v-on:visible="(visible) => modalCreateUpdate(null, visible)"
             />
             <!-- Modal eliminar -->
-            <form-delete
-                :dataModal="{
-                    display: displayEliminar,
-                    dataRegistro : dataRegistro
+            <GenericAlert
+                :data_modal="{
+                    display: display_generic_alert,
+                    data_registro : data_registro,
+                    data_proceso : data_proceso
                 }"
-                v-on:visible="(visible) => modalEliminar(null, visible)"
+                @closeModal="modalGenericAlert({display: false, data: null, data_proceso: null})"
             />
         </template>
     </GenericLayout>
@@ -75,20 +75,20 @@ import {ref, onMounted} from 'vue';
 // Componentes de primevue
 import Column from 'primevue/column';
 import Button from "primevue/button";
-import InputText from "primevue/inputtext";
 
 // Componentes personalizados
 import GenericLayout from '@/Layouts/GenericLayout.vue';
 import GenericTable from '@/Components/GenericTable.vue';
+import GenericAlert from "@/Components/GenericAlert.vue";
 
 // Componentes de los modales
 import FormCreateUpdate from '@/Pages/Calendarizaciones/TiposPeriodos/CreateUpdate.vue';
-import FormDelete from '@/Pages/Calendarizaciones/TiposPeriodos/Delete.vue';
 
 // Variables
-const displayCreateUpdate = ref(null)
-const displayEliminar = ref(null)
-const dataRegistro = ref(null)
+const display_create_update = ref(null)
+const display_generic_alert = ref(null)
+const data_registro = ref(null)
+const data_proceso = ref(null);
 const columns = ref(null)
 
 // Propiedades
@@ -101,12 +101,14 @@ const props = defineProps({
 
 // Métodos
 const modalCreateUpdate = (data, show) => {
-    dataRegistro.value = data
-    displayCreateUpdate.value = show
+    data_registro.value = data
+    display_create_update.value = show
 }
-const modalEliminar = (data, show) => {
-    dataRegistro.value = data;
-    displayEliminar.value = show;
+
+const modalGenericAlert = (event) => {
+    data_registro.value = event.data;
+    display_generic_alert.value = event.display;
+    data_proceso.value = event.proceso;
 }
 
 onMounted(() => {
