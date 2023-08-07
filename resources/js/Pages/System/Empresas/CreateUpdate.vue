@@ -5,7 +5,7 @@
         :header="titulo"
     >
         <template #content>
-            <form @submit.prevent="submit">
+            <form @submit.prevent="submit" enctype="multipart/form-data">
                 <div class="row col-12 pt-4">
                     
                     <div class="col-sm-12 col-md-8">

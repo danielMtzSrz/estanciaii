@@ -213,42 +213,4 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
-
-    // Arrays Globales
-    'generos' => [
-        0 => 'Hombre',
-        1 => 'Mujer',
-        2 => 'Otro'
-    ],
-
-    'dias_semana' => [
-        0 => 'Lunes',
-        1 => 'Mates',
-        2 => 'Miércoles',
-        3 => 'Jueves',
-        4 => 'Viernes',
-        5 => 'Sábado',
-        6 => 'Domingo'
-    ],
-
-    'tipos_sangre' => [
-        0 => 'A+',
-        1 => 'A-',
-        2 => 'AB+',
-        3 => 'AB-',
-        4 => 'B+',
-        5 => 'B-',
-        6 => 'O+',
-        7 => 'O-'
-    ],
-
-    'estados_civiles' => [
-        0 => 'Soltero/a',
-        1 => 'Casado/aSoltero/a',
-        2 => 'Viudo/a',
-        3 => 'Divorciado/a',
-        4 => 'Separado/a',
-        5 => 'Conviviente',
-        6 => 'Unión civil'
-    ]
 ];

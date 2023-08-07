@@ -54,7 +54,8 @@ const props = defineProps({
     showTime: {
         type: Boolean,
         default: true
-    }
+    },
+    modelValue: null
 })
 
 const emits = defineEmits(['input'])
@@ -63,13 +64,12 @@ const selected = (event) => {
     inputValue.value = event
     let valorFormateado = null
     if(props.showTime){
-        let month = ("0" + (event.getMonth() + 1)).slice(-2),
-            day   = ("0" + (event.getDate())).slice(-2),
-            year  = event.getFullYear(),
-            hour  = ("0" + (event.getHours())).slice(-2),
-            min   = ("0" + (event.getMinutes())).slice(-2),
-            seg   = "59";
-
+        let month = ("0" + (event.getMonth() + 1)).slice(-2);
+        let day  = ("0" + (event.getDate())).slice(-2);
+        let year = event.getFullYear();
+        let hour =  ("0" + (event.getHours())).slice(-2);
+        let min =  ("0" + (event.getMinutes())).slice(-2);
+        let seg = "59";
         valorFormateado = year + "-" + month + "-" + day + " " + hour + ":" +  min + ":" + seg;
     }else{
         valorFormateado = event.toLocaleDateString("en-CA")

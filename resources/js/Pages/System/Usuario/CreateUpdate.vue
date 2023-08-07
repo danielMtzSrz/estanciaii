@@ -1,113 +1,441 @@
 <template>
-    <GenericModal :dataModal="dataModal" @cerrarModal="cerrarModal" :title="titulo">
-        <template #header>
-                <h3>Título del modal</h3>
-        </template>
-       <template #content>
-            <!-- Aquí íria todo el Form -->
-            <div class="mt-5"></div>
-            <div class="row p-fluid">
-            <div v-for="item in data"
-                :key="item.data_field?.field"
-                :class="`col-sm-${ item.data_field?.sm ?? 12 } col-md-${ item.data_field?.md ?? 12 } col-lg-${ item.data_field?.lg ?? 12 }`"
-            >
-                    <template v-if="item.data_field.type === 'text'">
-                        <InputText
-                            :id="item.data_field?.field ?? null"
-                            :name="item.data_field?.field ?? null"
-                            :label="item.data_field?.label ?? null"
-                            :icon="item.data_field?.icon ?? null"
-                            :errors="item.data_field?.errors ?? null"
-                            :disabled="item.data_field?.disabled ?? false"
-                            :tooltip="item.data_field.tooltip ?? null"
-                            v-model="form[item?.data_field?.field]"
-                            type="text"
-                        />
-                    </template>
-
-                    <template v-else-if="item.data_field.type === 'number'">
-                        <InputNumber
-                            :name="item.data_field?.name"
-                            :id="item.data_field?.id"
-                            :mode="item.data_field?.mode"
-                            :disabled="item.data_field?.disabled"
-                            :useGrouping="item.data_field?.useGrouping"
-                            v-model="form[item.data_field?.field]"
-                            :errors="item.data_field?.errors"
-                            v-tooltip.top="item.data_field?.tooltip"
-                        />
-                    </template>
-
-                    <template v-else-if="item.data_field.type === 'dropdown'">
-                        <Dropdown 
-                            :textDropdown="item.data_field?.textDropdown ?? null"
-                            :label="item.data_field?.label ?? null"
-                            :data="item.data_field?.data ?? null"
-                            v-model="form[item?.data_field?.field]"
-                            :errors="form[item?.data_field?.errors]"
-                        /> 
-                    </template>
-
-                    <template v-else>
-                        <p>NO ES DE TEXTO</p>
-                    </template>
+    <GenericModal
+        :data_modal="data_modal"
+        @closeModal="closeModal()" 
+        :header="titulo"
+    >
+        <template #content>
+            <form @submit.prevent="submit" enctype="multipart/form-data">
+                <div class="row col-12 pt-4">
                     
-                    <div class="mb-5"></div>
+                    <Divider align="left" type="solid" class="mb-4">
+                        <b>Información personal</b>
+                    </Divider>
+
+                    <div class="col-sm-12 col-md-4">
+                        <InputText
+                            label="Nombre (s)"
+                            name="name"
+                            :errors="form.errors.name"
+                            v-model="form.name"
+                        />
+                    </div>
+
+                    <div class="col-sm-12 col-md-4">
+                        <InputText
+                            label="Apellido paterno"
+                            name="apellido_paterno"
+                            :errors="form.errors.apellido_paterno"
+                            v-model="form.apellido_paterno"
+                        />
+                    </div>
+
+                    <div class="col-sm-12 col-md-4">
+                        <InputText
+                            label="Apellido materno"
+                            name="apellido_materno"
+                            :errors="form.errors.apellido_materno"
+                            v-model="form.apellido_materno"
+                        />
+                    </div>
+                    
+                    <div class="col-sm-12 col-md-4">
+                        <InputNumber
+                            label="Teléfono celular"
+                            name="telefono_celular"
+                            :errors="form.errors.telefono_celular"
+                            v-model="form.telefono_celular"
+                            :useGrouping="false"
+                        />
+                    </div>
+                    
+                    <div class="col-sm-12 col-md-4">
+                        <InputNumber
+                            label="Teléfono local"
+                            name="telefono_local"
+                            :errors="form.errors.telefono_local"
+                            v-model="form.telefono_local"
+                            :useGrouping="false"
+                        />
+                    </div>
+
+                    <div class="col-sm-12 col-md-4">
+                        <Calendar
+                            label="Fecha de nacimiento"
+                            v-model="form.fecha_nacimiento"
+                            :showTime="false"
+                            :errors="form.errors.fecha_nacimiento"
+                        />
+                    </div>
+
+                    <div class="col-sm-12 col-md-4">
+                        <InputText
+                            label="Correo electrónico"
+                            name="email"
+                            :errors="form.errors.email"
+                            v-model="form.email"
+                        />
+                    </div>
+
+                    <div class="col-sm-12 col-md-4">
+                        <InputText
+                            label="CURP"
+                            name="curp"
+                            :errors="form.errors.curp"
+                            v-model="form.curp"
+                        />
+                    </div>
+
+                    <div class="col-sm-12 col-md-4">
+                        <InputText
+                            label="RFC"
+                            name="rfc"
+                            :errors="form.errors.rfc"
+                            v-model="form.rfc"
+                        />
+                    </div>
+
+                    <div class="col-sm-12 col-md-4">
+                        <InputText
+                            label="NSS"
+                            name="nss"
+                            :errors="form.errors.nss"
+                            v-model="form.nss"
+                        />
+                    </div>
+
+                    <div class="col-sm-12 col-md-4">
+                        <Dropdown 
+                            label="Genero"
+                            :data="data_modal.data_generos"
+                            textDropdown="nombre"
+                            v-model="genero_seleccionado"
+                        />
+                    </div>
+
+                    <div class="col-sm-12 col-md-4">
+                        <Dropdown 
+                            label="Tipo de sangre"
+                            :data="data_modal.data_tipos_sangre"
+                            textDropdown="nombre"
+                            v-model="tipo_sangre_seleccionado"
+                        />
+                    </div>
+
+                    <div class="col-sm-12 col-md-4">
+                        <Dropdown 
+                            label="Estado civil"
+                            :data="data_modal.data_estados_civiles"
+                            textDropdown="nombre"
+                            v-model="estado_civil_seleccionado"
+                        />
+                    </div>
+
+                    <div class="col-sm-12 col-md-4">
+                        <Dropdown 
+                            label="Nacionalidad"
+                            :data="data_paises"
+                            textDropdown="nacionalidad"
+                            v-model="nacionalidad_seleccionada"
+                        />
+                    </div>                    
+
+                    <Divider align="left" type="solid" class="mb-4">
+                        <b>Domicilio</b>
+                    </Divider>
+
+                    <div class="col-sm-12 col-md-4">
+                        <Dropdown 
+                            label="Países"
+                            :data="data_paises"
+                            textDropdown="nombre"
+                            v-model="pais_seleccionado"
+                        />
+                    </div>
+
+                    <div class="col-sm-12 col-md-4">
+                        <Dropdown 
+                            label="Estados"
+                            :data="data_estados"
+                            textDropdown="nombre"
+                            v-model="estado_seleccionado"
+                            :disabled="!data_estados"
+                        />
+                    </div>
+
+                    <div class="col-sm-12 col-md-4">
+                        <Dropdown 
+                            label="Estados"
+                            :data="data_municipios"
+                            textDropdown="nombre"
+                            v-model="municipio_seleccionado"
+                            :disabled="!data_municipios"
+                        />
+                    </div>
+
+                    <div class="col-sm-12 col-md-6">
+                        <Dropdown 
+                            label="Colonias"
+                            :data="data_colonias"
+                            textDropdown="nombre"
+                            v-model="colonia_seleccionada"
+                            :errors="form.errors.colonia_id"
+                            :disabled="!data_colonias"
+                        />
+                    </div>
+
+                    <div class="col-sm-12 col-md-6">
+                        <InputText
+                            label="Calle"
+                            name="calle"
+                            v-model="form.calle"
+                            :errors="form.errors.calle"
+                        />
+                    </div>
+
+                    <div class="col-sm-12 col-md-4">
+                        <InputNumber
+                            label="N° Exterior"
+                            name="numero_exterior"
+                            v-model="form.numero_exterior"
+                            :errors="form.errors.numero_exterior"
+                            :useGrouping="false"
+                        />
+                    </div>
+
+                    <div class="col-sm-12 col-md-4">
+                        <InputNumber
+                            label="N° Interior"
+                            name="numero_interior"
+                            v-model="form.numero_interior"
+                            :errors="form.errors.numero_interior"
+                            :useGrouping="false"
+                        />
+                    </div>
+
+                    <div class="col-sm-12 col-md-4">
+                        <InputText
+                            label="Código Postal"
+                            name="codigo_postal"
+                            v-model="form.codigo_postal"
+                            :errors="form.errors.codigo_postal"
+                        />
+                    </div>
+
+                    <div class="mt-4 col-md-12">
+                        <FileUpload
+                            dropText="Arrastre aquí la foto del usuario."
+                            :imagenActual="imagenActual"
+                            v-model="form.profile_photo_path"
+                            :errors="form.errors.profile_photo_path"
+                        />
+                    </div>
                 </div>
-            </div>
-            <pre>{{ form }}</pre>
-       </template>
-   </GenericModal>
- </template>
- 
+
+                <pre>{{ form }}</pre>
+
+                <div class="float-end space-x-2 py-4">
+                    <Button
+                        type="button"
+                        label="Cancelar"
+                        class="p-button-text p-button-raised p-button-rounded p-button-warning"
+                        @click="closeModal()"
+                    />
+                    <Button
+                        type="submit"
+                        label="Guardar"
+                        class="p-button-text p-button-raised p-button-rounded p-button-success"
+                        :loading="form.processing"
+                    />
+                </div>
+            </form>
+        </template>
+    </GenericModal>
+</template>
+
 <script setup>
+
 // Vue
-import { ref, watch } from 'vue';
+import { ref, watch } from "vue";
+
+// Inertia
 import { useForm } from "@inertiajs/inertia-vue3";
 
-// Componentes
-import InputText from '@/Components/Forms/InputText.vue'
-import InputNumber from '@/Components/Forms/InputNumber.vue'
-import Dropdown from '@/Components/Forms/Dropdown.vue'
+// Primevue
+import Button from "primevue/button";
+import Divider from 'primevue/divider'
 
-// Layout
-import GenericModal from '@/Components/GenericModal.vue';
+// Layouts
+import GenericModal from "@/Components/GenericModal.vue";
 
-const form = useForm()
+// Inputs
+import InputText from "@/Components/Forms/InputText.vue";
+import Dropdown from "@/Components/Forms/Dropdown.vue";
+import InputNumber from "@/Components/Forms/InputNumber.vue";
+import FileUpload from "@/Components/Forms/FileUpload.vue";
+import Calendar from "@/Components/Forms/Calendar.vue";
 
-const ruta = ref(null), titulo = ref(null)
-const data = ref(null)
+// Variables
+const data_paises = ref(null), pais_seleccionado = ref(null),
+      data_estados = ref(null), estado_seleccionado = ref(null),
+      data_municipios = ref(null), municipio_seleccionado = ref(null),
+      data_colonias = ref(null), colonia_seleccionada = ref(null),
+      estado_civil_seleccionado = ref(null), genero_seleccionado = ref(null), tipo_sangre_seleccionado = ref(null),
+      nacionalidad_seleccionada = ref(null)
 
+const imagenActual = ref(null)
+
+const form = useForm({
+    _method: null,
+    
+    colonia_id: null,
+    tipo_sangre_id: null,
+    estado_civil_id: null,
+    generos_id: null,
+    nacionalidad_id: null,
+    
+    apellido_paterno: null,
+    apellido_materno: null,
+    fecha_nacimiento: null,
+    curp: null,
+    rfc: null,
+    nss: null,
+    telefono_local: null,
+    telefono_celular: null,
+    name: null,
+    email: null,
+    
+    calle: null,
+    numero_exterior: null,
+    numero_interior: null,
+    profile_photo_path: null
+});
+
+const ruta = ref(null),
+      titulo = ref(null);
+
+// Props
 const props = defineProps({
-    dataModal: {
+    data_modal: {
         type: Object,
-        default: null
+        default: null,
     },
-    fields: {
-        type: Object,
-        default: null
-    }
-})
+});
 
-const emits = defineEmits(['closeModal'])
+// Emits
+const emits = defineEmits(["closeModal"]);
 
-const cerrarModal = () => {
+// Methods
+const closeModal = () => {
     emits("closeModal");
     form.reset();
     form.errors = {}
-}
+};
 
-watch(() => props.dataModal, (newVal) => {
-    ruta.value = !newVal.dataRegistro ? 'GestionAcademica.Materias.store' : 'GestionAcademica.Materias.update'
-    titulo.value = !newVal.dataRegistro ? 'Nueva Materia' : 'Actualizar Materia'
-    data.value = props.fields;
-    props?.fields.forEach(el => {
-        console.log(el.data_field?.value);
-        form[el.data_field?.field] = el.data_field?.value ?? null
-    })
+const submit = () => {
+
+    if (!props.data_modal.data_registro) {
+        form.transform((data) => ({
+            ...data,
+            colonia_id      : colonia_seleccionada.value?.id,
+            tipo_sangre_id  : tipo_sangre_seleccionado?.id,
+            estado_civil_id : estado_civil_seleccionado?.id,
+            generos_id      : genero_seleccionado?.id,
+            nacionalidad_id : nacionalidad_seleccionada?.id,
+        })).post(route(ruta.value), {
+            onSuccess: () => {
+                closeModal();
+            },
+        });
+
+    } else {
+        form.transform((data) => ({
+            ...data,
+            colonia_id      : colonia_seleccionada.value?.id,
+            tipo_sangre_id  : tipo_sangre_seleccionado?.id,
+            estado_civil_id : estado_civil_seleccionado?.id,
+            generos_id      : genero_seleccionado?.id,
+            nacionalidad_id : nacionalidad_seleccionada?.id,
+        })).put(route(ruta.value, props.data_modal.data_registro), {
+            onSuccess: () => {
+                closeModal();
+            },
+        });
+    }
+};
+
+// Watchers
+watch(() => props.data_modal, async (newVal) => {
+    ruta.value = !newVal.data_registro ? 'user.store' : 'user.update'
+    titulo.value = !newVal.data_registro ? 'Nuevo usuario' : 'Actualizar usuario'
+    
+    const { data } = await axios.get(`/api/domicilio/paises`);
+    data_paises.value = data
+
+    nacionalidad_seleccionada.value = data_paises.value.find(el => el.id == newVal?.data_registro?.nacionalidad_id)
 })
 
-watch(form, newVal => {
+watch(() => props.data_modal.data_registro, (newVal) => {
+    form.reset()
+    
     console.log(newVal)
+
+    form._method = newVal ? "put" : null
+
+    form.colonia_id = newVal?.colonia_id ?? null
+    
+    form.tipo_sangre_id = newVal?.tipo_sangre_id ?? null
+    form.estado_civil_id = newVal?.estado_civil_id ?? null
+    form.generos_id = newVal?.generos_id ?? null
+    form.nacionalidad_id = newVal?.nacionalidad_id ?? null
+    
+    form.apellido_paterno = newVal?.apellido_paterno ?? null
+    form.apellido_materno = newVal?.apellido_materno ?? null
+    form.fecha_nacimiento = newVal?.fecha_nacimiento ?? null
+    form.curp = newVal?.curp ?? null
+    form.rfc = newVal?.rfc ?? null
+    form.nss = newVal?.nss ?? null
+    form.telefono_local = newVal?.telefono_local ?? null
+    form.telefono_celular = newVal?.telefono_celular ?? null
+    form.name = newVal?.name ?? null
+    form.email = newVal?.email ?? null
+    
+    form.calle = newVal?.calle ?? null
+    form.numero_exterior = newVal?.numero_exterior ?? null
+    form.numero_interior = newVal?.numero_interior ?? null
+    form.profile_photo_path = newVal?.profile_photo_path ?? null
+    imagenActual.value = newVal?.profile_photo_path ?? null
+
+    tipo_sangre_seleccionado.value = props.data_modal.data_tipos_sangre.find(el => el.id == newVal?.tipo_sangre_id)
+    estado_civil_seleccionado.value = props.data_modal.data_estados_civiles.find(el => el.id == newVal?.estado_civil_id)
+    genero_seleccionado.value = props.data_modal.data_generos.find(el => el.id == newVal?.generos_id)
+
+    pais_seleccionado.value = newVal?.colonia?.municipio?.estado?.pais
+    estado_seleccionado.value = newVal?.colonia?.municipio?.estado
+    municipio_seleccionado.value = newVal?.colonia?.municipio
+    colonia_seleccionada.value = newVal?.colonia
 })
- </script>
+
+watch(() => pais_seleccionado.value, async (newVal) => {
+    const { data } = await axios.get(`/api/domicilio/estados/${newVal?.id}`)
+    data_estados.value = data
+})
+
+watch(() => estado_seleccionado.value, async (newVal) => {
+    const { data } = await axios.get(`/api/domicilio/municipios/${newVal?.id}`)
+    data_municipios.value = data
+})
+
+watch(() => municipio_seleccionado.value, async (newVal) => {
+    const { data } = await axios.get(`/api/domicilio/colonias/${newVal?.id}`)
+    data_colonias.value = data
+})
+
+// Para obtener todo lo anterior a través de la colonia
+// watch(() => form.codigo_postal, async (newVal) => {
+//     if(form.codigo_postal.length === 5){
+//         const { data } = await axios.get(`/api/domicilio/cp/${newVal}`)
+//         console.log(data)
+//     }
+// })
+</script>

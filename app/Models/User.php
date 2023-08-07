@@ -27,8 +27,27 @@ class User extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
+        'colonia_id',
+        'tipo_sangre_id',
+        'estado_civil_id',
+        'generos_id',
+        'nacionalidad_id',
+        
+        'apellido_paterno',
+        'apellido_materno',
+        'fecha_nacimiento',
+        'curp',
+        'rfc',
+        'nss',
+        'telefono_local',
+        'telefono_celular',
         'name',
         'email',
+        
+        'calle',
+        'numero_exterior',
+        'numero_interior',
+        'profile_photo_path',
         'password',
     ];
 

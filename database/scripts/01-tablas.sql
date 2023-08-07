@@ -26,14 +26,6 @@ CREATE TABLE `colonias` (
   `deleted_at` timestamp DEFAULT NULL
 );
 
-CREATE TABLE `paisPersona` (
-  `nacionalidad_id` bigint,
-  `usuario_id` bigint,
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
-);
-
 CREATE TABLE `paises` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `nombre` varchar(255),
@@ -70,7 +62,7 @@ CREATE TABLE `periodos` (
 CREATE TABLE `tiposConvocatorias` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `nombre` varchar(255),
-  `plantilla` varchar(255),
+  `contenido` varchar(255),
   `created_at` timestamp DEFAULT NULL,
   `updated_at` timestamp DEFAULT NULL,
   `deleted_at` timestamp DEFAULT NULL
@@ -90,7 +82,6 @@ CREATE TABLE `tipoPeriodo` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `nombre` varchar(255),
   `descripcion` varchar(255),
-  `color` varchar(255),
   `created_at` timestamp DEFAULT NULL,
   `updated_at` timestamp DEFAULT NULL,
   `deleted_at` timestamp DEFAULT NULL
@@ -115,22 +106,6 @@ CREATE TABLE `aulas` (
   `nombre` varchar(255),
   `estatus` bool,
   `capacidad` int,
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
-);
-
-CREATE TABLE `tiposAulas` (
-  `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `nombre` varchar(255),
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
-);
-
-CREATE TABLE `edificios` (
-  `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `nombre` varchar(255),
   `created_at` timestamp DEFAULT NULL,
   `updated_at` timestamp DEFAULT NULL,
   `deleted_at` timestamp DEFAULT NULL
@@ -176,14 +151,6 @@ CREATE TABLE `planesEstudio` (
   `carrera_id` bigint,
   `mapa_curricular_id` bigint,
   `estatus` varchar(255),
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
-);
-
-CREATE TABLE `cuatrimestre` (
-  `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `nombre` varchar(255),
   `created_at` timestamp DEFAULT NULL,
   `updated_at` timestamp DEFAULT NULL,
   `deleted_at` timestamp DEFAULT NULL
@@ -379,23 +346,24 @@ CREATE TABLE `empresasAsociadas` (
 
 CREATE TABLE `users` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `colonia_id` bigint,
   `tipo_sangre_id` bigint,
   `estado_civil_id` bigint,
   `generos_id` bigint,
   `nacionalidad_id` bigint,
-  `domicilio_id` bigint,
   `apellido_paterno` varchar(255),
   `apellido_materno` varchar(255),
   `fecha_nacimiento` date,
   `curp` varchar(255),
   `rfc` varchar(255),
   `nss` bigint,
-  `correo_personal` varchar(255),
-  `correo_administrativo` varchar(255),
   `telefono_local` int,
   `telefono_celular` int,
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
+  `calle` varchar(255),
+  `numero_exterior` int,
+  `numero_interior` int,
   `email_verified_at` timestamp DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `two_factor_secret` text,
@@ -411,6 +379,8 @@ CREATE TABLE `users` (
 
 ALTER TABLE `empresasAsociadas` ADD FOREIGN KEY (`colonia_id`) REFERENCES `colonias` (`id`);
 
+ALTER TABLE `users` ADD FOREIGN KEY (`colonia_id`) REFERENCES `colonias` (`id`);
+
 ALTER TABLE `asesorias` ADD FOREIGN KEY (`materia_id`) REFERENCES `materias` (`id`);
 
 ALTER TABLE `asesorias` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
@@ -423,10 +393,6 @@ ALTER TABLE `grupos` ADD FOREIGN KEY (`aula_id`) REFERENCES `aulas` (`id`);
 
 ALTER TABLE `grupos` ADD FOREIGN KEY (`tutor_id`) REFERENCES `users` (`id`);
 
-ALTER TABLE `aulas` ADD FOREIGN KEY (`edificio_id`) REFERENCES `edificios` (`id`);
-
-ALTER TABLE `aulas` ADD FOREIGN KEY (`tipo_aula_id`) REFERENCES `tiposAulas` (`id`);
-
 ALTER TABLE `aulasReservacion` ADD FOREIGN KEY (`aula_id`) REFERENCES `aulas` (`id`);
 
 ALTER TABLE `aulasReservacion` ADD FOREIGN KEY (`solicitante_id`) REFERENCES `users` (`id`);
@@ -437,10 +403,6 @@ ALTER TABLE `municipios` ADD FOREIGN KEY (`estado_id`) REFERENCES `estados` (`id
 
 ALTER TABLE `colonias` ADD FOREIGN KEY (`municipio_id`) REFERENCES `municipios` (`id`);
 
-ALTER TABLE `paisPersona` ADD FOREIGN KEY (`nacionalidad_id`) REFERENCES `paises` (`id`);
-
-ALTER TABLE `paisPersona` ADD FOREIGN KEY (`usuario_id`) REFERENCES `users` (`id`);
-
 ALTER TABLE `horarios` ADD FOREIGN KEY (`aula_id`) REFERENCES `aulas` (`id`);
 
 ALTER TABLE `periodos` ADD FOREIGN KEY (`tipo_periodo_id`) REFERENCES `tipoPeriodo` (`id`);
@@ -448,8 +410,6 @@ ALTER TABLE `periodos` ADD FOREIGN KEY (`tipo_periodo_id`) REFERENCES `tipoPerio
 ALTER TABLE `convocatorias` ADD FOREIGN KEY (`periodo_id`) REFERENCES `periodos` (`id`);
 
 ALTER TABLE `convocatorias` ADD FOREIGN KEY (`tipo_convocatoria_id`) REFERENCES `tiposConvocatorias` (`id`);
-
-ALTER TABLE `materias` ADD FOREIGN KEY (`cuatrimestre_id`) REFERENCES `cuatrimestre` (`id`);
 
 ALTER TABLE `materias` ADD FOREIGN KEY (`plan_estudios_id`) REFERENCES `planesEstudio` (`id`);
 

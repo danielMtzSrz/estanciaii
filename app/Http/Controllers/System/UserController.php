@@ -7,109 +7,92 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
-use Error;
+
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
 
-    public function index(Request $request){
-
-        session(['breadcrumbItems' => [
-            [
-                'label' => 'Usuarios',
-                'url' => route('user.index'),
-
-            ]
-        ]]);
-
-        $userData = User::all();
-        $roles = Role::all();
-        $model_has_roles = DB::table('model_has_roles')->get();
-
-        return Inertia::render('System/Usuario/Index', compact('userData', 'roles', 'model_has_roles'));
-    }
-
-    public function create()
+    public function index(Request $request)
     {
-        //
+
+        $generos = config('staticdata.informacion_personal.generos');
+        $tipos_sangre = config('staticdata.informacion_personal.tipos_sangre');
+        $estados_civiles = config('staticdata.informacion_personal.estados_civiles');
+
+        $users = User::all();
+
+        return Inertia::render('System/Usuario/Index', compact('users', 'generos', 'tipos_sangre', 'estados_civiles'));
     }
 
     public function store(Request $request)
     {
-        try {
-            $usr = User::where('email', $request->email)->get();
-            if (count($usr)) {
-                return redirect()->route('user.index')->with(
-                    [
-                        'summary' => 'Error',
-                        'severity' => 'error',
-                        'detail' => 'La dirección de correo electrónico ya está registrada',
-                        'life' => 5000
-                    ]
-                );
-            }
+        // dd($request->all());
 
-            $user = User::create($request->all());
+        $input = $request->all();
 
-            $user->roles()->sync($request->roles);
+        $user = User::create([
+            'tipo_sangre_id' => $input['tipo_sangre_id'],
+            'estado_civil_id' => $input['estado_civil_id'],
+            'generos_id' => $input['generos_id'],
+            'nacionalidad_id' => $input['nacionalidad_id'],
+            
+            'apellido_paterno' => $input['apellido_paterno'],
+            'apellido_materno' => $input['apellido_materno'],
+            'fecha_nacimiento' => $input['fecha_nacimiento'],
+            'curp' => $input['curp'],
+            'rfc' => $input['rfc'],
+            'nss' => $input['nss'],
+            'telefono_local' => $input['telefono_local'],
+            'telefono_celular' => $input['telefono_celular'],
+            'name' => $input['name'],
+            'email' => $input['email'],
+            
+            'calle' => $input['calle'],
+            'numero_exterior' => $input['numero_exterior'],
+            'numero_interior' => $input['numero_interior'],
+            'password' => Hash::make('Temp123')
+        ]);
 
-            return redirect()->route('user.index')->with(
-                [
-                    'summary' => 'Creado correctamente',
-                    'severity' => 'success',
-                    'detail' => 'El usuario ha sido creado correctamente',
-                    'life' => 5000
-                ]
-            );
-        } catch (Error $e) {
+        // Cargar imagen
+        if($request->file('profile_photo_path')){
+            $user->profile_photo_path = $request->file('profile_photo_path')->store('profile_photo_path', 'public');
+            $user->save();
         }
-    }
 
-    public function show($id)
-    {
-        //
-    }
+        // $user->roles()->sync($request->roles);
 
-
-    public function edit(User $user){
-        //
+        return back()->with(config('messages.mensaje_exito'));
+        
     }
 
     public function update(Request $request, User $user)
     {
-        try {
-            
-            $user->roles()->sync($request->roles);
+        // $user->roles()->sync($request->roles);
 
-            $user->update($request->all());
+        // dd($request->all());
 
-            return redirect()->route('user.index')->with(
-                [
-                    'summary' => 'Creado correctamente',
-                    'severity' => 'success',
-                    'detail' => 'El usuario ha sido modificado correctamente',
-                    'life' => 5000
-                ]
-            );
-        } catch (Error $e) {
+        if($request->file('profile_photo_path')){
+            Storage::disk('public')->delete($user->profile_photo_path);
         }
+
+        $user->update($request->all());
+
+        if($request->file('profile_photo_path')) {
+            $user->profile_photo_path = $request->file('profile_photo_path')->store('profile_photo_path', 'public');
+            $user->save();
+        }
+
+        
+
+        return back()->with(config('messages.mensaje_actualizar'));
     }
 
     public function destroy(Request $request, User $user)
     {
-        try {
-            $user->delete();
+        $user->delete();
 
-            return redirect()->route('user.index')->with(
-                [
-                    'summary' => 'Eliminado correctamente',
-                    'severity' => 'error',
-                    'detail' => 'El usuario ha sido eliminado correctamente',
-                    'life' => 5000
-                ]
-            );
-        } catch (Error $e) {
-        }
+        return back()->with(config('messages.mensaje_eliminar'));
     }
 }
