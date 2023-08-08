@@ -6,6 +6,7 @@ use Inertia\Inertia;
 // Controladores
 use App\Http\Controllers\System\{UserController, RoleController, PermissionController};
 use App\Http\Controllers\Seguimiento\{AnunciosController, VacantesController};
+use App\Http\Controllers\ChatController;
 // Modelos
 use Illuminate\Http\Request;
 
@@ -30,4 +31,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     // Rutas de empresas
     Route::resource("empresas", EmpresasController::class)->except('show','create','edit');
+
+    // Rutas chat UI
+    Route::get("/chat", [ChatController::class, 'index'])->name("Chat.index");
 });

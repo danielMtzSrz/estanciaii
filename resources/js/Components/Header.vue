@@ -237,7 +237,7 @@ export default {
                                 );
                             },
                         },
-                        
+
                         {
                             label: "Materias",
                             icon: "pi pi-book",
@@ -261,6 +261,14 @@ export default {
 
                     ]
                 },
+                {
+                    label: "Chat",
+                    icon: "pi pi-users",
+                    command: () => {this.$inertia.visit(
+                        route( "Chat.index"));
+                    },
+                },
+
                 // {
                 //     label: "Anuncios",
                 //     icon: "pi pi-bell",
