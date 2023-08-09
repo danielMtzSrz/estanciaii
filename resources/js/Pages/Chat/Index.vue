@@ -1,7 +1,8 @@
 <template>
     <GenericLayout titleModule="Chat">
         <template #content>
-            Soy un chat
+            chat:
+            <pre>{{ mensajes }}</pre>
         </template>
     </GenericLayout>
 </template>
@@ -21,7 +22,19 @@ import CreateUpdate from "@/Pages/System/Empresas/CreateUpdate.vue";
 // Variables
 
 // Propiedades
-const props = defineProps({ });
+// const props = defineProps({});
+
+const mensajes = ref([]);
+
+const chatChannel = window.Echo.private("private.chat.1");
+
+chatChannel
+    .subscribed(() => {
+        console.log("subscribed");
+    })
+    .listen(".chat-message", (e) => {
+        mensajes.value.push(e);
+    });
 
 // Métodos
 </script>

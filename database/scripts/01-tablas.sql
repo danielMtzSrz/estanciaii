@@ -1,3 +1,13 @@
+CREATE TABLE `websockets_statistics_entries` (
+  `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `app_id` varchar(255),
+  `peak_connection_count` int,
+  `websocket_message_count` int,
+  `api_message_count` int,
+  `created_at` timestamp DEFAULT NULL,
+  `updated_at` timestamp DEFAULT NULL
+);
+
 CREATE TABLE `estados` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `pais_id` bigint,
