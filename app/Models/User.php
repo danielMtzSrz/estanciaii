@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Chat\Conversacion;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -32,7 +33,7 @@ class User extends Authenticatable
         'estado_civil_id',
         'generos_id',
         'nacionalidad_id',
-        
+
         'apellido_paterno',
         'apellido_materno',
         'fecha_nacimiento',
@@ -43,7 +44,7 @@ class User extends Authenticatable
         'telefono_celular',
         'name',
         'email',
-        
+
         'calle',
         'numero_exterior',
         'numero_interior',
@@ -91,5 +92,9 @@ class User extends Authenticatable
 
     public function materiaUsuarios(){
         return $this->belongsTo("App\Models\Material\MateriaUsuarios");
+    }
+
+    public function conversaciones() {
+        return $this->belongsToMany(Conversacion::class, 'usuario_conversacion', 'usuario_id');
     }
 }

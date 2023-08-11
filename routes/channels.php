@@ -20,6 +20,6 @@ use Illuminate\Support\Facades\Log;
 
 // messenger
 Broadcast::channel('private.chat.{id}', function ($user, $id) {
-    Log::info("Login Broadcast", [$user, $id]);
+    // Log::debug("login_chat_id:" . $id, [$user]);
     return true;
 });

@@ -1,3 +1,26 @@
+ -- Creado para el chat
+CREATE TABLE `conversaciones` (
+  `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `created_at` timestamp DEFAULT NULL,
+  `updated_at` timestamp DEFAULT NULL
+);
+CREATE TABLE `mensajes` (
+  `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `autor_id` bigint,
+  `conversacion_id` bigint,
+  `mensaje` varchar(255),
+  `created_at` timestamp DEFAULT NULL,
+  `updated_at` timestamp DEFAULT NULL
+);
+CREATE TABLE `usuario_conversacion` (
+  `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `usuario_id` bigint,
+  `conversacion_id` bigint,
+  `created_at` timestamp DEFAULT NULL,
+  `updated_at` timestamp DEFAULT NULL
+);
+ -- Fin chat
+
 CREATE TABLE `websockets_statistics_entries` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `app_id` varchar(255),
@@ -450,3 +473,10 @@ ALTER TABLE `model_has_permissions` ADD FOREIGN KEY (`permission_id`) REFERENCES
 ALTER TABLE `model_has_roles` ADD FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
 
 ALTER TABLE `anuncios` ADD FOREIGN KEY (`empresasAsociadas_id`) REFERENCES `empresasAsociadas` (`id`);
+
+ -- chat
+ALTER TABLE `mensajes` ADD FOREIGN KEY (`autor_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+ALTER TABLE `mensajes` ADD FOREIGN KEY (`conversacion_id`) REFERENCES `conversaciones` (`id`) ON DELETE CASCADE;
+ALTER TABLE `usuario_conversacion` ADD FOREIGN KEY (`usuario_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+ALTER TABLE `usuario_conversacion` ADD FOREIGN KEY (`conversacion_id`) REFERENCES `conversaciones` (`id`) ON DELETE CASCADE;
+

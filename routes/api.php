@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Domicilios;
+use App\Http\Controllers\ChatController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,13 @@ Route::prefix('domicilio')->name('domicilio.')->group(function () {
 
     Route::get('colonias/{id_municipio}', [Domicilios::class, 'Colonias'])->name('colonias');
 
-    Route::get('cp/{cp}',[Domicilios::class, 'cp'])->name('cp');
+    Route::get('cp/{cp}', [Domicilios::class, 'cp'])->name('cp');
 });
 
+// Chat api routes
+//
+Route::prefix('chat')->name('chat.')->group(function () {
+    Route::get('get/{id}', [ChatController::class, 'getConversacion'])->name('get.conversacion');
+    Route::get('get/msg/{id}', [ChatController::class, 'getMsg'])->name('get.msg');
+    Route::post('send', [ChatController::class, 'sendMessage'])->name('send');
+});
