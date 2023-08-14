@@ -37,7 +37,9 @@ Route::prefix('domicilio')->name('domicilio.')->group(function () {
 // Chat api routes
 //
 Route::prefix('chat')->name('chat.')->group(function () {
-    Route::get('get/{id}', [ChatController::class, 'getConversacion'])->name('get.conversacion');
+    Route::post('conversaciones', [ChatController::class, 'getConversaciones'])->name('index');
+    Route::post('msgs', [ChatController::class, 'getMensajes'])->name('show');
+    Route::post('create', [ChatController::class, 'createConversacion'])->name('create');
     Route::get('get/msg/{id}', [ChatController::class, 'getMsg'])->name('get.msg');
     Route::post('send', [ChatController::class, 'sendMessage'])->name('send');
 });

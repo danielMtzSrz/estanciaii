@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Chat\Conversacion;
+use App\Models\User;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Log;
 
@@ -21,5 +23,12 @@ use Illuminate\Support\Facades\Log;
 // messenger
 Broadcast::channel('private.chat.{id}', function ($user, $id) {
     // Log::debug("login_chat_id:" . $id, [$user]);
-    return true;
+    $conversacion = Conversacion::find($id);
+    $usuarios = $conversacion->usuarios;
+    foreach ($usuarios as $usuario) {
+        if ($usuario->id == $user->id) {
+            return true;
+        }
+    }
+    return false;
 });

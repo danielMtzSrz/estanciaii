@@ -80,8 +80,8 @@
                         icon="pi pi-trash"
                         class="p-button-danger p-button-text p-button-raised p-button-rounded"
                         @click="modalGenericAlert({
-                            data: data, 
-                            display: true, 
+                            data: data,
+                            display: true,
                             proceso: {
                                 'proceso': 'delete',
                                 'ruta': 'empresas.destroy',
@@ -101,7 +101,7 @@
                 }"
                 @closeModal="modalCreateUpdate({display: false, data: null})"
             />
-            
+
             <GenericAlert
                 :data_modal="{
                     display: display_generic_alert,
