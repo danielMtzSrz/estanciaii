@@ -1,7 +1,7 @@
 <template>
     <GenericModal
-        :data_modal="data_modal"
-        @closeModal="cerrarModal()"
+        :dataModal="dataModal"
+        @closeModal="closeModal()"
         :header="titulo"
         :style="{ width: '75vw' }"
     >
@@ -52,7 +52,7 @@
                         type="button"
                         label="Cancelar"
                         class="p-button-text p-button-raised p-button-rounded p-button-warning"
-                        @click="cerrarModal()"
+                        @click="closeModal()"
                     />
                     <Button
                         type="submit"
@@ -95,7 +95,7 @@ const ruta = ref(null)
 const titulo = ref(null)
 
 const props = defineProps({
-    data_modal: {
+    dataModal: {
         type: Object,
         default: null
     },
@@ -103,7 +103,7 @@ const props = defineProps({
 
 const emits = defineEmits(['closeModal', 'success'])
 
-const cerrarModal = () => {
+const closeModal = () => {
     emits("closeModal");
     form.reset();
     form.errors = {}
@@ -111,17 +111,17 @@ const cerrarModal = () => {
 
 // Métodos
 const submit = () => {
-    if(!props.data_modal.data_registro){
+    if(!props.dataModal.dataRegistro){
         form.post(route(ruta.value), {
             onSuccess: () => {
-                cerrarModal();
+                closeModal();
                 emits('success')
             },
         });
     }else{
-        form.put(route(ruta.value, props.data_modal.data_registro), {
+        form.put(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
-                cerrarModal();
+                closeModal();
                 emits('success')
             },
         });
@@ -130,25 +130,25 @@ const submit = () => {
 const buscador = ref(null)
 const data_permisosAll = computed(() => {
     return buscador.value 
-        ? props.data_modal?.data_permisos.filter(el => el.description.toLowerCase().indexOf(buscador.value.toLowerCase()) >= 0)
-        : props.data_modal?.data_permisos
+        ? props.dataModal?.data_permisos.filter(el => el.description.toLowerCase().indexOf(buscador.value.toLowerCase()) >= 0)
+        : props.dataModal?.data_permisos
 })
 
-watch(() => props.data_modal, (newVal) => {
-    ruta.value = !newVal.data_registro ? 'role.store' : 'role.update'
-    titulo.value = !newVal.data_registro ? 'Nuevo permiso' : 'Actualizar permiso'
+watch(() => props.dataModal, (newVal) => {
+    ruta.value = !newVal.dataRegistro ? 'role.store' : 'role.update'
+    titulo.value = !newVal.dataRegistro ? 'Nuevo permiso' : 'Actualizar permiso'
 })
 
-watch(() => props.data_modal.data_registro, (newVal) => {
+watch(() => props.dataModal.dataRegistro, (newVal) => {
 
-    console.log(props.data_modal.data_permisos)
+    console.log(props.dataModal.data_permisos)
 
     form.reset();
 
     form.id = newVal?.id ?? null
     form.name = newVal?.name ?? null
-    props.data_modal.data_permisos.forEach(permiso => {
-        props.data_modal?.data_registro?.permisos.find(el => el.id == permiso.id) && form.permissions.push(permiso.id)
+    props.dataModal.data_permisos.forEach(permiso => {
+        props.dataModal?.dataRegistro?.permisos.find(el => el.id == permiso.id) && form.permissions.push(permiso.id)
     })
 })
 </script>

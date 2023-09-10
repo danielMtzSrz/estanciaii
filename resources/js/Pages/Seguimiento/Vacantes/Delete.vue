@@ -3,7 +3,7 @@
         :style="{ width: '50vw' }" :closable="false">
         <div class="flex justify-between mt-0 mb-2">
             <h3 class="font-bold">Eliminar vacante</h3>
-            <button @click="cerrarModal()"
+            <button @click="closeModal()"
                 class="rounded-full px-2 py-1 shadow-md  transition-all transform hover:shadow-xl hover:shadow-gray-700">
                 <span class="p-dialog-header-close-icon pi pi-times"></span>
             </button>
@@ -11,7 +11,7 @@
         ¿Seguro que desea eliminar la vacante <strong>{{ dataModal.dataRegistro.name }}</strong>?
         <div class="float-end space-x-2 mt-3">
             <Button type="button" label="Cancelar"
-                    class="p-button-text p-button-raised p-button-rounded p-button-warning" @click="cerrarModal()" />
+                    class="p-button-text p-button-raised p-button-rounded p-button-warning" @click="closeModal()" />
             <Button type="submit" label="Eliminar"
                 class="p-button-text p-button-raised p-button-rounded p-button-danger"
                 @click="eliminarUsuario()" :loading="form.processing" />
@@ -49,13 +49,13 @@ export default {
     },
     methods: {
         // Cargar modales
-        cerrarModal() {
+        closeModal() {
             this.$emit("visible", false);
         },
         eliminarUsuario() {
             this.form.delete(route("vacantes.destroy", this.dataModal.dataRegistro), {
                 onSuccess: () => {
-                    this.cerrarModal();
+                    this.closeModal();
                     this.form.reset();
                 },
             });

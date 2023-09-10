@@ -42,7 +42,7 @@
             <GenericAlert :dataModal="{
                 display: displayAlert,
                 dataRegistro: dataRegistro,
-                dataProceso: dataProceso
+                data_proceso: data_proceso
             }" v-on:visible="(visible) => modalGenericAlert(null, visible, null)" />
         </template>
     </GenericLayout>
@@ -66,7 +66,7 @@ import GenericAlert from '@/Components/GenericAlert.vue';
 // Variables
 const displayCreateUpdate = ref(null)
 const displayAlert = ref(null)
-const dataProceso = ref(null)
+const data_proceso = ref(null)
 const dataRegistro = ref(null)
 const columns = ref(null)
 
@@ -87,7 +87,7 @@ const modalCreateUpdate = (data, show) => {
 const modalGenericAlert = (data, show, dataProcess) => {
     dataRegistro.value = data
     displayAlert.value = show
-    dataProceso.value = dataProcess
+    data_proceso.value = dataProcess
 }
 
 onMounted(() => {

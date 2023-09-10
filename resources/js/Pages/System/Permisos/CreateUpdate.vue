@@ -1,8 +1,8 @@
 <template>
     <GenericModal 
-        :data_modal="data_modal" 
+        :dataModal="dataModal" 
         :header="titulo"
-        @closeModal="cerrarModal()" 
+        @closeModal="closeModal()" 
     >
         <template #content>
             <form @submit.prevent="submit()">
@@ -34,7 +34,7 @@
                         type="button"
                         label="Cancelar"
                         class="p-button-text p-button-raised p-button-rounded p-button-warning"
-                        @click="cerrarModal()"
+                        @click="closeModal()"
                     />
                     <Button
                         type="submit"
@@ -75,7 +75,7 @@ const ruta = ref(null),
       titulo = ref(null)
 
 const props = defineProps({
-    data_modal: {
+    dataModal: {
         type: Object,
         default: null
     },
@@ -83,7 +83,7 @@ const props = defineProps({
 
 const emits = defineEmits(['closeModal'])
 
-const cerrarModal = () => {
+const closeModal = () => {
     emits("closeModal");
     form.reset();
     form.errors = {}
@@ -91,27 +91,27 @@ const cerrarModal = () => {
 
 // Métodos
 const submit = () => {
-    if(!props.data_modal.data_registro){
+    if(!props.dataModal.dataRegistro){
         form.post(route(ruta.value), {
             onSuccess: () => {
-                cerrarModal();
+                closeModal();
             },
         });
     }else{
-        form.put(route(ruta.value, props.data_modal.data_registro), {
+        form.put(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
-                cerrarModal();
+                closeModal();
             },
         });
     }
 }
 
-watch(() => props.data_modal, (newVal) => {
-    ruta.value = !newVal.data_registro ? 'permission.store' : 'permission.update'
-    titulo.value = !newVal.data_registro ? 'Nuevo permiso' : 'Actualizar permiso'
+watch(() => props.dataModal, (newVal) => {
+    ruta.value = !newVal.dataRegistro ? 'permission.store' : 'permission.update'
+    titulo.value = !newVal.dataRegistro ? 'Nuevo permiso' : 'Actualizar permiso'
 })
 
-watch(() => props.data_modal.data_registro, (newVal) => {
+watch(() => props.dataModal.dataRegistro, (newVal) => {
     form.reset();
 
     form.id = newVal?.id ?? null

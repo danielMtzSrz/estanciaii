@@ -50,17 +50,17 @@
         <template #footer>
             <!-- Modal crear - actualizar -->
             <form-create-update
-                :data_modal="{
+                :dataModal="{
                     display: display_create_update,
-                    data_registro: data_registro
+                    dataRegistro: dataRegistro
                 }"
                 v-on:visible="(visible) => modalCreateUpdate(null, visible)"
             />
             <!-- Modal eliminar -->
             <GenericAlert
-                :data_modal="{
+                :dataModal="{
                     display: display_generic_alert,
-                    data_registro : data_registro,
+                    dataRegistro : dataRegistro,
                     data_proceso : data_proceso
                 }"
                 @closeModal="modalGenericAlert({display: false, data: null, data_proceso: null})"
@@ -87,7 +87,7 @@ import FormCreateUpdate from '@/Pages/Calendarizaciones/TiposPeriodos/CreateUpda
 // Variables
 const display_create_update = ref(null)
 const display_generic_alert = ref(null)
-const data_registro = ref(null)
+const dataRegistro = ref(null)
 const data_proceso = ref(null);
 const columns = ref(null)
 
@@ -101,12 +101,12 @@ const props = defineProps({
 
 // Métodos
 const modalCreateUpdate = (data, show) => {
-    data_registro.value = data
+    dataRegistro.value = data
     display_create_update.value = show
 }
 
 const modalGenericAlert = (event) => {
-    data_registro.value = event.data;
+    dataRegistro.value = event.data;
     display_generic_alert.value = event.display;
     data_proceso.value = event.proceso;
 }

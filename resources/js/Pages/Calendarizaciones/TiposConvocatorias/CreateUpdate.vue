@@ -1,8 +1,5 @@
 <template>
-    <GenericModal :dataModal="dataModal" @cerrarModal="cerrarModal" :title="titulo">
-        <template #header>
-            <h3 class="font-bold">{{ titulo }}</h3>
-        </template>
+    <GenericModal :dataModal="dataModal" @closeModal="closeModal" :header="titulo">
         <template #content>
             <form @submit.prevent="submit(false)">
                 <div class="row p-fluid">
@@ -12,8 +9,7 @@
                             label="Tipo de convocatoria"
                             name="nombre"
                             :errors="form.errors.nombre"
-                            :value="form.nombre"
-                            @input="form.nombre = $event"
+                            v-model="form.nombre"
                         />
                     </div>
                     <!-- Fin input name -->
@@ -23,8 +19,7 @@
                             label="Plantilla"
                             name="plantilla"
                             :errors="form.errors.plantilla"
-                            :value="form.plantilla"
-                            @input="form.plantilla = $event"
+                            v-model="form.plantilla"
                         />
                     </div>
                     <!-- Fin input description -->
@@ -34,7 +29,7 @@
                         type="button"
                         label="Cancelar"
                         class="p-button-text p-button-raised p-button-rounded p-button-warning"
-                        @click="cerrarModal()"
+                        @click="closeModal()"
                     />
                     <Button
                         type="submit"
@@ -82,7 +77,7 @@ const props = defineProps({
 
 const emits = defineEmits(['visible'])
 
-const cerrarModal = () => {
+const closeModal = () => {
     emits("visible", false);
     form.reset();
 }
@@ -90,13 +85,13 @@ const submit = () => {
     if(!props.dataModal.dataRegistro){
         form.post(route(ruta.value), {
             onSuccess: () => {
-                cerrarModal();
+                closeModal();
             },
         });
     }else{
         form.put(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
-                cerrarModal();
+                closeModal();
             },
         });
     }

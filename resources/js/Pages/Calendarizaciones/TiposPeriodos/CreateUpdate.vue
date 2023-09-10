@@ -1,5 +1,5 @@
 <template>
-    <GenericModal :data_modal="data_modal" @closeModal="closeModal" :header="titulo">
+    <GenericModal :dataModal="dataModal" @closeModal="closeModal" :header="titulo">
         <template #content>
             <form @submit.prevent="submit(false)">
                 <div class="row p-fluid pt-4">
@@ -69,7 +69,7 @@ const ruta = ref(null)
 const titulo = ref(null)
     
 const props = defineProps({
-    data_modal: {
+    dataModal: {
         type: Object,
         default: null
     },
@@ -82,7 +82,7 @@ const closeModal = () => {
     form.reset();
 }
 const submit = () => {
-    if(!props.data_modal.data_registro){
+    if(!props.dataModal.dataRegistro){
         form.transform((data) => ({
             ...data,
             color: "#"+data.color.toUpperCase(),
@@ -95,7 +95,7 @@ const submit = () => {
         form.transform((data) => ({
             ...data,
             color: data.color.includes("#") ? data.color.toUpperCase() : "#"+data.color.toUpperCase(),
-        })).put(route(ruta.value, props.data_modal.data_registro), {
+        })).put(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();
             },
@@ -103,15 +103,15 @@ const submit = () => {
     }
 }
 
-watch(() => props.data_modal, (newVal, oldVal) => {
+watch(() => props.dataModal, (newVal, oldVal) => {
     form.reset();
         
-    ruta.value = !props.data_modal.data_registro ? 'Calendarizaciones.TiposPeriodos.store' : 'Calendarizaciones.TiposPeriodos.update'
-    titulo.value = !props.data_modal.data_registro ? 'Nuevo tipo de periodo' : 'Actualizar tipo de periodo'
+    ruta.value = !props.dataModal.dataRegistro ? 'Calendarizaciones.TiposPeriodos.store' : 'Calendarizaciones.TiposPeriodos.update'
+    titulo.value = !props.dataModal.dataRegistro ? 'Nuevo tipo de periodo' : 'Actualizar tipo de periodo'
 
     // En caso de que se modifique el registro se llenarán estos campos correspondientes al form.
-    form.nombre = newVal.data_registro?.nombre ?? ""
-    form.descripcion = newVal.data_registro?.descripcion ?? ""
-    form.color = newVal.data_registro?.color ?? ""
+    form.nombre = newVal.dataRegistro?.nombre ?? ""
+    form.descripcion = newVal.dataRegistro?.descripcion ?? ""
+    form.color = newVal.dataRegistro?.color ?? ""
 })
 </script>

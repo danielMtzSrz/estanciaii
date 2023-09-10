@@ -43,9 +43,9 @@
 
         <template #footer>
             <CreateUpdate
-                :data_modal="{
+                :dataModal="{
                     display: display_create_update,
-                    data_registro: data_registro,
+                    dataRegistro: dataRegistro,
                     data_generos: generos,
                     data_tipos_sangre: tipos_sangre,
                     data_estados_civiles: estados_civiles
@@ -53,9 +53,9 @@
                 @closeModal="modalCreateUpdate({display: false, data: null})"
             />
             <GenericAlert
-                :data_modal="{
+                :dataModal="{
                     display: display_generic_alert,
-                    data_registro : data_registro,
+                    dataRegistro : dataRegistro,
                     data_proceso : data_proceso
                 }"
                 @closeModal="modalGenericAlert({display: false, data: null, data_proceso: null})"
@@ -79,16 +79,16 @@ import CreateUpdate from "@/Pages/System/Usuario/CreateUpdate.vue";
 
 // Variables para los modales
 const display_create_update = ref(false), display_generic_alert = ref(false);
-const data_registro = ref(null), data_proceso = ref(null)
+const dataRegistro = ref(null), data_proceso = ref(null)
 
 // Métodos
 const modalCreateUpdate = (event) => {
     display_create_update.value = event.display;
-    data_registro.value = event?.data ?? null;
+    dataRegistro.value = event?.data ?? null;
 }
 
 const modalGenericAlert = (event) => {
-    data_registro.value = event.data;
+    dataRegistro.value = event.data;
     display_generic_alert.value = event.display;
     data_proceso.value = event.proceso;
 }

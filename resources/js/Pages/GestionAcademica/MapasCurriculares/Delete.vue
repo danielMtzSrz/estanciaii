@@ -1,6 +1,6 @@
 <template>
 
-   <GenericModal :dataModal="dataModal" @cerrarModal="cerrarModal">
+   <GenericModal :dataModal="dataModal" @closeModal="closeModal">
       <template #header>
         <h3 class="font-bold">{{ titulo }}</h3>
       </template>
@@ -18,7 +18,7 @@
             type="button"
             label="Cancelar"
             class="p-button-text p-button-raised p-button-rounded p-button-warning"
-            @click="cerrarModal()"
+            @click="closeModal()"
           />
           <Button
             type="submit"
@@ -49,7 +49,7 @@
    
    const emits = defineEmits(["visible"]);
    
-   const cerrarModal = () => {
+   const closeModal = () => {
      emits("visible", false);
    }
    const eliminarRegistro = () => {
@@ -57,7 +57,7 @@
        route("GestionAcademica.MapasCurriculares.destroy", props.dataModal.dataRegistro),
        {
          onSuccess: () => {
-           cerrarModal();
+           closeModal();
          },
        }
      );

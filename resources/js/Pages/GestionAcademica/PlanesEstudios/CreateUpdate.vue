@@ -1,5 +1,5 @@
 <template>
-    <GenericModal :dataModal="dataModal" @cerrarModal="cerrarModal" :title="titulo">
+    <GenericModal :dataModal="dataModal" @closeModal="closeModal" :title="titulo">
        <template #header>
            <h3 class="font-bold">{{ titulo }}</h3>
        </template>
@@ -41,7 +41,7 @@
                        type="button"
                        label="Cancelar"
                        class="p-button-text p-button-raised p-button-rounded p-button-warning"
-                       @click="cerrarModal()"
+                       @click="closeModal()"
                    />
                    <Button
                        type="submit"
@@ -90,7 +90,7 @@
     
     const emits = defineEmits(['visible'])
     
-    const cerrarModal = () => {
+    const closeModal = () => {
         emits("visible", false);
         form.reset();
         form.errors = {}
@@ -103,7 +103,7 @@
                 estatus: data.estatus ? '1' : '0',
             })).post(route(ruta.value), {
                 onSuccess: () => {
-                    cerrarModal();
+                    closeModal();
                 },
             });
         }else{
@@ -112,7 +112,7 @@
                 estatus: data.estatus ? '1' : '0',
             })).put(route(ruta.value, props.dataModal.dataRegistro), {
                 onSuccess: () => {
-                    cerrarModal();
+                    closeModal();
                 },
             });
         }

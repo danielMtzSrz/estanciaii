@@ -1,6 +1,6 @@
 <template>
     <GenericModal 
-        :data_modal="data_modal" 
+        :dataModal="dataModal" 
         @closeModal="closeModal()"
         :header="alert_process?.alert_title"
     >
@@ -10,7 +10,7 @@
                 <span v-html="`
                         ¿Seguro que desea <strong>${alert_process?.text_alert}</strong> el registro?
                         <br>
-                        ${ data_modal?.data_proceso?.exta_info ?? '' }
+                        ${ dataModal?.data_proceso?.exta_info ?? '' }
                     `"
                 />
             </div>
@@ -51,7 +51,7 @@ const proceso = ref(null)
 const alert_process = ref(null)
 
 const props = defineProps({
-    data_modal: Object,
+    dataModal: Object,
 })
 
 const emits = defineEmits(['closeModal'])
@@ -62,13 +62,13 @@ const closeModal = () => {
 }
 const submit = () => {
     if(proceso.value == 'FORCEDELETE' || proceso.value == 'DESTROY' || proceso.value == 'DELETE'){
-        form.delete(route(props.data_modal.data_proceso.ruta, props.data_modal.data_registro), {
+        form.delete(route(props.dataModal.data_proceso.ruta, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();
             },
         });
     }else if(proceso.value == 'RESTORE'){
-        form.post(route(props.data_modal.data_proceso.ruta, props.data_modal.data_registro), {
+        form.post(route(props.dataModal.data_proceso.ruta, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();
             },
@@ -107,7 +107,7 @@ const proceso_execute = () => {
 }
 
 // Watchers
-watch(() => props.data_modal.data_proceso, (newVal) => {
+watch(() => props.dataModal.data_proceso, (newVal) => {
     proceso.value = newVal?.proceso.toUpperCase() ?? null
     proceso_execute()
 })

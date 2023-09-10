@@ -9,7 +9,7 @@
         <div class="flex justify-between mt-0 mb-2">
             <h3 class="font-bold">Modificar anuncio</h3>
             <button
-                @click="cerrarModal()"
+                @click="closeModal()"
                 class="rounded-full px-2 py-1 shadow-md transition-all transform hover:shadow-xl hover:shadow-gray-700"
             >
                 <span class="p-dialog-header-close-icon pi pi-times"></span>
@@ -107,7 +107,7 @@
                     type="button"
                     label="Cancelar"
                     class="p-button-text p-button-raised p-button-rounded p-button-warning"
-                    @click="cerrarModal()"
+                    @click="closeModal()"
                 />
                 <Button
                     type="submit"
@@ -177,14 +177,14 @@ export default {
         }
     },
     methods: {
-        cerrarModal() {
+        closeModal() {
             this.$emit("visible", false);
         },
         submit() {
             this.form.post(route("anuncios.update", this.dataModal.dataRegistro), {
                 preserveState: true,
                 onSuccess: () => {
-                    this.cerrarModal();
+                    this.closeModal();
                     this.form.reset();
                 },
                 onError : (errors) => {

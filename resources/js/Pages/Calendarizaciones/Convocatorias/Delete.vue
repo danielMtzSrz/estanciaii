@@ -1,5 +1,5 @@
 <template>
-    <GenericModal :dataModal="dataModal" @cerrarModal="cerrarModal">
+    <GenericModal :dataModal="dataModal" @closeModal="closeModal">
         <template #header>
             <h3 class="font-bold">Eliminar convocatoria</h3>
         </template>
@@ -13,7 +13,7 @@
                     type="button"
                     label="Cancelar"
                     class="p-button-text p-button-raised p-button-rounded p-button-warning" 
-                    @click="cerrarModal()"
+                    @click="closeModal()"
                 />
                 <Button 
                     type="submit"
@@ -45,13 +45,13 @@ const props = defineProps({
 
 const emits = defineEmits(['visible'])
 
-const cerrarModal = () => {
+const closeModal = () => {
     emits("visible", false);
 }
 const eliminarRegistro = () => {
     form.delete(route("Calendarizaciones.Convocatorias.destroy", props.dataModal.dataRegistro), {
         onSuccess: () => {
-            cerrarModal();
+            closeModal();
         },
     });
 }

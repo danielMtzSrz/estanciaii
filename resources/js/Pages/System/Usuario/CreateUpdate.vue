@@ -1,6 +1,6 @@
 <template>
     <GenericModal
-        :data_modal="data_modal"
+        :dataModal="dataModal"
         @closeModal="closeModal()" 
         :header="titulo"
     >
@@ -107,7 +107,7 @@
                     <div class="col-sm-12 col-md-4">
                         <Dropdown 
                             label="Genero"
-                            :data="data_modal.data_generos"
+                            :data="dataModal.data_generos"
                             textDropdown="nombre"
                             v-model="genero_seleccionado"
                         />
@@ -116,7 +116,7 @@
                     <div class="col-sm-12 col-md-4">
                         <Dropdown 
                             label="Tipo de sangre"
-                            :data="data_modal.data_tipos_sangre"
+                            :data="dataModal.data_tipos_sangre"
                             textDropdown="nombre"
                             v-model="tipo_sangre_seleccionado"
                         />
@@ -125,7 +125,7 @@
                     <div class="col-sm-12 col-md-4">
                         <Dropdown 
                             label="Estado civil"
-                            :data="data_modal.data_estados_civiles"
+                            :data="dataModal.data_estados_civiles"
                             textDropdown="nombre"
                             v-model="estado_civil_seleccionado"
                         />
@@ -316,7 +316,7 @@ const ruta = ref(null),
 
 // Props
 const props = defineProps({
-    data_modal: {
+    dataModal: {
         type: Object,
         default: null,
     },
@@ -334,7 +334,7 @@ const closeModal = () => {
 
 const submit = () => {
 
-    if (!props.data_modal.data_registro) {
+    if (!props.dataModal.dataRegistro) {
         form.transform((data) => ({
             ...data,
             colonia_id      : colonia_seleccionada.value?.id,
@@ -356,7 +356,7 @@ const submit = () => {
             estado_civil_id : estado_civil_seleccionado?.id,
             generos_id      : genero_seleccionado?.id,
             nacionalidad_id : nacionalidad_seleccionada?.id,
-        })).put(route(ruta.value, props.data_modal.data_registro), {
+        })).put(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();
             },
@@ -365,17 +365,17 @@ const submit = () => {
 };
 
 // Watchers
-watch(() => props.data_modal, async (newVal) => {
-    ruta.value = !newVal.data_registro ? 'user.store' : 'user.update'
-    titulo.value = !newVal.data_registro ? 'Nuevo usuario' : 'Actualizar usuario'
+watch(() => props.dataModal, async (newVal) => {
+    ruta.value = !newVal.dataRegistro ? 'user.store' : 'user.update'
+    titulo.value = !newVal.dataRegistro ? 'Nuevo usuario' : 'Actualizar usuario'
     
     const { data } = await axios.get(`/api/domicilio/paises`);
     data_paises.value = data
 
-    nacionalidad_seleccionada.value = data_paises.value.find(el => el.id == newVal?.data_registro?.nacionalidad_id)
+    nacionalidad_seleccionada.value = data_paises.value.find(el => el.id == newVal?.dataRegistro?.nacionalidad_id)
 })
 
-watch(() => props.data_modal.data_registro, (newVal) => {
+watch(() => props.dataModal.dataRegistro, (newVal) => {
     form.reset()
     
     console.log(newVal)
@@ -406,9 +406,9 @@ watch(() => props.data_modal.data_registro, (newVal) => {
     form.profile_photo_path = newVal?.profile_photo_path ?? null
     imagenActual.value = newVal?.profile_photo_path ?? null
 
-    tipo_sangre_seleccionado.value = props.data_modal.data_tipos_sangre.find(el => el.id == newVal?.tipo_sangre_id)
-    estado_civil_seleccionado.value = props.data_modal.data_estados_civiles.find(el => el.id == newVal?.estado_civil_id)
-    genero_seleccionado.value = props.data_modal.data_generos.find(el => el.id == newVal?.generos_id)
+    tipo_sangre_seleccionado.value = props.dataModal.data_tipos_sangre.find(el => el.id == newVal?.tipo_sangre_id)
+    estado_civil_seleccionado.value = props.dataModal.data_estados_civiles.find(el => el.id == newVal?.estado_civil_id)
+    genero_seleccionado.value = props.dataModal.data_generos.find(el => el.id == newVal?.generos_id)
 
     pais_seleccionado.value = newVal?.colonia?.municipio?.estado?.pais
     estado_seleccionado.value = newVal?.colonia?.municipio?.estado
