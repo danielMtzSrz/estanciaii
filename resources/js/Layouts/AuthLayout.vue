@@ -1,172 +1,103 @@
-<script setup>
-import { Head, Link, usePage, useForm } from '@inertiajs/inertia-vue3';
-import JetAuthenticationCard from '@/Jetstream/AuthenticationCard.vue';
-import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue';
-import JetLabel from '@/Jetstream/Label.vue';
-import JetValidationErrors from '@/Jetstream/ValidationErrors.vue';
+<template>
+    <Head :title="title" />
+    <div>
+        <div
+            class="min-h-screen dark:modoOscuro"
+            :class="{ modoOscuro: darkMode }"
+            id="contentMain"
+        >
+        <Menubar :model="items" class="container-fluid">
+            <template #start>
+            </template>
+            <template #end>
+                <div class="d-flex align-items-center space-x-2">
+                    <Button
+                        :icon="darkMode == true ? 'pi pi-moon' : 'pi pi-sun'"
+                        class="p-button-rounded"
+                        :class="
+                            darkMode == true
+                                ? 'p-button-text p-button-help'
+                                : 'p-button-warning p-button-outlined'
+                        "
+                        id="darkModeId"
+                        name="darkModeId"
+                        @click="themeColor"
+                    />
+                    <Link :href="route('login')" class="text-sm text-gray-400 underline">
+                        Iniciar sesión
+                    </Link>
 
-import Galleria from 'primevue/galleria';
+                    <Link :href="route('register')" class="ml-4 text-sm text-gray-400 underline">
+                        Crear usuario
+                    </Link>
+                </div>
+            </template>
+        </Menubar>
+
+            <!-- Page Content -->
+            <div class="col-md-">
+                <slot name="content"/>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script setup>
+// Vue
+import { ref, computed, watch } from "vue";
+
+// Inertia
+import { Head, Link, usePage } from '@inertiajs/inertia-vue3';
+
+// Primevue
 import Menubar from "primevue/menubar";
-import InputText from "primevue/inputtext";
-import Password from "primevue/password";
-import Checkbox from 'primevue/checkbox';
 import Button from "primevue/button";
-import Image from 'primevue/image';
 
 defineProps({
     title: String,
 });
+
+const darkMode = ref(true);
+const home = {
+    icon: "pi pi-home",
+    url: route("dashboard"),
+};
+const items = usePage().props.value.breadcrumbItems;
+
+const theme = computed(() => (darkMode.value ? "/themes/bootstrap4-dark-blue/theme.css" : "/themes/bootstrap4-light-blue/theme.css"));
+
+const themeColor = () => {
+    darkMode.value = !darkMode.value;
+    const container = document.getElementById("contentMain");
+    const themeElement = document.getElementById("theme-link");
+    const div = document.getElementById("main-container");
+
+    if (darkMode.value) {
+        localStorage.setItem("darkMode", true);
+        document.documentElement.classList.add("dark");
+        container.classList.add("modoOscuro");
+        div.classList.add("dark");
+    } else {
+        localStorage.setItem("darkMode", false);
+        document.documentElement.classList.remove("dark");
+        container.classList.remove("modoOscuro");
+        div.classList.remove("dark");
+    }
+
+    themeElement.setAttribute("href", theme.value);
+};
+
+const cargar = async () => {
+    const dark = localStorage.getItem("darkMode");
+    darkMode.value = dark === "true";
+    const themeElement = document.getElementById("theme-link");
+    await setTimeout(() => {
+        themeElement.setAttribute("href", theme.value);
+    }, 200);
+};
+
+cargar();
 </script>
-
-    <template>
-        <Head :title="title" />
-        <div>
-            <div
-                class="min-h-screen dark:modoOscuro"
-                :class="{ modoOscuro: darkMode }"
-                id="contentMain"
-            >
-            <Menubar :model="items" class="container-fluid">
-                <template #start>
-                </template>
-                <template #end>
-                    <div class="d-flex align-items-center space-x-2">
-                        <Button
-                            :icon="darkMode == true ? 'pi pi-moon' : 'pi pi-sun'"
-                            class="p-button-rounded"
-                            :class="
-                                darkMode == true
-                                    ? 'p-button-text p-button-help'
-                                    : 'p-button-warning p-button-outlined'
-                            "
-                            id="darkModeId"
-                            name="darkModeId"
-                            @click="themeColor"
-                        />
-                        <Link :href="route('login')" class="text-sm text-gray-400 underline">
-                            Iniciar sesión
-                        </Link>
-
-                        <Link :href="route('register')" class="ml-4 text-sm text-gray-400 underline">
-                            Crear usuario
-                        </Link>
-                    </div>
-                </template>
-            </Menubar>
-
-                <!-- Page Content -->
-                <div class="col-md-">
-                    <slot name="content"/>
-                </div>
-            </div>
-        </div>
-    </template>
-
-    <script>
-    export default {
-        data() {
-            return {
-                darkMode: true,
-                checked: true,
-                home: {
-                    icon: "pi pi-home",
-                    url: route("dashboard"),
-                },
-                items: usePage().props.value.breadcrumbItems,
-                activeIndex: 0,
-                images: [
-                    {
-                        "itemImageSrc": "/storage/login/img1.jpg",
-                        "thumbnailImageSrc": "/storage/login/img1.jpg",
-                        "alt": "Descripción de la imagen 1",
-                        "title": "Imágen 1"
-                    },
-                    {
-                        "itemImageSrc": "/storage/login/img2.jpg",
-                        "thumbnailImageSrc": "/storage/login/img2.jpg",
-                        "alt": "Descripción de la imagen 2",
-                        "title": "Imágen 2"
-                    },
-                    {
-                        "itemImageSrc": "/storage/login/img3.jpg",
-                        "thumbnailImageSrc": "/storage/login/img2.jpg",
-                        "alt": "Descripción de la imagen 2",
-                        "title": "Imágen 2"
-                    },
-                    {
-                        "itemImageSrc": "/storage/login/img4.jpg",
-                        "thumbnailImageSrc": "/storage/login/img2.jpg",
-                        "alt": "Descripción de la imagen 2",
-                        "title": "Imágen 2"
-                    },
-                    {
-                        "itemImageSrc": "/storage/login/img5.jpg",
-                        "thumbnailImageSrc": "/storage/login/img2.jpg",
-                        "alt": "Descripción de la imagen 2",
-                        "title": "Imágen 2"
-                    },
-                    {
-                        "itemImageSrc": "/storage/login/img6.jpg",
-                        "thumbnailImageSrc": "/storage/login/img2.jpg",
-                        "alt": "Descripción de la imagen 2",
-                        "title": "Imágen 2"
-                    },
-                    {
-                        "itemImageSrc": "/storage/login/img7.jpg",
-                        "thumbnailImageSrc": "/storage/login/img2.jpg",
-                        "alt": "Descripción de la imagen 2",
-                        "title": "Imágen 2"
-                    },
-                ]
-            };
-        },
-        props: {
-            title: String,
-            breadcrumbItems: Array,
-        },
-        methods: {
-            theme() {
-                return this.darkMode
-                    ? "/themes/bootstrap4-dark-blue/theme.css"
-                    : "/themes/bootstrap4-light-blue/theme.css";
-            },
-            themeColor() {
-                this.darkMode = this.cheked = !this.darkMode;
-                let container = document.getElementById("contentMain");
-                let themeElement = document.getElementById("theme-link");
-                let div = document.getElementById("main-container");
-                console.log(div);
-                if (this.darkMode) {
-                    localStorage.setItem("darkMode", true);
-                    document.documentElement.classList.add("dark");
-                    container.classList.add("modoOscuro");
-                    div.classList.add("dark");
-                } else {
-                    localStorage.setItem("darkMode", false);
-                    document.documentElement.classList.remove("dark");
-                    container.classList.remove("modoOscuro");
-                    div.classList.remove("dark");
-                }
-                themeElement.setAttribute("href", this.theme());
-            },
-        },
-        beforeMount() {
-            let cargar = async () => {
-                let dark = localStorage.getItem("darkMode");
-                if (dark === "true") {
-                    this.darkMode = this.checked = true;
-                } else {
-                    this.darkMode = this.checked = false;
-                }
-                let themeElement = document.getElementById("theme-link");
-                await setTimeout(() => {
-                    themeElement.setAttribute("href", this.theme());
-                }, 200);
-            };
-            cargar();
-        },
-    };
-    </script>
 
 <style>
 .modoOscuro {
@@ -206,6 +137,6 @@ defineProps({
         border: 3px solid #2b3e58;
     }
 }
-    </style>
+</style>
 
 

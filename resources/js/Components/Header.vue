@@ -1,12 +1,13 @@
 <script setup>
-// Componentes de Vue
+// Inertia
 import { Inertia } from "@inertiajs/inertia";
+import { Link } from '@inertiajs/inertia-vue3';
+// Componentes de Vue
 
 // Componentes de primevue
 import Button from "primevue/button";
 import Menubar from "primevue/menubar";
 import UserMenu from "@/Components/UserMenu.vue";
-import Avatar from 'primevue/avatar'
 
 // Layouts
 import Sidebar from "@/Layouts/Sidebar.vue";
@@ -31,8 +32,9 @@ const logout = () => {
     <div class="d-flex">
         <Menubar :model="items" class="container-fluid">
             <template #start>
-                <div class="d-flex">
+                <div class="d-flex align-items-center">
                     <!-- <Sidebar :items="items"/> -->
+                    <Button icon="pi pi-home" plain text @click="Inertia.visit('/')"/>
                     <span class="mx-2 my-0 py-0 text-2xl font-light" style="font-family: Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;">{{ title ?? "Bienvenido" }}</span>
                 </div>
             </template>
@@ -66,6 +68,13 @@ export default {
                     label: "Sistema",
                     icon: "pi pi-cog",
                     items: [
+                        {
+                            label: "Prueba",
+                            icon: "pi pi-users",
+                            command: () => {
+                                Inertia.visit(route("prueba.index"));
+                            },
+                        },
                         {
                             label: "Usuarios",
                             icon: "pi pi-users",

@@ -16,7 +16,6 @@
 
             <!-- Page Content -->
             <div class="container mt-4">
-                {{ this.breadcrumbItems }}
                 <div class="row justify-content-center">
                     <slot></slot>
                 </div>
@@ -25,126 +24,84 @@
     </div>
 </template>
 
-<script>
-import { computed, watch } from "vue";
+<script setup>
+// Vue
+import { computed, watch, ref } from "vue";
+
+// Inertia
 import { Head, usePage } from "@inertiajs/inertia-vue3";
-import JetBanner from "@/Jetstream/Banner.vue";
+
+// Components
 import Header from "@/Components/Header.vue";
-import InputSwitch from "primevue/inputswitch";
-import Breadcrumb from "@/Components/primevue/Menu/Breadcrumb.vue";
+
+// Primevue
 import Toast from "primevue/toast";
-import Button from "primevue/button";
 import { useToast } from "primevue/usetoast";
+import Breadcrumb from 'primevue/breadcrumb';
 
-export default {
-    mounted() {
-        const toast = useToast();
-        const to = usePage().props?.value?.toast ?? null
+const toast = useToast();
+const toastData = computed(() => usePage().props.value.flash);
+const darkMode = ref(true);
 
-        if (to) {
-            if (!Object.values(to).includes(null) && to.severity) {
-                toast.add({
-                    severity: to.severity,
-                    summary: to.summary,
-                    detail: to.detail,
-                    life: to.life,
-                });
-            }
-        }
-    },
-    setup() {
-        // console.log(usePage().props.value.flash);
-        const toast=useToast()
-        const toastData = computed(() => usePage().props.value.flash);
+const theme = computed(() => (darkMode.value ? "/themes/bootstrap4-dark-blue/theme.css" : "/themes/bootstrap4-light-blue/theme.css"));
 
-        watch(toastData, (newData, oldData) => {
-            if (Object.values(newData).includes(null)) {
-                return;
-            }
+const home = ref({
+    icon: 'pi pi-home',
+    to: '/',
+});
 
-            toast.add({
-                severity: newData.severity,
-                summary: newData.summary,
-                detail: newData.detail,
-                life: newData.life,
-            });
-        });
-    },
+const items = ref([
+    {label: 'Computer'},
+    {label: 'Notebook'},
+    {label: 'Accessories'},
+    {label: 'Backpacks'},
+    {label: 'Item'}
+]);
 
-    components: {
-        Head,
-        JetBanner,
-        Header,
-        InputSwitch,
-        Breadcrumb,
-        Toast,
-        Button,
-    },
-    data() {
-        return {
-            darkMode: true,
-            checked: true,
-            home: {
-                icon: "pi pi-home",
-                command:() => this.$inertia.visit(route('dashboard'))
-            },
-            items: usePage().props.value.breadcrumbItems.map(item=>(
-                {
-                    label:item.label,
-                    command:()=>this.$inertia.visit(item.url)
-                })
-            ),
+const themeColor = () => {
+    darkMode.value = !darkMode.value;
+    const container = document.getElementById("contentMain");
+    const themeElement = document.getElementById("theme-link");
+    const div = document.getElementById("main-container");
 
-           
-        };
-    },
-    props: {
-        title: String,
-        breadcrumbItems: Array,
-        titleModule: String,
-    },
-    methods: {
-        theme() {
-            return this.darkMode
-                ? "/themes/bootstrap4-dark-blue/theme.css"
-                : "/themes/bootstrap4-light-blue/theme.css";
-        },
-        themeColor() {
-            this.darkMode = this.cheked = !this.darkMode;
-            let container = document.getElementById("contentMain");
-            let themeElement = document.getElementById("theme-link");
-            let div = document.getElementById("main-container");
-            // console.log(div);
-            if (this.darkMode) {
-                localStorage.setItem("darkMode", true);
-                document.documentElement.classList.add("dark");
-                container.classList.add("modoOscuro");
-                div.classList.add("dark");
-            } else {
-                localStorage.setItem("darkMode", false);
-                document.documentElement.classList.remove("dark");
-                container.classList.remove("modoOscuro");
-                div.classList.remove("dark");
-            }
-            themeElement.setAttribute("href", this.theme());
-        },
-    },
-    beforeMount() {
-        let cargar = async () => {
-            let dark = localStorage.getItem("darkMode");
-            if (dark === "true") {
-                this.darkMode = this.checked = true;
-            } else {
-                this.darkMode = this.checked = false;
-            }
-            let themeElement = document.getElementById("theme-link");
-            await setTimeout(() => {
-                themeElement.setAttribute("href", this.theme());
-            }, 200);
-        };
-        cargar();
-    },
+    if (darkMode.value) {
+        localStorage.setItem("darkMode", true);
+        document.documentElement.classList.add("dark");
+        container.classList.add("modoOscuro");
+        div.classList.add("dark");
+    } else {
+        localStorage.setItem("darkMode", false);
+        document.documentElement.classList.remove("dark");
+        container.classList.remove("modoOscuro");
+        div.classList.remove("dark");
+    }
+
+    themeElement.setAttribute("href", theme.value);
 };
+
+const cargar = async () => {
+    const dark = localStorage.getItem("darkMode");
+    darkMode.value = dark === "true";
+    const themeElement = document.getElementById("theme-link");
+    await setTimeout(() => {
+        themeElement.setAttribute("href", theme.value);
+    }, 200);
+};
+
+cargar();
+
+watch(toastData, (newData) => {
+    if (Object.values(newData).includes(null)) {
+        return;
+    }
+
+    toast.add({
+        severity: newData.severity,
+        summary: newData.summary,
+        detail: newData.detail,
+        life: newData.life,
+    });
+});
 </script>
 
 <style>

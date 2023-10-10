@@ -10,11 +10,6 @@
 // Layouts
 import AppLayout from "@/Layouts/AppLayout.vue";
 
-// Store
-import { useTitleModuleStore } from '@/store/title-module.js';
-
-const useTitleModule = useTitleModuleStore()
-
 // Propiedades
 const props = defineProps({
     titleModule: {

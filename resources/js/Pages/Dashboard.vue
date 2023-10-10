@@ -1,33 +1,12 @@
 <template>
-    <AppLayout>
-        <!-- Code -->
-    </AppLayout>
+    <GenericLayout titleModule="Menú principal">
+        <template #content>
+            <h1>Ya pondré algo aquí</h1>
+        </template>
+    </GenericLayout>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-
-// Primevue
-import { Inertia } from '@inertiajs/inertia'
-
 // Layout padre
-import AppLayout from "@/Layouts/AppLayout.vue";
-
-const displayCreateUpdate = ref(null)
-
-const modalCreateUpdate = (show) => {
-    displayCreateUpdate.value = show
-}
-
-const detalleMateria = (dataMateria) => {
-    Inertia.visit(route("materiaUsuario.show", dataMateria));
-}
-
-const props = defineProps({
-    materiasUsuarios:{
-        type: Object,
-        default: null
-    }
-})
-
+import GenericLayout from "@/Layouts/GenericLayout.vue";
 </script>

@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 
 // Agrupación de los controladores con el middleware de autenticación
 
+use App\Http\Controllers\Prueba\PruebaController;
+
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/', function (Request $request) {
         session(['breadcrumbItems' => []]);
@@ -30,4 +32,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     // Rutas de empresas
     Route::resource("empresas", EmpresasController::class)->except('show','create','edit');
+
+    Route::resource('prueba', PruebaController::class);
 });
