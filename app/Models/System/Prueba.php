@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\System;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jenssegers\Mongodb\Eloquent\Model;
 
-class Empresas extends Model
+class Prueba extends Model
 {
     use HasFactory;
     /* use SoftDeletes; */
@@ -27,30 +27,10 @@ class Empresas extends Model
     ];
 
     // Atributes
-    public function getNombrePaisAttribute()
-    {
-        return $this->colonia->municipio->estado->pais->nombre;
-    }
-
-    public function getNombreEstadoAttribute()
-    {
-        return $this->colonia->municipio->estado->nombre;
-    }
-
-    public function getNombreMunicipioAttribute()
-    {
-        return $this->colonia->municipio->nombre;
-    }
-
-    public function getNombreColoniaAttribute()
-    {
-        return $this->colonia->nombre;
-    }
-
-    public function getCpColoniaAttribute()
-    {
-        return $this->colonia->cp;
-    }
+    // public function getNombrePaisAttribute()
+    // {
+    //     return $this->colonia->municipio->estado->pais->nombre;
+    // }
 
     // Scopes
     public function scopeToIndex($query)
@@ -74,8 +54,4 @@ class Empresas extends Model
     }
 
     // Relations
-    public function colonia()
-    {
-        return $this->belongsTo("App\Models\Domicilios\Colonia");
-    }
 }

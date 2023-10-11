@@ -3,12 +3,14 @@
 namespace App\Models\Calendarizaciones;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class TipoPeriodo extends Model{
+class TipoPeriodo extends Model
+{
+    protected $connection = 'mongodb';
 
-    protected $table = 'tipoPeriodo';
+    protected $collection = 'tipoPeriodo';
 
     use HasFactory;
     use SoftDeletes;

@@ -1,9 +1,9 @@
 <template>
-    <GenericLayout titleModule="Empresas">
+    <GenericLayout titleModule="Prueba">
         <template #content>
             <DynamicTable
-                :data="empresas"
-                titleModule="Empresas"
+                :data="pruebas"
+                titleModule="Prueba"
                 :items="[
                     {
                         dataField: {
@@ -20,21 +20,8 @@
                     },
                     {
                         dataField: {
-                            field : 'razon_social',
-                            header : 'Razón social',
-                            sortable: false,
-                            type: 'html',
-                            headerStyle: 'width: 20em'
-                        },
-                        filters: {
-                            active: false,
-                            type: 'text',
-                        },
-                    },
-                    {
-                        dataField: {
-                            field : 'direccion',
-                            header : 'Dirección',
+                            field : 'descripcion',
+                            header : 'Descripción',
                             sortable: true,
                             type: 'text',
                             headerStyle: 'width: 20em'
@@ -44,19 +31,19 @@
                             type: 'text',
                         },
                     },
-                    {
-                        dataField: {
-                            field : 'rfc',
-                            header : 'RFC',
-                            sortable: true,
-                            type: 'text',
-                            headerStyle: 'width: 20em'
-                        },
-                        filters: {
-                            active: true,
-                            type: 'text',
-                        },
-                    },
+                    // {
+                    //     dataField: {
+                    //         field : 'rfc',
+                    //         header : 'RFC',
+                    //         sortable: true,
+                    //         type: 'text',
+                    //         headerStyle: 'width: 20em'
+                    //     },
+                    //     filters: {
+                    //         active: true,
+                    //         type: 'text',
+                    //     },
+                    // },
                 ]"
             >
                 <template #header>
@@ -124,7 +111,7 @@ import DynamicTable from "@/Components/DynamicTable.vue";
 import GenericAlert from "@/Components/GenericAlert.vue";
 
 // Componentes de los modales
-import CreateUpdate from "@/Pages/System/Empresas/CreateUpdate.vue";
+import CreateUpdate from "@/Pages/Prueba/CreateUpdate.vue";
 
 // Variables
 const display_create_update = ref(false);
@@ -134,7 +121,7 @@ const display_generic_alert = ref(null)
 
 // Propiedades
 const props = defineProps({
-    empresas: {
+    pruebas: {
         type: Object,
         default: {},
     },

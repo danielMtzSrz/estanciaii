@@ -5,43 +5,34 @@ namespace App\Http\Controllers\Prueba;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Models\Empresas;
+use App\Models\System\Prueba;
 use App\Http\Requests\System\Empresas\StoreEmpresasRequest;
 
 use Illuminate\Support\Facades\Storage;
 
 use Inertia\Inertia;
 
+use Carbon\Carbon;
+
 class PruebaController extends Controller
 {
     public function index()
     {
-        $empresas = Empresas::toIndex()->get()->map(function($empresa){
-            return $empresa->indexMap();
-        });
+        $pruebas = Prueba::get();
 
-        return Inertia::render("Prueba/Index", compact('empresas'));
+        return Inertia::render("Prueba/Index", compact('pruebas'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        Prueba::create($request->all());
+        
+        return back()->with(config('messages.mensaje_exito'));
     }
 
     /**
@@ -63,7 +54,7 @@ class PruebaController extends Controller
      */
     public function edit($id)
     {
-        //
+       
     }
 
     /**
@@ -75,7 +66,22 @@ class PruebaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $prueba = Prueba::find($id);
+
+        if(isset($prueba->imagen) && $request->file('imagen')){
+            Storage::disk('public')->delete($prueba->imagen);
+        }
+        
+        $prueba->update($request->all());
+        
+        if($request->file('imagen')) {
+            $path = "prueba/imagenes";
+            $nombreArchivo = Carbon::now()->format('Y-m-d H-m-s')." - ".$request->file('imagen')->getClientOriginalName();
+            $prueba->imagen = $request->file('imagen')->storeAs($path, $nombreArchivo, 'public');
+            $prueba->save();
+        }
+
+        return back()->with(config('messages.mensaje_actualizar'));
     }
 
     /**

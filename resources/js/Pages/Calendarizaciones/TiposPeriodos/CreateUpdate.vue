@@ -95,7 +95,7 @@ const submit = () => {
         form.transform((data) => ({
             ...data,
             color: data.color.includes("#") ? data.color.toUpperCase() : "#"+data.color.toUpperCase(),
-        })).put(route(ruta.value, props.dataModal.dataRegistro), {
+        })).put(route(ruta.value, props.dataModal?.dataRegistro?._id), {
             onSuccess: () => {
                 closeModal();
             },

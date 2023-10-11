@@ -10,6 +10,8 @@ use App\Models\Calendarizaciones\TipoPeriodo;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Redirect;
 
+use Illuminate\Http\Request;
+
 class TiposPeriodosController extends Controller{
 
     public function index()
@@ -28,8 +30,11 @@ class TiposPeriodosController extends Controller{
         return back()->with(config('messages.mensaje_exito'));
     }
 
-    public function update(UpdateTipoPeriodoRequest $request, $id)
+    public function update(Request $request, $id)
     {
+
+        dd($request->all());
+
         $tipoPeriodo = TipoPeriodo::find($id);
 
         $tipoPeriodo->update($request->validated());

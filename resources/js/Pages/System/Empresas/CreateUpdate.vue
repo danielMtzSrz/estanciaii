@@ -123,8 +123,6 @@
                     </div>
                 </div>
 
-                <pre>{{ form }}</pre>
-
                 <div class="float-end space-x-2 py-4">
                     <Button
                         type="button"
@@ -223,7 +221,7 @@ const submit = () => {
         form.transform((data) => ({
             ...data,
             colonia_id: colonia_seleccionada.value?.id
-        })).put(route(ruta.value, props.dataModal.dataRegistro), {
+        })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();
             },
