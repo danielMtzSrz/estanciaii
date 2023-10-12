@@ -10,7 +10,7 @@ import InputText from "@/Assets/Components/Forms/InputText.vue";
  -->
 
  <template>
-    <div class="mb-4">
+    <div class="mb-5">
         <div class="p-inputgroup">
             <span v-if="icon" class="p-inputgroup-addon">
                 <i :class="icon"></i>
