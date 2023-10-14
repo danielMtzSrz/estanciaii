@@ -145,7 +145,7 @@
 <script setup>
 
 // Vue
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 
 // Inertia
 import { useForm } from "@inertiajs/inertia-vue3";
@@ -162,6 +162,11 @@ import InputText from "@/Components/Forms/InputText.vue";
 import Dropdown from "@/Components/Forms/Dropdown.vue";
 import InputNumber from "@/Components/Forms/InputNumber.vue";
 import FileUpload from "@/Components/Forms/FileUpload.vue";
+
+// Pinia
+import { useAddressStore } from '@/store/adress';
+
+const { obtenerPaises, obtenerEstados, obtenerMunicipios, obtenerColonias } = useAddressStore()
 
 // Variables
 const data_paises = ref(null), pais_seleccionado = ref(null),
@@ -233,10 +238,9 @@ const submit = () => {
 watch(() => props.dataModal, async (newVal) => {
     ruta.value = !newVal.dataRegistro ? 'empresas.store' : 'empresas.update'
     titulo.value = !newVal.dataRegistro ? 'Nueva Empresa' : 'Actualizar Empresa'
-    
-    const { data } = await axios.get(`/api/domicilio/paises`);
-    data_paises.value = data
-    
+
+    await obtenerPaises()
+    data_paises.value = useAddressStore().paisesData
 })
 
 watch(() => props.dataModal.dataRegistro, (newVal) => {
@@ -262,18 +266,18 @@ watch(() => props.dataModal.dataRegistro, (newVal) => {
 })
 
 watch(() => pais_seleccionado.value, async (newVal) => {
-    const { data } = await axios.get(`/api/domicilio/estados/${newVal?.id}`)
-    data_estados.value = data
+    await obtenerEstados(newVal?.id)
+    data_estados.value = useAddressStore().estadosData
 })
 
 watch(() => estado_seleccionado.value, async (newVal) => {
-    const { data } = await axios.get(`/api/domicilio/municipios/${newVal?.id}`)
-    data_municipios.value = data
+    await obtenerMunicipios(newVal?.id)
+    data_municipios.value = useAddressStore().municipiosData
 })
 
 watch(() => municipio_seleccionado.value, async (newVal) => {
-    const { data } = await axios.get(`/api/domicilio/colonias/${newVal?.id}`)
-    data_colonias.value = data
+    await obtenerColonias(newVal?.id)
+    data_colonias.value = useAddressStore().coloniasData
 })
 
 // Para obtener todo lo anterior a través de la colonia

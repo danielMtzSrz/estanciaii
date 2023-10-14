@@ -86,7 +86,7 @@ const props = defineProps({
         default: null
     },
     data: {
-        type: Object,
+        type: [Object, Promise],
         default: null
     },
     value: {

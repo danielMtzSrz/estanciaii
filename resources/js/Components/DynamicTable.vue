@@ -223,9 +223,15 @@ Propiedades dentro de filters: {}
                     <!-- Campo de Avatar -->
                     <template v-else-if="item.dataField.type === 'avatar'">
                         <div class="flex align-items-center">
-                            <Avatar
+                            <!-- <Avatar
                                 class="p-avatar-image p-avatar-circle p-avatar-lg"
                                 :image="`${data[item.dataField.field]?.substring(0, 4) == 'http' ? '' : '/storage/'}${data[item.dataField.field]}`"
+                            /> -->
+                            <Image
+                                imageClass="p-avatar-image p-avatar-circle p-avatar-lg"
+                                :src="`${data[item.dataField.field]?.substring(0, 4) == 'http' ? '' : '/storage/'}${data[item.dataField.field]}`"
+                                width="35"
+                                preview
                             />
                             <p class="my-0 py-0 ms-3">
                                 {{ data[item.dataField.avatarText] }}
@@ -238,34 +244,28 @@ Propiedades dentro de filters: {}
                         <Button
                             type="button"
                             icon="pi pi-eye"
-                            :label="`Ver ${item.dataField.header}`"
-                            class="p-button-text p-button-raised p-button-rounded"
+                            :label="`${item.dataField.header}`"
+                            class="p-button-raised p-button-rounded"
                             @click="openModal(index)"
+                            text
                         />
                         <Dialog
                             :visible="displayHTML[index]"
                             :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
                             :style="{ width: '50vw' }"
                             :modal="true"
-                            :showHeader="false"
+                            :header="item.dataField.header"
+                            v-on:update:visible="closeModal(index)"
                         >
-                            <div class="flex justify-end mt-4">
-                                <Button
-                                    icon="pi pi-times"
-                                    class="p-button-danger p-button-text p-button-secondary p-button-rounded"
-                                    @click="closeModal(index)"
-                                    v-tooltip.bottom="'Cerrar'"
-                                />
-                            </div>
                             <div v-html="data[item.dataField.field]"></div>
-                            <template #footer>
+                            <div class="float-end space-x-2 mt-4">
                                 <Button
                                     label="Cerrar"
                                     icon="pi pi-times"
                                     class="p-button-text p-button-raised p-button-rounded p-button-warning"
                                     @click="closeModal(index)"
                                 />
-                            </template>
+                            </div>
                         </Dialog>
                     </template>
                 </template>
