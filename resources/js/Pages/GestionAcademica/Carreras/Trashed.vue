@@ -58,7 +58,7 @@
                 :dataModal="{
                     display: displayAlert,
                     dataRegistro : dataRegistro,
-                    data_proceso : data_proceso
+                    dataProceso : dataProceso
                 }"
                 v-on:visible="(visible) => modalGenericAlert(null, visible, null)"
             />
@@ -79,7 +79,7 @@
     import moment from 'moment'
     
     const displayAlert = ref(null)
-    const data_proceso = ref(null)
+    const dataProceso = ref(null)
     const dataRegistro = ref(null)
     const columns = ref(null)
     
@@ -93,7 +93,7 @@
     const modalGenericAlert = (data, show, dataProcess) => {
         dataRegistro.value = data
         displayAlert.value = show
-        data_proceso.value = dataProcess
+        dataProceso.value = dataProcess
     }
     
     onMounted(() => {

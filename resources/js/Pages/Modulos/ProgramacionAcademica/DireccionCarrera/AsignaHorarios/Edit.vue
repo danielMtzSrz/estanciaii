@@ -39,7 +39,7 @@
             <GenericAlert :dataModal="{
                 display: displayAlert,
                 dataRegistro: dataRegistro,
-                data_proceso: data_proceso
+                dataProceso: dataProceso
             }" v-on:visible="(visible) => modalGenericAlert(null, visible, null)" />
         </Panel>
         <Panel :header="`Horario ${grupoMateria.materia.nombre}`" class="mb-3">m
@@ -72,7 +72,7 @@ const props = defineProps({
 const columns = ref(null)
 const displayAlert = ref(null)
 const displayCreateUpdate = ref(null)
-const data_proceso = ref(null)
+const dataProceso = ref(null)
 const dataRegistro = ref(null)
 const dataRegistroParent = ref(null)
 
@@ -85,7 +85,7 @@ const modalCreateUpdate = (data, show, parentData) => {
 const modalGenericAlert = (data, show, dataProcess) => {
     dataRegistro.value = data
     displayAlert.value = show
-    data_proceso.value = dataProcess
+    dataProceso.value = dataProcess
 }
 
 onMounted(() => {

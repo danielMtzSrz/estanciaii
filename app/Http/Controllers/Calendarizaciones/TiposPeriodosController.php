@@ -17,27 +17,22 @@ class TiposPeriodosController extends Controller{
     public function index()
     {
         $tiposPeriodos = TipoPeriodo::all();
+        
         return Inertia::render('Calendarizaciones/TiposPeriodos/Index', compact('tiposPeriodos'));
     }
 
-    public function store(StoreTipoPeriodoRequest $request)
+    public function store(Request $request)
     {
-        TipoPeriodo::create([
-            'nombre' => $request->nombre,
-            'descripcion' => $request->descripcion,
-        ]);
+        TipoPeriodo::create($request->all());
 
         return back()->with(config('messages.mensaje_exito'));
     }
 
     public function update(Request $request, $id)
     {
-
-        dd($request->all());
-
         $tipoPeriodo = TipoPeriodo::find($id);
 
-        $tipoPeriodo->update($request->validated());
+        $tipoPeriodo->update($request->all());
 
         return back()->with(config('messages.mensaje_actualizar'));
     }

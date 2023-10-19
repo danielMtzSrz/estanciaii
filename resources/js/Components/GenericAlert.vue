@@ -10,7 +10,7 @@
                 <span v-html="`
                         ¿Seguro que desea <strong>${alert_process?.text_alert}</strong> el registro?
                         <br>
-                        ${ dataModal?.data_proceso?.exta_info ?? '' }
+                        ${ dataModal?.dataProceso?.exta_info ?? '' }
                     `"
                 />
             </div>
@@ -62,13 +62,13 @@ const closeModal = () => {
 }
 const submit = () => {
     if(proceso.value == 'FORCEDELETE' || proceso.value == 'DESTROY' || proceso.value == 'DELETE'){
-        form.delete(route(props.dataModal.data_proceso.ruta, props.dataModal.dataRegistro), {
+        form.delete(route(props.dataModal.dataProceso.ruta, (props.dataModal?.dataRegistro.id) ? props.dataModal.dataRegistro : props.dataModal?.dataRegistro?._id), {
             onSuccess: () => {
                 closeModal();
             },
         });
     }else if(proceso.value == 'RESTORE'){
-        form.post(route(props.dataModal.data_proceso.ruta, props.dataModal.dataRegistro), {
+        form.post(route(props.dataModal.dataProceso.ruta, props.dataModal?.dataRegistro ?? props.dataModal?.dataRegistro?._id), {
             onSuccess: () => {
                 closeModal();
             },
@@ -107,7 +107,7 @@ const proceso_execute = () => {
 }
 
 // Watchers
-watch(() => props.dataModal.data_proceso, (newVal) => {
+watch(() => props.dataModal.dataProceso, (newVal) => {
     proceso.value = newVal?.proceso.toUpperCase() ?? null
     proceso_execute()
 })

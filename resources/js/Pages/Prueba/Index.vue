@@ -93,9 +93,9 @@
                 :dataModal="{
                     display: display_generic_alert,
                     dataRegistro : dataRegistro,
-                    data_proceso : data_proceso
+                    dataProceso : dataProceso
                 }"
-                @closeModal="modalGenericAlert({display: false, data: null, data_proceso: null})"
+                @closeModal="modalGenericAlert({display: false, data: null, dataProceso: null})"
             />
         </template>
     </GenericLayout>
@@ -115,7 +115,7 @@ import CreateUpdate from "@/Pages/Prueba/CreateUpdate.vue";
 
 // Variables
 const display_create_update = ref(false);
-const data_proceso = ref(null);
+const dataProceso = ref(null);
 const dataRegistro = ref(null);
 const display_generic_alert = ref(null)
 
@@ -136,6 +136,6 @@ const modalCreateUpdate = (event) => {
 const modalGenericAlert = (event) => {
     dataRegistro.value = event.data;
     display_generic_alert.value = event.display;
-    data_proceso.value = event.proceso;
+    dataProceso.value = event.proceso;
 }
 </script>

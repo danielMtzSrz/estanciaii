@@ -74,7 +74,7 @@ class UserController extends Controller
         // dd($request->all());
 
         if($request->file('profile_photo_path')){
-            Storage::disk('public')->delete($user->profile_photo_path);
+            \Storage::disk('public')->delete($user->profile_photo_path);
         }
 
         $user->update($request->all());

@@ -68,9 +68,9 @@
                 :dataModal="{
                     display: display_generic_alert,
                     dataRegistro : dataRegistro,
-                    data_proceso : data_proceso
+                    dataProceso : dataProceso
                 }"
-                @closeModal="modalGenericAlert({display: false, data: null, data_proceso: null})"
+                @closeModal="modalGenericAlert({display: false, data: null, dataProceso: null})"
             />
         </template>
     </GenericLayout>
@@ -92,7 +92,7 @@ import moment from 'moment'
 
 // Variables
 const display_generic_alert = ref(null)
-const data_proceso = ref(null)
+const dataProceso = ref(null)
 const dataRegistro = ref(null)
 const columns = ref(null)
 
@@ -108,7 +108,7 @@ const props = defineProps({
 const modalGenericAlert = (event) => {
     dataRegistro.value = event.data;
     display_generic_alert.value = event.display;
-    data_proceso.value = event.proceso;
+    dataProceso.value = event.proceso;
 }
 
 onMounted(() => {

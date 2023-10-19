@@ -17,9 +17,16 @@ class TipoPeriodo extends Model
 
     protected $fillable = [
         'nombre',
-        'descripcion',
-        'color',
-        'log_id'
+        'contenido',
+    ];
+
+    protected $guarded = [
+        '_id'
+    ];
+
+    protected $dates = [
+        'created_at',
+        'updated_at'
     ];
 
     // Relación con el modelo Periodos

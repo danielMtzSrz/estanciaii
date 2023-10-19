@@ -71,9 +71,9 @@
                 :dataModal="{
                     display: display_generic_alert,
                     dataRegistro : dataRegistro,
-                    data_proceso : data_proceso
+                    dataProceso : dataProceso
                 }"
-                @closeModal="modalGenericAlert({display: false, data: null, data_proceso: null})"
+                @closeModal="modalGenericAlert({display: false, data: null, dataProceso: null})"
             />
 
             <Dialog 
@@ -121,7 +121,7 @@ const data = ref(null)
 
 // Variables para los modales
 const display_create_update = ref(false), display_generic_alert = ref(false), display_ver_permisos = ref(false);
-const dataRegistro = ref(null), data_proceso = ref(null), data_ver_permisos = ref(null)
+const dataRegistro = ref(null), dataProceso = ref(null), data_ver_permisos = ref(null)
 
 // Métodos
 const modalCreateUpdate = (event) => {
@@ -132,7 +132,7 @@ const modalCreateUpdate = (event) => {
 const modalGenericAlert = (event) => {
     dataRegistro.value = event.data;
     display_generic_alert.value = event.display;
-    data_proceso.value = event.proceso;
+    dataProceso.value = event.proceso;
 }
 
 const verPermisos = (event) => {

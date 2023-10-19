@@ -356,7 +356,7 @@ const submit = () => {
             estado_civil_id : estado_civil_seleccionado?.id,
             generos_id      : genero_seleccionado?.id,
             nacionalidad_id : nacionalidad_seleccionada?.id,
-        })).put(route(ruta.value, props.dataModal.dataRegistro), {
+        })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();
             },
