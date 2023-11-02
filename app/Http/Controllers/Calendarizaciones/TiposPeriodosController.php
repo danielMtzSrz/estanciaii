@@ -3,14 +3,17 @@
 namespace App\Http\Controllers\Calendarizaciones;
 
 use App\Http\Controllers\Controller;
-use App\Models\Calendarizaciones\TiposPeriodos;
+
 use App\Http\Requests\Calendarizaciones\StoreTipoPeriodoRequest;
 use App\Http\Requests\Calendarizaciones\UpdateTipoPeriodoRequest;
-use App\Models\Calendarizaciones\TipoPeriodo;
-use Inertia\Inertia;
-use Illuminate\Support\Facades\Redirect;
 
+use App\Models\Calendarizaciones\TiposPeriodos;
+use App\Models\Calendarizaciones\TipoPeriodo;
+
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
+
+use Inertia\Inertia;
 
 class TiposPeriodosController extends Controller{
 
@@ -44,7 +47,6 @@ class TiposPeriodosController extends Controller{
         $tipoPeriodo->delete();
 
         return back()->with(config('messages.mensaje_eliminar'));
-        
     }
 
     public function trashed()

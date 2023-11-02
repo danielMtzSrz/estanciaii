@@ -4,7 +4,7 @@ namespace App\Models\Calendarizaciones;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jenssegers\Mongodb\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+// use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
 class TipoPeriodo extends Model
 {
@@ -13,15 +13,11 @@ class TipoPeriodo extends Model
     protected $collection = 'tipoPeriodo';
 
     use HasFactory;
-    use SoftDeletes;
+    // use SoftDeletes;
 
     protected $fillable = [
         'nombre',
         'contenido',
-    ];
-
-    protected $guarded = [
-        '_id'
     ];
 
     protected $dates = [

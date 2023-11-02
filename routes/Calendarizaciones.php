@@ -14,7 +14,8 @@ Route::name('Periodos.')->prefix('Periodos')->group(function () {
 }); 
 
 // Tipos de periodos
-Route::resource("TiposPeriodos", TiposPeriodosController::class)->except(['show', 'create', 'edit']);
+Route::resource("TiposPeriodos", TiposPeriodosController::class)->except(['show', 'create', 'edit', 'destroy']);
+Route::delete('/TiposPeriodos/{id}', [TiposPeriodosController::class, 'destroy'])->name('TiposPeriodos.destroy');
 Route::name('TiposPeriodos.')->prefix('TiposPeriodos')->group(function () {
     Route::get('eliminados', [TiposPeriodosController::class, 'trashed'])->name('trashed');
     Route::post('restablecer/{horarios}', [TiposPeriodosController::class, 'restore'])->name('restore');
