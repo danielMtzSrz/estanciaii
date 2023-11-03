@@ -1,10 +1,35 @@
 <template>
-    <GenericLayout titleModule="Permisos">
+    <GenericLayout titleModule="Estados">
         <template #content>
             <DynamicTable
-                :data="permisos"
-                :items="items"
-                titleModule="Permisos"
+                :data="estados"
+                titleModule="Estados"
+                :items="[
+                    {
+                        dataField: {
+                            field : 'pais',
+                            header : 'País',
+                            sortable: false,
+                            type: 'text',
+                        },
+                        filters: {
+                            active: true,
+                            type: 'text',
+                        },
+                    },
+                    {
+                        dataField: {
+                            field : 'nombre',
+                            header : 'Estado',
+                            sortable: false,
+                            type: 'text',
+                        },
+                        filters: {
+                            active: true,
+                            type: 'text',
+                        },
+                    },
+                ]"
             >
                 <template #header>
                     <Button
@@ -15,13 +40,11 @@
                         @click="modalCreateUpdate({display: true})"
                     />
                 </template>
-
                 <template #buttons="{ data }">
                     <Button
                         type="button"
                         icon="pi pi-pencil"
                         class="p-button-warning p-button-text p-button-raised p-button-rounded"
-                        v-tooltip.top="'Actualizar'"
                         @click="modalCreateUpdate({display: true, data: data})"
                     />
                     <Button
@@ -33,7 +56,7 @@
                             display: true, 
                             proceso: {
                                 'proceso': 'delete',
-                                'ruta': 'permission.destroy',
+                                'ruta': 'estados.destroy',
                             }
                         })"
                     />
@@ -49,9 +72,10 @@
                 }"
                 @closeModal="modalCreateUpdate({display: false, data: null})"
             />
+            
             <GenericAlert
                 :dataModal="{
-                    display: display_generic_alert,
+                    display: displayGenericAlert,
                     dataRegistro : dataRegistro,
                     dataProceso : dataProceso
                 }"
@@ -62,21 +86,21 @@
 </template>
 
 <script setup>
-// Vue
-import { ref } from 'vue';
+import { ref } from "vue";
 
 // Layouts
 import GenericLayout from "@/Layouts/GenericLayout.vue";
 import DynamicTable from "@/Components/DynamicTable.vue";
-
 import GenericAlert from "@/Components/GenericAlert.vue";
 
 // Componentes de los modales
-import CreateUpdate from "@/Pages/System/Permisos/CreateUpdate.vue";
+import CreateUpdate from "@/Pages/System/Estados/CreateUpdate.vue";
 
-// Variables para los modales
-const displayCreateUpdate = ref(false), display_generic_alert = ref(false);
-const dataRegistro = ref(null), dataProceso = ref(null)
+// Variables
+const displayCreateUpdate = ref(false);
+const dataProceso = ref(null);
+const dataRegistro = ref(null);
+const displayGenericAlert = ref(null)
 
 // Métodos
 const modalCreateUpdate = (event) => {
@@ -86,70 +110,15 @@ const modalCreateUpdate = (event) => {
 
 const modalGenericAlert = (event) => {
     dataRegistro.value = event.data;
-    display_generic_alert.value = event.display;
+    displayGenericAlert.value = event.display;
     dataProceso.value = event.proceso;
 }
 
 // Propiedades
 const props = defineProps({
-    permisos: {
+    estados: {
         type: Object,
-        default: null
-    }
-})
-
-// Array-Object para los items del DataTable
-const items = ref([
-    {
-        dataField: {
-            field: 'id',
-            header : 'ID',
-            sortable: true,
-            type: 'text',
-        },
-        filters: {
-            active: true,
-            type: 'numeric',
-            minFractionDigits: 0,
-            maxFractionDigits: 0,
-        },
+        default: {},
     },
-    {
-        dataField: {
-            field: 'module_name',
-            header : 'Módulo',
-            sortable: true,
-            type: 'text',
-        },
-        filters: {
-            active: true,
-            type: 'text',
-        },
-    },
-    {
-        dataField: {
-            field: 'name',
-            header : 'Nombre',
-            sortable: true,
-            type: 'text',
-        },
-        filters: {
-            active: true,
-            type: 'text',
-        },
-    },
-    {
-        dataField: {
-            field: 'description',
-            header : 'Descripción',
-            sortable: true,
-            type: 'text',
-        },
-        filters: {
-            active: true,
-            type: 'text',
-        },
-    },
-])
-
+});
 </script>

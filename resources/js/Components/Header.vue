@@ -108,6 +108,11 @@ export default {
                             icon: "pi pi-unlock",
                             command: () => Inertia.visit(route("paises.index")),
                         },
+                        {
+                            label: "Estados",
+                            icon: "pi pi-unlock",
+                            command: () => Inertia.visit(route("estados.index")),
+                        },
                     ],
                 },
                 {

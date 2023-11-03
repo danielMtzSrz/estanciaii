@@ -60,7 +60,7 @@
         <template #footer>
            <CreateUpdate
                 :dataModal="{
-                    display: display_create_update,
+                    display: displayCreateUpdate,
                     dataRegistro: dataRegistro,
                     data_permisos: data_permisos
                 }"
@@ -120,12 +120,12 @@ import DataView from 'primevue/dataview';
 const data = ref(null)
 
 // Variables para los modales
-const display_create_update = ref(false), display_generic_alert = ref(false), display_ver_permisos = ref(false);
+const displayCreateUpdate = ref(false), display_generic_alert = ref(false), display_ver_permisos = ref(false);
 const dataRegistro = ref(null), dataProceso = ref(null), data_ver_permisos = ref(null)
 
 // Métodos
 const modalCreateUpdate = (event) => {
-    display_create_update.value = event.display;
+    displayCreateUpdate.value = event.display;
     dataRegistro.value = event?.data ?? null;
 }
 

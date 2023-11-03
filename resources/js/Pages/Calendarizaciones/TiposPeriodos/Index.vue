@@ -44,7 +44,7 @@
         <template #footer>
             <CreateUpdate
                 :dataModal="{
-                    display: display_create_update,
+                    display: displayCreateUpdate,
                     dataRegistro: dataRegistro,
                 }"
                 @closeModal="modalCreateUpdate({display: false, data: null})"
@@ -75,12 +75,12 @@ import GenericAlert from "@/Components/GenericAlert.vue";
 import CreateUpdate from "@/Pages/Calendarizaciones/TiposPeriodos/CreateUpdate.vue";
 
 // Variables para los modales
-const display_create_update = ref(false), display_generic_alert = ref(false);
+const displayCreateUpdate = ref(false), display_generic_alert = ref(false);
 const dataRegistro = ref(null), dataProceso = ref(null)
 
 // Métodos
 const modalCreateUpdate = (event) => {
-    display_create_update.value = event.display;
+    displayCreateUpdate.value = event.display;
     dataRegistro.value = event?.data ?? null;
 }
 

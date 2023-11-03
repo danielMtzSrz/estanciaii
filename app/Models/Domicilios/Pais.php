@@ -17,7 +17,6 @@ class Pais extends Model
         'nacionalidad',
     ];
 
-
     public function estados()
     {
         return $this->hasMany('App\Models\Domicilios\Estado');

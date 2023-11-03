@@ -7,7 +7,7 @@ use App\Http\Controllers\System\{UserController, RoleController, PermissionContr
 use App\Http\Controllers\Seguimiento\{AnunciosController, VacantesController};
 
 // Domicilios
-use App\Http\Controllers\System\{PaisesController};
+use App\Http\Controllers\System\{PaisesController, EstadosController};
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +39,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     // Rutas de domicilios
     Route::resource("paises", PaisesController::class)->except('show','create','edit');
+    Route::resource("estados", EstadosController::class)->except('show','create','edit');
 
     Route::resource('prueba', PruebaController::class);
 });

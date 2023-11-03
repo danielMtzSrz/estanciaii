@@ -83,7 +83,7 @@
         <template #footer>
             <CreateUpdate
                 :dataModal="{
-                    display: display_create_update,
+                    display: displayCreateUpdate,
                     dataRegistro: dataRegistro,
                 }"
                 @closeModal="modalCreateUpdate({display: false, data: null})"
@@ -114,7 +114,7 @@ import GenericAlert from "@/Components/GenericAlert.vue";
 import CreateUpdate from "@/Pages/Prueba/CreateUpdate.vue";
 
 // Variables
-const display_create_update = ref(false);
+const displayCreateUpdate = ref(false);
 const dataProceso = ref(null);
 const dataRegistro = ref(null);
 const display_generic_alert = ref(null)
@@ -129,7 +129,7 @@ const props = defineProps({
 
 // Métodos
 const modalCreateUpdate = (event) => {
-    display_create_update.value = event.display;
+    displayCreateUpdate.value = event.display;
     dataRegistro.value = event?.data ?? null;
 }
 

@@ -19,6 +19,19 @@ class Estado extends Model
         'nombre',
     ];
 
+
+    // Maps
+    public function indexMap()
+    {
+        return [
+            'id' => $this->id,
+            'pais_object' => $this->pais,
+            'pais' => $this->pais->nombre,
+            'nombre' => $this->nombre
+        ];
+    }
+
+    // Relations
     public function pais()
     {
         return $this->belongsTo('App\Models\Domicilios\Pais');
