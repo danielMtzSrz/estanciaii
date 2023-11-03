@@ -18,6 +18,16 @@
                     </div>
 
                     <div class="col-sm-12 col-md-6">
+                        <Dropdown 
+                            label="Estados"
+                            :data="dataEstados"
+                            textDropdown="nombre"
+                            v-model="estadoSeleccionado"
+                            :disabled="!dataEstados"
+                        />
+                    </div>
+
+                    <div class="col-sm-12 col-md-12">
                         <InputText
                             label="Estado"
                             name="nombre"
@@ -67,14 +77,15 @@ import InputText from "@/Components/Forms/InputText.vue";
 // Pinia
 import { useAddressStore } from '@/store/adress';
 
-const { obtenerPaises } = useAddressStore()
+const { obtenerPaises, obtenerEstados } = useAddressStore()
 
 // Variables
-const dataPaises = ref(null), paisSeleccionado = ref(null)
+const dataPaises = ref(null), paisSeleccionado = ref(null),
+      dataEstados = ref(null), estadoSeleccionado = ref(null)
 
 const form = useForm({
     _method: null,
-    pais_id: null,
+    estado_id: null,
     nombre: null
 });
 
@@ -104,7 +115,7 @@ const submit = () => {
     if (!props.dataModal.dataRegistro) {
         form.transform((data) => ({
             ...data,
-            pais_id: paisSeleccionado?.value.id
+            estado_id: estadoSeleccionado?.value.id
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
@@ -113,7 +124,7 @@ const submit = () => {
     } else {
         form.transform((data) => ({
             ...data,
-            pais_id: paisSeleccionado.value?.id
+            estado_id: estadoSeleccionado.value?.id
         })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();
@@ -124,8 +135,8 @@ const submit = () => {
 
 // Watchers
 watch(() => props.dataModal, async (newVal) => {
-    ruta.value = !newVal.dataRegistro ? 'estados.store' : 'estados.update'
-    titulo.value = !newVal.dataRegistro ? 'Nuevo Estado' : 'Actualizar Estado'
+    ruta.value = !newVal.dataRegistro ? 'municipios.store' : 'municipios.update'
+    titulo.value = !newVal.dataRegistro ? 'Nuevo Municipio' : 'Actualizar Municipio'
 
     await obtenerPaises()
     dataPaises.value = useAddressStore().paisesData
@@ -137,6 +148,12 @@ watch(() => props.dataModal.dataRegistro, (newVal) => {
     form._method = newVal ? "put" : null
 
     paisSeleccionado.value = newVal?.pais ?? null
+    estadoSeleccionado.value = newVal?.estado ?? null
     form.nombre = newVal?.nombre ?? null
+})
+
+watch(() => paisSeleccionado.value, async (newVal) => {
+    await obtenerEstados(newVal?.id)
+    dataEstados.value = useAddressStore().estadosData
 })
 </script>

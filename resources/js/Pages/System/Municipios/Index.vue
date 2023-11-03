@@ -1,9 +1,9 @@
 <template>
-    <GenericLayout titleModule="Estados">
+    <GenericLayout titleModule="Municipios">
         <template #content>
             <DynamicTable
-                :data="estados"
-                titleModule="Estados"
+                :data="municipios"
+                titleModule="Municipios"
                 :items="[
                     {
                         dataField: {
@@ -19,8 +19,20 @@
                     },
                     {
                         dataField: {
-                            field : 'nombre',
+                            field : 'estado_nombre',
                             header : 'Estado',
+                            sortable: false,
+                            type: 'text',
+                        },
+                        filters: {
+                            active: true,
+                            type: 'text',
+                        },
+                    },
+                    {
+                        dataField: {
+                            field : 'nombre',
+                            header : 'Municipio',
                             sortable: false,
                             type: 'text',
                         },
@@ -56,7 +68,7 @@
                             display: true, 
                             proceso: {
                                 'proceso': 'delete',
-                                'ruta': 'estados.destroy',
+                                'ruta': 'municipios.destroy',
                             }
                         })"
                     />
@@ -94,7 +106,7 @@ import DynamicTable from "@/Components/DynamicTable.vue";
 import GenericAlert from "@/Components/GenericAlert.vue";
 
 // Componentes de los modales
-import CreateUpdate from "@/Pages/System/Estados/CreateUpdate.vue";
+import CreateUpdate from "@/Pages/System/Municipios/CreateUpdate.vue";
 
 // Variables
 const displayCreateUpdate = ref(false);
@@ -116,7 +128,7 @@ const modalGenericAlert = (event) => {
 
 // Propiedades
 const props = defineProps({
-    estados: {
+    municipios: {
         type: Object,
         default: {},
     },

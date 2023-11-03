@@ -25,8 +25,8 @@ class Estado extends Model
     {
         return [
             'id' => $this->id,
-            'pais_object' => $this->pais,
-            'pais' => $this->pais->nombre,
+            'pais' => $this->pais,
+            'pais_nombre' => $this->pais->nombre,
             'nombre' => $this->nombre
         ];
     }

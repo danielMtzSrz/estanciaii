@@ -113,6 +113,11 @@ export default {
                             icon: "pi pi-unlock",
                             command: () => Inertia.visit(route("estados.index")),
                         },
+                        {
+                            label: "Municipios",
+                            icon: "pi pi-unlock",
+                            command: () => Inertia.visit(route("municipios.index")),
+                        },
                     ],
                 },
                 {

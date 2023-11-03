@@ -19,6 +19,19 @@ class Municipio extends Model
         'nombre',
     ];
 
+    // Maps
+    public function indexMap(){
+        return [
+            'id' => $this->id,
+            'pais' => $this->estado->pais,
+            'pais_nombre' => $this->estado->pais->nombre,
+            'estado' => $this->estado,
+            'estado_nombre' => $this->estado->nombre,
+            'nombre' => $this->nombre
+        ];
+    }
+
+    // Relations
     public function estado()
     {
         return $this->belongsTo(Estado::class);
