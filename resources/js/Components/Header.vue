@@ -103,6 +103,11 @@ export default {
                                 Inertia.visit(route("empresas.index"));
                             },
                         },
+                        {
+                            label: "Países",
+                            icon: "pi pi-unlock",
+                            command: () => Inertia.visit(route("paises.index")),
+                        },
                     ],
                 },
                 {

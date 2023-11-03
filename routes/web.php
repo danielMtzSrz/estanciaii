@@ -1,13 +1,18 @@
 <?php
 
-use App\Http\Controllers\EmpresasController;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+
 // Controladores
+use App\Http\Controllers\EmpresasController;
 use App\Http\Controllers\System\{UserController, RoleController, PermissionController};
 use App\Http\Controllers\Seguimiento\{AnunciosController, VacantesController};
-// Modelos
+
+// Domicilios
+use App\Http\Controllers\System\{PaisesController};
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
+use Inertia\Inertia;
 
 // Agrupación de los controladores con el middleware de autenticación
 
@@ -29,9 +34,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('anuncios', AnunciosController::class);
     Route::resource('vacantes', VacantesController::class);
 
-
     // Rutas de empresas
     Route::resource("empresas", EmpresasController::class)->except('show','create','edit');
+
+    // Rutas de domicilios
+    Route::resource("paises", PaisesController::class)->except('show','create','edit');
 
     Route::resource('prueba', PruebaController::class);
 });
