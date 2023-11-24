@@ -21,8 +21,8 @@
                     <div class="col-sm-12">
                         <InputText 
                             label="Título del anuncio"
-                            v-model="form.titulo"
-                            :errors="form.errors.titulo"
+                            v-model="form.nombre"
+                            :errors="form.errors.nombre"
                         />
                     </div>
                     <div class="col-sm-12">
@@ -85,8 +85,9 @@ const dataEmpresas = ref(null), empresaSeleccionada = ref(null)
 const imagenActual = ref(null)
 
 const form = useForm({
-    empresaasociada_id : null,
-    titulo : null,
+    _method: null,
+    empresa_id : null,
+    nombre : null,
     contenido : null,
     imagen : null
 })
@@ -113,7 +114,7 @@ const submit = () => {
     if(!props.dataModal.dataRegistro){
         form.transform((data) => ({
             ...data,
-            empresaasociada_id: empresaSeleccionada.value?.id
+            empresa_id: empresaSeleccionada.value?.id
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
@@ -122,8 +123,8 @@ const submit = () => {
     }else{
         form.transform((data) => ({
             ...data,
-            empresaasociada_id: empresaSeleccionada.value?.id
-        })).put(route(ruta.value, props.dataModal.dataRegistro), {
+            empresa_id: empresaSeleccionada.value?.id
+        })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();
             },
@@ -142,8 +143,10 @@ watch(() => props.dataModal, async (newVal) => {
 watch(() => props.dataModal.dataRegistro, (newVal) => {
     form.reset();
 
-    form.empresaasociada_id = newVal?.empresaasociada_id ?? null
-    form.titulo = newVal?.titulo ?? null
+    form._method = newVal ? "put" : null
+
+    form.empresa_id = newVal?.empresa_id ?? null
+    form.nombre = newVal?.nombre ?? null
     form.contenido = newVal?.contenido ?? null
     form.imagen = newVal?.imagen ?? null
     imagenActual.value = newVal?.imagen ?? null

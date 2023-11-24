@@ -59,7 +59,7 @@ CREATE TABLE `periodos` (
   `deleted_at` timestamp DEFAULT NULL
 );
 
-CREATE TABLE `tiposConvocatorias` (
+CREATE TABLE `tipos_convocatoria` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `nombre` varchar(255),
   `contenido` varchar(255),
@@ -78,7 +78,7 @@ CREATE TABLE `convocatorias` (
   `deleted_at` timestamp DEFAULT NULL
 );
 
-CREATE TABLE `tipoPeriodo` (
+CREATE TABLE `tipos_periodo` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `nombre` varchar(255),
   `descripcion` varchar(255),
@@ -111,7 +111,7 @@ CREATE TABLE `aulas` (
   `deleted_at` timestamp DEFAULT NULL
 );
 
-CREATE TABLE `aulasReservacion` (
+CREATE TABLE `aulas_reservacion` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `aula_id` bigint,
   `solicitante_id` bigint,
@@ -146,7 +146,7 @@ CREATE TABLE `materias` (
   `deleted_at` timestamp DEFAULT NULL
 );
 
-CREATE TABLE `planesEstudio` (
+CREATE TABLE `planes_estudio` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `carrera_id` bigint,
   `mapa_curricular_id` bigint,
@@ -156,7 +156,7 @@ CREATE TABLE `planesEstudio` (
   `deleted_at` timestamp DEFAULT NULL
 );
 
-CREATE TABLE `grupoMateria` (
+CREATE TABLE `grupo_materia` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `profesor_id` bigint,
   `materia_id` bigint,
@@ -168,7 +168,7 @@ CREATE TABLE `grupoMateria` (
   `deleted_at` timestamp DEFAULT NULL
 );
 
-CREATE TABLE `horarioGrupoMateria` (
+CREATE TABLE `horarios_grupo_materia` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `horario_id` bigint,
   `grupo_materia_id` bigint,
@@ -177,7 +177,7 @@ CREATE TABLE `horarioGrupoMateria` (
   `deleted_at` timestamp DEFAULT NULL
 );
 
-CREATE TABLE `mapasCurriculares` (
+CREATE TABLE `mapas_curriculares` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `clave_mapa_curricular` varchar(255),
   `total_cuatrimestres` int,
@@ -308,10 +308,10 @@ CREATE TABLE `expediente` (
   `deleted_at` timestamp DEFAULT NULL
 );
 
-CREATE TABLE `tipoAnuncio` (
+CREATE TABLE `tipos_anuncio` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `empresasAsociadas_id` bigint,
-  `titulo` varchar(255),
+  `empresa_id` bigint,
+  `nombre` varchar(255),
   `contenido` varchar(255),
   `imagen` varchar(255),
   `created_at` datetime,
@@ -321,7 +321,7 @@ CREATE TABLE `tipoAnuncio` (
 CREATE TABLE `anuncios` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `tipo_anuncio_id` bigint,
-  `empresasAsociadas_id` bigint,
+  `empresa_id` bigint,
   `titulo` varchar(255),
   `contenido` varchar(255),
   `imagen` varchar(255),
@@ -329,7 +329,7 @@ CREATE TABLE `anuncios` (
   `updated_at` datetime
 );
 
-CREATE TABLE `empresasAsociadas` (
+CREATE TABLE `empresas` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `colonia_id` bigint,
   `calle` varchar(255),
@@ -377,7 +377,7 @@ CREATE TABLE `users` (
   `deleted_at` timestamp DEFAULT NULL
 );
 
-ALTER TABLE `empresasAsociadas` ADD FOREIGN KEY (`colonia_id`) REFERENCES `colonias` (`id`);
+ALTER TABLE `empresas` ADD FOREIGN KEY (`colonia_id`) REFERENCES `colonias` (`id`);
 
 ALTER TABLE `users` ADD FOREIGN KEY (`colonia_id`) REFERENCES `colonias` (`id`);
 
@@ -385,7 +385,7 @@ ALTER TABLE `asesorias` ADD FOREIGN KEY (`materia_id`) REFERENCES `materias` (`i
 
 ALTER TABLE `asesorias` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
-ALTER TABLE `anuncios` ADD FOREIGN KEY (`tipo_anuncio_id`) REFERENCES `tipoAnuncio` (`id`);
+ALTER TABLE `anuncios` ADD FOREIGN KEY (`tipo_anuncio_id`) REFERENCES `tipos_anuncio` (`id`);
 
 ALTER TABLE `grupos` ADD FOREIGN KEY (`carrera_id`) REFERENCES `carreras` (`id`);
 
@@ -393,9 +393,9 @@ ALTER TABLE `grupos` ADD FOREIGN KEY (`aula_id`) REFERENCES `aulas` (`id`);
 
 ALTER TABLE `grupos` ADD FOREIGN KEY (`tutor_id`) REFERENCES `users` (`id`);
 
-ALTER TABLE `aulasReservacion` ADD FOREIGN KEY (`aula_id`) REFERENCES `aulas` (`id`);
+ALTER TABLE `aulas_reservacion` ADD FOREIGN KEY (`aula_id`) REFERENCES `aulas` (`id`);
 
-ALTER TABLE `aulasReservacion` ADD FOREIGN KEY (`solicitante_id`) REFERENCES `users` (`id`);
+ALTER TABLE `aulas_reservacion` ADD FOREIGN KEY (`solicitante_id`) REFERENCES `users` (`id`);
 
 ALTER TABLE `estados` ADD FOREIGN KEY (`pais_id`) REFERENCES `paises` (`id`);
 
@@ -405,31 +405,31 @@ ALTER TABLE `colonias` ADD FOREIGN KEY (`municipio_id`) REFERENCES `municipios` 
 
 ALTER TABLE `horarios` ADD FOREIGN KEY (`aula_id`) REFERENCES `aulas` (`id`);
 
-ALTER TABLE `periodos` ADD FOREIGN KEY (`tipo_periodo_id`) REFERENCES `tipoPeriodo` (`id`);
+ALTER TABLE `periodos` ADD FOREIGN KEY (`tipo_periodo_id`) REFERENCES `tipos_periodo` (`id`);
 
 ALTER TABLE `convocatorias` ADD FOREIGN KEY (`periodo_id`) REFERENCES `periodos` (`id`);
 
-ALTER TABLE `convocatorias` ADD FOREIGN KEY (`tipo_convocatoria_id`) REFERENCES `tiposConvocatorias` (`id`);
+ALTER TABLE `convocatorias` ADD FOREIGN KEY (`tipo_convocatoria_id`) REFERENCES `tipos_convocatoria` (`id`);
 
-ALTER TABLE `materias` ADD FOREIGN KEY (`plan_estudios_id`) REFERENCES `planesEstudio` (`id`);
+ALTER TABLE `materias` ADD FOREIGN KEY (`plan_estudios_id`) REFERENCES `planes_estudio` (`id`);
 
-ALTER TABLE `planesEstudio` ADD FOREIGN KEY (`carrera_id`) REFERENCES `carreras` (`id`);
+ALTER TABLE `planes_estudio` ADD FOREIGN KEY (`carrera_id`) REFERENCES `carreras` (`id`);
 
-ALTER TABLE `planesEstudio` ADD FOREIGN KEY (`mapa_curricular_id`) REFERENCES `mapasCurriculares` (`id`);
+ALTER TABLE `planes_estudio` ADD FOREIGN KEY (`mapa_curricular_id`) REFERENCES `mapas_curriculares` (`id`);
 
-ALTER TABLE `grupoMateria` ADD FOREIGN KEY (`profesor_id`) REFERENCES `users` (`id`);
+ALTER TABLE `grupo_materia` ADD FOREIGN KEY (`profesor_id`) REFERENCES `users` (`id`);
 
-ALTER TABLE `grupoMateria` ADD FOREIGN KEY (`materia_id`) REFERENCES `materias` (`id`);
+ALTER TABLE `grupo_materia` ADD FOREIGN KEY (`materia_id`) REFERENCES `materias` (`id`);
 
-ALTER TABLE `grupoMateria` ADD FOREIGN KEY (`horario_id`) REFERENCES `horarios` (`id`);
+ALTER TABLE `grupo_materia` ADD FOREIGN KEY (`horario_id`) REFERENCES `horarios` (`id`);
 
-ALTER TABLE `grupoMateria` ADD FOREIGN KEY (`grupo_id`) REFERENCES `grupos` (`id`);
+ALTER TABLE `grupo_materia` ADD FOREIGN KEY (`grupo_id`) REFERENCES `grupos` (`id`);
 
-ALTER TABLE `grupoMateria` ADD FOREIGN KEY (`periodo_id`) REFERENCES `periodos` (`id`);
+ALTER TABLE `grupo_materia` ADD FOREIGN KEY (`periodo_id`) REFERENCES `periodos` (`id`);
 
-ALTER TABLE `horarioGrupoMateria` ADD FOREIGN KEY (`horario_id`) REFERENCES `horarios` (`id`);
+ALTER TABLE `horarios_grupo_materia` ADD FOREIGN KEY (`horario_id`) REFERENCES `horarios` (`id`);
 
-ALTER TABLE `horarioGrupoMateria` ADD FOREIGN KEY (`grupo_materia_id`) REFERENCES `grupoMateria` (`id`);
+ALTER TABLE `horarios_grupo_materia` ADD FOREIGN KEY (`grupo_materia_id`) REFERENCES `grupo_materia` (`id`);
 
 ALTER TABLE `users` ADD FOREIGN KEY (`nacionalidad_id`) REFERENCES `paises` (`id`);
 
@@ -439,4 +439,4 @@ ALTER TABLE `model_has_permissions` ADD FOREIGN KEY (`permission_id`) REFERENCES
 
 ALTER TABLE `model_has_roles` ADD FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
 
-ALTER TABLE `anuncios` ADD FOREIGN KEY (`empresasAsociadas_id`) REFERENCES `empresasAsociadas` (`id`);
+ALTER TABLE `anuncios` ADD FOREIGN KEY (`empresa_id`) REFERENCES `empresas` (`id`);

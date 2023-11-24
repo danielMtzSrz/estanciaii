@@ -10,7 +10,7 @@ class Empresas extends Model
     use HasFactory;
     /* use SoftDeletes; */
 
-    protected $table = 'empresasAsociadas';
+    protected $table = 'empresas';
 
     protected $fillable = [
           "id",
@@ -82,5 +82,10 @@ class Empresas extends Model
     public function colonia()
     {
         return $this->belongsTo("App\Models\Domicilios\Colonia");
+    }
+
+    public function tipos_anuncios()
+    {
+        return $this->hasMany("App\Models\Vacantes\TipoAnuncio");
     }
 }

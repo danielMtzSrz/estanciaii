@@ -10,13 +10,11 @@ class TipoAnuncio extends Model
     use HasFactory;
     /* use SoftDeletes; */
 
-    protected $connection = 'mongodb';
-
-    protected $collection = 'tipoAnuncio';
+    protected $table = 'tipos_anuncio';
 
     protected $fillable = [
-        "empresaasociada_id",
-        "titulo",
+        "empresa_id",
+        "nombre",
         "contenido",
         "imagen"
     ];
@@ -35,15 +33,17 @@ class TipoAnuncio extends Model
     {
         return [
             'id' => $this->id,
-            'pais' => $this->pais,
-            'pais_nombre' => $this->pais->nombre,
-            'nombre' => $this->nombre
+            'empresa' => $this->empresa,
+            'empresa_nombre' => $this->empresa->nombre_empresa,
+            'nombre' => $this->nombre,
+            'contenido' => $this->contenido,
+            'imagen' => $this->imagen
         ];
     }
 
     // Relations
     public function empresa()
     {
-        return $this->belongsTo("App\Models\Empresas", 'empresaasociada_id', 'id');
+        return $this->belongsTo("App\Models\Empresas");
     }
 }

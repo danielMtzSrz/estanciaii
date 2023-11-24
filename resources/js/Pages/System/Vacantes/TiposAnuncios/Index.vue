@@ -102,7 +102,19 @@ const props = defineProps({
 const items = ref([
     {
         dataField: {
-            field: 'titulo',
+            field: 'empresa_nombre',
+            header : 'Empresa',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'text',
+        },
+    },
+    {
+        dataField: {
+            field: 'nombre',
             header : 'Título',
             sortable: true,
             type: 'text',

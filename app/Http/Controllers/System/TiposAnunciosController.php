@@ -7,13 +7,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Vacantes\TipoAnuncio;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 use Inertia\Inertia;
 
 class TiposAnunciosController extends Controller
 {
     public function index()
-    {
+    {        
         $tipos_anuncios = TipoAnuncio::get()->map(function($tipo_anuncio){
             return $tipo_anuncio->indexMap();
         });
@@ -27,7 +28,7 @@ class TiposAnunciosController extends Controller
 
         // Cargar imagen
         if($request->file('imagen')){
-            $tipo_anuncio->imagen = $request->file('imagen')->store('imagen', 'public');
+            $tipo_anuncio->imagen = $request->file('imagen')->store('System/TiposAnuncios', 'public');
             $tipo_anuncio->save();
         }
 
@@ -37,8 +38,17 @@ class TiposAnunciosController extends Controller
     public function update(Request $request, $id)
     {
         $tipo_anuncio = TipoAnuncio::find($id);
+        
+        if($request->file('imagen')){
+            Storage::disk('public')->delete($tipo_anuncio->imagen);
+        }
 
         $tipo_anuncio->update($request->all());
+
+        if($request->file('imagen')) {
+            $tipo_anuncio->imagen = $request->file('imagen')->store('System/TiposAnuncios', 'public');
+            $tipo_anuncio->save();
+        }
 
         return back()->with(config('messages.mensaje_actualizar'));
     }
@@ -46,6 +56,8 @@ class TiposAnunciosController extends Controller
     public function destroy($id)
     {
         $tipo_anuncio = TipoAnuncio::find($id);
+
+        Storage::disk('public')->delete($tipo_anuncio->imagen);
 
         $tipo_anuncio->delete();
 

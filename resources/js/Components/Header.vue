@@ -69,13 +69,6 @@ export default {
                     icon: "pi pi-cog",
                     items: [
                         {
-                            label: "Prueba",
-                            icon: "pi pi-users",
-                            command: () => {
-                                Inertia.visit(route("prueba.index"));
-                            },
-                        },
-                        {
                             label: "Usuarios",
                             icon: "pi pi-users",
                             command: () => {
