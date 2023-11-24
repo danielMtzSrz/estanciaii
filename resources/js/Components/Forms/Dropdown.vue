@@ -38,11 +38,12 @@ Ejemplo:
             >
                 <template #value="slotProps">
                     <div class="p-dropdown-car-value" v-if="slotProps.value">
-                        <div class="flex p-dropdown-car-option">
-                            <Avatar
+                        <div class="flex p-dropdown-car-option align-items-center">
+                            <Image
                                 v-if="slotProps.value[imageDropdown] && imageDropdown" 
                                 :alt="slotProps.value[textDropdown]"
-                                :image="'/storage/'+slotProps.value[imageDropdown]"
+                                :src="'/storage/'+slotProps.value[imageDropdown]"
+                                width="30"
                                 class="p-avatar-image p-avatar-circle"
                             />
                             <span class="ms-2">{{ slotProps.value[textDropdown] }}</span>
@@ -53,11 +54,12 @@ Ejemplo:
                     </span>
                 </template>
                 <template #option="slotProps">
-                    <div class="flex p-dropdown-car-option">
-                        <Avatar 
+                    <div class="flex p-dropdown-car-option align-items-center">
+                        <Image 
                             v-if="slotProps.option[imageDropdown]"
                             :alt="slotProps.option[textDropdown]"
-                            :image="'/storage/'+slotProps.option[imageDropdown]"
+                            :src="'/storage/'+slotProps.option[imageDropdown]"
+                            width="30"
                             class="p-avatar-image p-avatar-circle"
                         />
                         <span class="ms-2">{{ slotProps.option[textDropdown] }}</span>
@@ -77,7 +79,7 @@ import { computed } from 'vue';
 
 // Primevue
 import Dropdown from 'primevue/dropdown'
-import Avatar from 'primevue/avatar'
+import Image from 'primevue/image'
 
 const props = defineProps({
     icon: String,
@@ -121,7 +123,7 @@ const props = defineProps({
 })
 
 const placeholder = computed(() => {
-    return `${props.placeholder} ${props.label}`
+    return `${props.placeholder} ${props.label.toLowerCase()}`
 })
 
 const inputValue = computed({

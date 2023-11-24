@@ -145,7 +145,7 @@
 <script setup>
 
 // Vue
-import { ref, watch, computed } from "vue";
+import { ref, watch } from "vue";
 
 // Inertia
 import { useForm } from "@inertiajs/inertia-vue3";

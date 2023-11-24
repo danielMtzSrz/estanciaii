@@ -12,7 +12,7 @@
                             :data="dataModal.dataTipoPeriodo"
                             :value="tipoPeriodo"
                             :errors="form.errors.tipo_periodo_id"
-                            :textDropdown="'nombre'"
+                            textDropdown="nombre"
                             @input="form.tipo_periodo_id = $event.id, tipoPeriodo=$event"
                         />
                     </div>

@@ -32,7 +32,7 @@
                             :data="dataModal.dataTipoCoordinacion"
                             :value="tipoCoordinacion"
                             :errors="form.errors.tipo_coordinacion_carrera"
-                            :textDropdown="'nombre'"
+                            textDropdown="nombre"
                             @input="form.tipo_coordinacion_carrera = $event.id, tipoCoordinacion=$event"/>
                  </div>
                   <div class="col-sm-4 mt-3">

@@ -19,7 +19,7 @@
                            :data="dataModal.dataCuatrimestre"
                            :value="cuatrimestre"
                            :errors="form.errors.cuatrimestre_id"
-                           :textDropdown="'nombre'"
+                           textDropdown="nombre"
                            @input="form.cuatrimestre_id = $event.id, cuatrimestre=$event"
                        />
                        <Dropdown 
@@ -27,7 +27,7 @@
                            :data="dataModal.dataPlanEstudio"
                            :value="planEstudio"
                            :errors="form.errors.plan_estudio_id"
-                           :textDropdown="'id'"
+                           textDropdown="id"
                            @input="form.plan_estudio_id = $event.id, planEstudio=$event"
                         />
                    </div>

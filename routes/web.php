@@ -9,6 +9,9 @@ use App\Http\Controllers\Seguimiento\{AnunciosController, VacantesController};
 // Domicilios
 use App\Http\Controllers\System\{PaisesController, EstadosController, MunicipiosController};
 
+// Vacantes
+use App\Http\Controllers\System\{TiposAnunciosController};
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +44,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource("paises", PaisesController::class)->except('show','create','edit');
     Route::resource("estados", EstadosController::class)->except('show','create','edit');
     Route::resource("municipios", MunicipiosController::class)->except('show','create','edit');
+
+    // Anuncios
+    Route::resource("tiposanuncios", TiposAnunciosController::class)->except('show','create','edit');
 
     Route::resource('prueba', PruebaController::class);
 });

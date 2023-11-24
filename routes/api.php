@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Domicilios;
+use App\Http\Controllers\Api\Empresas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// Empresas
+Route::get('empresas', [Empresas::class, 'Empresas'])->name('empresas');
+
+
+// Domicilios
 Route::prefix('domicilio')->name('domicilio.')->group(function () {
 
     Route::get('paises', [Domicilios::class, 'Paises'])->name('paises');

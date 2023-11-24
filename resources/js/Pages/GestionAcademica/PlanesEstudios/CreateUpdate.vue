@@ -12,7 +12,7 @@
                            :data="dataModal.dataCarrera"
                            :value="carrera"
                            :errors="form.errors.carrera_id"
-                           :textDropdown="'nombre'"
+                           textDropdown="nombre"
                            @input="form.carrera_id = $event.id, carrera=$event"
                        />
                        <Dropdown 
@@ -20,7 +20,7 @@
                            :data="dataModal.dataMapaCurricular"
                            :value="mapaCurricular"
                            :errors="form.errors.mapa_curricular_id"
-                           :textDropdown="'clave_mapa_curricular'"
+                           textDropdown="clave_mapa_curricular"
                            @input="form.mapa_curricular_id = $event.id, mapaCurricular=$event"
                        />
                    </div>

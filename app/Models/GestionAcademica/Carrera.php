@@ -9,7 +9,6 @@ use App\Models\GestionAcademica\PerfilAcademico;
 use App\Models\GestionAcademica\PlanEstudio;
 use Illuminate\Database\Eloquent\Model;
 
-
 class Carrera extends Model
 {
     use HasFactory;
