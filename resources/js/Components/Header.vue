@@ -116,6 +116,11 @@ export default {
                             icon: "pi pi-unlock",
                             command: () => Inertia.visit(route("tiposanuncios.index")),
                         },
+                        {
+                            label: "Anuncios",
+                            icon: "pi pi-unlock",
+                            command: () => Inertia.visit(route("anuncios.index")),
+                        },
                     ],
                 },
                 {
