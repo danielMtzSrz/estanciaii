@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\System;
 
 use App\Models\Empresas;
 use App\Http\Requests\System\Empresas\StoreEmpresasRequest;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+
+use App\Http\Controllers\Controller;
 
 use Inertia\Inertia;
 
@@ -28,7 +30,7 @@ class EmpresasController extends Controller
 
         // Cargar imagen
         if($request->file('imagen')){
-            $empresa->imagen = $request->file('imagen')->store('imagen', 'public');
+            $empresa->imagen = $request->file('imagen')->store('System/Empresas', 'public');
             $empresa->save();
         }
 
@@ -45,7 +47,7 @@ class EmpresasController extends Controller
         $empresa->update($request->validated());
 
         if($request->file('imagen')) {
-            $empresa->imagen = $request->file('imagen')->store('imagen', 'public');
+            $empresa->imagen = $request->file('imagen')->store('System/Empresas', 'public');
             $empresa->save();
         }
 

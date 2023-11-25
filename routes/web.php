@@ -2,7 +2,7 @@
 
 
 // Controladores
-use App\Http\Controllers\EmpresasController;
+use App\Http\Controllers\System\EmpresasController;
 use App\Http\Controllers\System\{UserController, RoleController, PermissionController};
 use App\Http\Controllers\Seguimiento\{AnunciosController, VacantesController};
 
