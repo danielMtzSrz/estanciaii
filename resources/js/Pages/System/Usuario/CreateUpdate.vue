@@ -375,8 +375,6 @@ watch(() => props.dataModal, async (newVal) => {
 
 watch(() => props.dataModal.dataRegistro, (newVal) => {
     form.reset()
-    
-    console.log(newVal)
 
     form._method = newVal ? "put" : null
 

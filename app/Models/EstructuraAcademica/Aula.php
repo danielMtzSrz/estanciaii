@@ -3,11 +3,12 @@
 namespace App\Models\EstructuraAcademica;
 
 use App\Models\Calendarizaciones\Horario;
-use Carbon\Carbon;
+
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+
+use Carbon\Carbon;
 
 class Aula extends Model
 {
@@ -15,27 +16,41 @@ class Aula extends Model
     protected $table = 'aulas';
 
     use HasFactory;
-    use SoftDeletes;
 
     protected $fillable = [
         'edificio_id',
         'tipo_aula_id',
         'nombre',
-        'estatus',
         'capacidad',
-        'log_id'
+        'estatus'
     ];
+
+    // Maps
+    public function indexMap()
+    {
+        return [
+            'id' => $this->id,
+            'tipo_aula' => $this->tipoAula(),
+            'tipo_aula_nombre' => $this->tipoAula()['nombre'],
+            'edificio' => $this->edificio(),
+            'edificio_nombre' => $this->edificio()['nombre'],
+            'nombre' => $this->nombre,
+            'capacidad' => $this->capacidad,
+            'estatus' => $this->estatus,
+            'estatus_label' => $this->estatus_label
+        ];
+    }
+
+    // Variables computadas
+    public function getEstatusLabelAttribute()
+    {
+        return $this->estatus ? 'Activo' : 'Inactivo';
+    }
 
     // Relación con la tabla EstructuraAcademica/AulasReservacion
     public function aulaReservacion()
     {
         return $this->hasMany('App\Models\EstructuraAcademica\AulaReservacion');
-    }
-
-    // Relación con la tabla EstructuraAcademica/Edicios
-    public function edificio()
-    {
-        return $this->belongsTo('App\Models\EstructuraAcademica\Edificio');
     }
 
     // Relación con la tabla EstructuraAcademica/Grupos
@@ -50,10 +65,19 @@ class Aula extends Model
         return $this->hasMany(Horario::class);
     }
 
-    // Relación con la tabla EstructuraAcademica/TiposAulas
+    // Relación con los arrays en staticdata
+    public function edificio()
+    {
+        $edificio = config('staticdata.estructura_academica.edificios');
+
+        return collect($edificio)->firstWhere('id', $this->edificio_id);
+    }
+
     public function tipoAula()
     {
-        return $this->belongsTo('App\Models\EstructuraAcademica\TipoAula');
+        $tipos_aulas = config('staticdata.estructura_academica.tipos_aulas');
+
+        return collect($tipos_aulas)->firstWhere('id', $this->tipo_aula_id);
     }
 
     public function log()

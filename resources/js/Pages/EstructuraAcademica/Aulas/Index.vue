@@ -1,117 +1,185 @@
 <template>
     <GenericLayout titleModule="Aulas">
         <template #content>
-            <GenericTable :data="aulas">
-                <template #headerContent>
-                    <Button type="button" label="Nuevo" icon="pi pi-plus"
-                        class="p-button-raised p-button-rounded p-button-text p-button-success p-button-sm"
-                        @click="modalCreateUpdate(null, true)" />
-                    <Link :href="route('EstructuraAcademica.Aulas.trashed')">
-                    <Button type="button" label="Papelera" icon="pi pi-trash"
-                        class="p-button-raised p-button-rounded p-button-text p-button-help p-button-sm" />
-                    </Link>
+            <DynamicTable
+                :data="aulas"
+                :items="items"
+                titleModule="Aulas"
+            >
+                <template #header>
+                    <Button
+                        type="button"
+                        label="Nuevo"
+                        icon="pi pi-plus"
+                        class="p-button-raised p-button-rounded p-button-success p-button-sm p-button-text"
+                        @click="modalCreateUpdate({display: true})"
+                    />
                 </template>
-                <template #content>
-                    <Column v-for="col of columns" :field="col.field" :header="col.header" :key="col.field"
-                        :sortable="col.sortable"></Column>
-                    <Column headerStyle="width: 8em" bodyStyle="text-align: center">
-                        <template #body="slotProps">
-                            <!-- <Button
-                            v-permission="'permission.update'" -->
-                            <Button type="button" icon="pi pi-pencil"
-                                class="p-button-warning p-button-text p-button-raised p-button-rounded"
-                                @click="modalCreateUpdate(slotProps.data, true)" />
-                            <Button type="button" icon="pi pi-trash"
-                                class="p-button-danger p-button-text p-button-raised p-button-rounded" @click="modalGenericAlert(slotProps.data, true,
-                                    {
-                                        'proceso': 'destroy',
-                                        'ruta': 'EstructuraAcademica.Aulas.destroy',
-                                        'registro': `del aula ${slotProps.data.nombre}`
-                                    }
-                                )" />
-                        </template>
-                    </Column>
+
+                <template #buttons="{ data }">
+                    <Button
+                        type="button"
+                        icon="pi pi-pencil"
+                        class="p-button-warning p-button-text p-button-raised p-button-rounded"
+                        v-tooltip.top="'Actualizar'"
+                        @click="modalCreateUpdate({display: true, data: data})"
+                    />
+                    <Button
+                        type="button"
+                        icon="pi pi-trash"
+                        class="p-button-danger p-button-text p-button-raised p-button-rounded"
+                        @click="modalGenericAlert({
+                            data: data, 
+                            display: true, 
+                            proceso: {
+                                'proceso': 'delete',
+                                'ruta': 'EstructuraAcademica.Aulas.destroy',
+                            }
+                        })"
+                    />
                 </template>
-            </GenericTable>
+            </DynamicTable>
         </template>
+
         <template #footer>
-            <!-- Modal crear - actualizar -->
-            <form-create-update :dataModal="{
-                display: displayCreateUpdate,
-                dataRegistro: dataRegistro,
-                dataEdificios: edificios,
-                dataTiposAulas: tiposAulas
-            }" v-on:visible="(visible) => modalCreateUpdate(null, visible)" />
-            <!-- Modal eliminar -->
-            <GenericAlert :dataModal="{
-                display: displayAlert,
-                dataRegistro: dataRegistro,
-                dataProceso: dataProceso
-            }" v-on:visible="(visible) => modalGenericAlert(null, visible, null)" />
+            <CreateUpdate
+                :dataModal="{
+                    display: displayCreateUpdate,
+                    dataRegistro: dataRegistro,
+                    dataEdificios: edificios,
+                    dataTiposAula: tipos_aula
+                }"
+                @closeModal="modalCreateUpdate({display: false, data: null})"
+            />
+            <GenericAlert
+                :dataModal="{
+                    display: displayGenericAlert,
+                    dataRegistro : dataRegistro,
+                    dataProceso : dataProceso
+                }"
+                @closeModal="modalGenericAlert({display: false, data: null, dataProceso: null})"
+            />
         </template>
     </GenericLayout>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+// Vue
+import { ref } from 'vue';
 
-// Componentes de primevue
-import Column from 'primevue/column';
-import Button from "primevue/button";
+// Layouts
+import GenericLayout from "@/Layouts/GenericLayout.vue";
+import DynamicTable from "@/Components/DynamicTable.vue";
 
-// Componentes personalizados
-import GenericLayout from '@/Layouts/GenericLayout.vue';
-import GenericTable from '@/Components/GenericTable.vue';
+import GenericAlert from "@/Components/GenericAlert.vue";
 
 // Componentes de los modales
-import FormCreateUpdate from '@/Pages/EstructuraAcademica/Aulas/CreateUpdate.vue';
-import GenericAlert from '@/Components/GenericAlert.vue';
+import CreateUpdate from "@/Pages/EstructuraAcademica/Aulas/CreateUpdate.vue";
 
-// Variables
-const displayCreateUpdate = ref(null)
-const displayAlert = ref(null)
-const dataProceso = ref(null)
-const dataRegistro = ref(null)
-const columns = ref(null)
+// Variables para los modales
+const displayCreateUpdate = ref(false), displayGenericAlert = ref(false);
+const dataRegistro = ref(null), dataProceso = ref(null)
+
+// Métodos
+const modalCreateUpdate = (event) => {
+    displayCreateUpdate.value = event.display;
+    dataRegistro.value = event?.data ?? null;
+}
+
+const modalGenericAlert = (event) => {
+    dataRegistro.value = event.data;
+    displayGenericAlert.value = event.display;
+    dataProceso.value = event.proceso;
+}
 
 // Propiedades
 const props = defineProps({
     aulas: {
-        type: Array,
+        type: Object,
+        default: null
+    },
+    tipos_aula: {
+        type: Object,
         default: null
     },
     edificios: {
-        type: Array,
-        default: null
-    },
-    tiposAulas: {
-        type: Array,
+        type: Object,
         default: null
     }
 })
 
-// Métodos
-const modalCreateUpdate = (data, show) => {
-    dataRegistro.value = data
-    displayCreateUpdate.value = show
-}
+// Array-Object para los items del DataTable
+const items = ref([
+    {
+        dataField: {
+            field: 'edificio_nombre',
+            header : 'Edificio',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'text',
+        },
+    },
+    {
+        dataField: {
+            field: 'tipo_aula_nombre',
+            header : 'Tipo de aula',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'text',
+        },
+    },
+    {
+        dataField: {
+            field: 'nombre',
+            header : 'Aula',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'text',
+        },
+    },
+    {
+        dataField: {
+            field: 'capacidad',
+            header : 'Capacidad',
+            sortable: false,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'numeric',
+        },
+    },
+    {
+        dataField: {
+            field: 'estatus_label',
+            header : 'Estatus',
+            sortable: false,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'text',
+        },
+    },
+])
 
-const modalGenericAlert = (data, show, dataProcess) => {
-    dataRegistro.value = data
-    displayAlert.value = show
-    dataProceso.value = dataProcess
-}
-
-onMounted(() => {
-    columns.value = [
-        { field: 'id', header: 'ID', sortable: true },
-        { field: 'edificio.nombre', header: 'Edificio', sortable: true },
-        { field: 'tipo_aula.nombre', header: 'Tipo de Aula', sortable: true },
-        { field: 'nombre', header: 'Nombre', sortable: true },
-        { field: 'estatus', header: 'Estatus', sortable: true },
-        { field: 'capacidad', header: 'Capacidad', sortable: true },
-        { field: 'created_at', header: 'Fecha de creación', sortable: true },
-        { field: 'updated_at', header: 'Fecha de actualización', sortable: true }
-    ];
-})
+// columns.value = [
+//     { field: 'id', header: 'ID', sortable: true },
+//     { field: 'edificio.nombre', header: 'Edificio', sortable: true },
+//     { field: 'tipo_aula.nombre', header: 'Tipo de Aula', sortable: true },
+//     { field: 'nombre', header: 'Nombre', sortable: true },
+//     { field: 'estatus', header: 'Estatus', sortable: true },
+//     { field: 'capacidad', header: 'Capacidad', sortable: true },
+//     { field: 'created_at', header: 'Fecha de creación', sortable: true },
+//     { field: 'updated_at', header: 'Fecha de actualización', sortable: true }
+// ];
 </script>

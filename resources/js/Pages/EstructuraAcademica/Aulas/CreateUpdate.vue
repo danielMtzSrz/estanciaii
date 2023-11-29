@@ -1,48 +1,72 @@
 <template>
-    <GenericModal :dataModal="dataModal" @closeModal="closeModal" :title="titulo">
-        <template #header>
-            <h3 class="font-bold">{{ titulo }}</h3>
-        </template>
+    <GenericModal
+        :dataModal="dataModal"
+        @closeModal="closeModal()" 
+        :header="titulo"
+    >
         <template #content>
-            <form @submit.prevent="submit(false)">
-                <div class="row p-fluid">
-                    <div class="mt-4 col-md-12">
-                        <Dropdown :data="dataModal.dataEdificios" label="Edificio" textDropdown="nombre"
-                            :value="edificio" @input="form.edificio_id = $event.id, edificio = $event"
-                            :errors="form.errors.edificio_id" />
+            <form @submit.prevent="submit" enctype="multipart/form-data">
+                <div class="row col-12 pt-4">
+                    
+                    <div class="col-sm-12 col-md-6">
+                        <Dropdown 
+                            label="Edificio"
+                            :data="dataModal.dataEdificios"
+                            textDropdown="nombre"
+                            v-model="edificioSeleccionado"
+                        />
                     </div>
-                    <div class="mt-4 col-md-12">
-                        <Dropdown :data="dataModal.dataTiposAulas" label="Tipo de aula" textDropdown="nombre"
-                            :value="tipoAula" @input="form.tipo_aula_id = $event.id, tipoAula = $event"
-                            :errors="form.errors.tipo_aula_id" />
+
+                    <div class="col-sm-12 col-md-6">
+                        <Dropdown 
+                            label="Tipo de aula"
+                            :data="dataModal.dataTiposAula"
+                            textDropdown="nombre"
+                            v-model="tipoAulaSeleccionado"
+                        />
                     </div>
-                    <div class="mt-4 col-md-12">
-                        <InputText label="Nombre" name="nombre" :errors="form.errors.nombre" :value="form.nombre"
-                            @input="form.nombre = $event" />
+
+                    <div class="col-sm-12 col-md-6">
+                        <InputText
+                            label="Nombre"
+                            v-model="form.nombre"
+                            :errors="form.errors.nombre"
+                        />
                     </div>
-                    <div class="mt-5 col-md-6">
-                        <span class="p-float-label">
-                            <InputNumber inputId="capacidad" v-model="form.capacidad" mode="decimal" showButtons
-                                :min="1" :max="50" :class="{ 'p-invalid': form.errors.capacidad }" />
-                            <label for="capacidad">Capacidad</label>
-                        </span>
-                        <small class="p-error" v-if="form.errors.capacidad">
-                            {{ form.errors.capacidad }}
-                        </small>
+
+                    <div class="col-sm-12 col-md-2">
+                        <InputNumber
+                            label="Capacidad"
+                            :errors="form.errors.capacidad"
+                            v-model="form.capacidad"
+                            :useGrouping="false"
+                        />
                     </div>
-                    <div class="col-md-6">
+
+                    <div class="col-sm-12 col-md-2">
                         <label for="estatus" class="flex ms-1">Estatus</label>
-                        <InputSwitch inputId="estatus" v-model="form.estatus"
-                            class="mt-3 ms-2" />
+                        <InputSwitch 
+                            inputId="estatus"
+                            v-model="form.estatus"
+                            class="mt-3 ms-2"
+                        />
                     </div>
+
                 </div>
-                <div class="float-end space-x-2">
-                    <Button type="button" label="Cancelar"
+
+                <div class="float-end space-x-2 py-4">
+                    <Button
+                        type="button"
+                        label="Cancelar"
                         class="p-button-text p-button-raised p-button-rounded p-button-warning"
-                        @click="closeModal()" />
-                    <Button type="submit" label="Guardar"
+                        @click="closeModal()"
+                    />
+                    <Button
+                        type="submit"
+                        label="Guardar"
                         class="p-button-text p-button-raised p-button-rounded p-button-success"
-                        :loading="form.processing" />
+                        :loading="form.processing"
+                    />
                 </div>
             </form>
         </template>
@@ -51,92 +75,101 @@
 
 <script setup>
 
-import { ref, watch } from 'vue';
+// Vue
+import { ref, watch } from "vue";
 
 // Inertia
 import { useForm } from "@inertiajs/inertia-vue3";
 
 // Primevue
 import Button from "primevue/button";
+import InputSwitch from 'primevue/inputswitch'
+
+// Layouts
+import GenericModal from "@/Components/GenericModal.vue";
 
 // Inputs
-import Dropdown from '@/Components/Forms/Dropdown.vue';
 import InputText from "@/Components/Forms/InputText.vue";
-import InputNumber from 'primevue/inputnumber';
-import InputSwitch from 'primevue/inputswitch';
-import Checkbox from 'primevue/checkbox';
+import InputNumber from "@/Components/Forms/InputNumber.vue";
+import Dropdown from "@/Components/Forms/Dropdown.vue";
 
-import GenericModal from '@/Components/GenericModal.vue';
-
-const edificio = ref(null)
-const tipoAula = ref(null)
+// Variables
+const edificioSeleccionado = ref(null), tipoAulaSeleccionado = ref(null)
 
 const form = useForm({
+    _method: null,
     edificio_id: null,
     tipo_aula_id: null,
     nombre: null,
-    estatus: null,
-    capacidad: null
-})
+    capacidad: null,
+    estatus: null
+});
 
-const ruta = ref(null)
-const titulo = ref(null)
+const ruta = ref(null),
+      titulo = ref(null);
 
+// Props
 const props = defineProps({
     dataModal: {
         type: Object,
-        default: null
+        default: null,
     },
-})
+});
 
-const emits = defineEmits(['visible'])
+// Emits
+const emits = defineEmits(["closeModal"]);
 
+// Methods
 const closeModal = () => {
-    emits("visible", false);
+    emits("closeModal");
     form.reset();
     form.errors = {}
-}
+};
 
-// Métodos
 const submit = () => {
+
     if (!props.dataModal.dataRegistro) {
         form.transform((data) => ({
             ...data,
-            estatus: data.estatus ? 1 : 0,
+            edificio_id     : edificioSeleccionado.value?.id,
+            tipo_aula_id    : tipoAulaSeleccionado.value?.id,
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
             },
         });
+
     } else {
         form.transform((data) => ({
             ...data,
-            estatus: data.estatus ? 1 : 0,
-        })).put(route(ruta.value, props.dataModal.dataRegistro), {
+            edificio_id      : edificioSeleccionado.value?.id,
+            tipo_aula_id    : tipoAulaSeleccionado.value?.id,
+        })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();
             },
         });
     }
-}
+};
 
-watch(() => props.dataModal, (newVal, oldVal) => {
-    ruta.value = !props.dataModal.dataRegistro ? 'EstructuraAcademica.Aulas.store' : 'EstructuraAcademica.Aulas.update'
-    titulo.value = !props.dataModal.dataRegistro ? 'Nueva aula' : 'Actualizar aula'
+// Watchers
+watch(() => props.dataModal, async (newVal) => {
+    ruta.value = !newVal.dataRegistro ? 'EstructuraAcademica.Aulas.store' : 'EstructuraAcademica.Aulas.update'
+    titulo.value = !newVal.dataRegistro ? 'Nueva aula' : 'Actualizar aula'
 })
 
-watch(() => props.dataModal.dataRegistro, (newVal, oldVal) => {
-    form.reset();
+watch(() => props.dataModal.dataRegistro, (newVal) => {
+    form.reset()
 
-    // En caso de que se modifique el registro se llenarán estos campos correspondientes al form.
-    edificio.value = newVal?.edificio ?? null
-    tipoAula.value = newVal?.tipo_aula ?? null
+    form._method = newVal ? "put" : null
 
-    form.edificio_id = newVal?.edificio.id ?? null
-    form.tipo_aula_id = newVal?.tipo_aula.id ?? null
+    form.edificio_id = newVal?.edificio_id ?? null
+    form.tipo_aula_id = newVal?.tipo_aula_id ?? null
     form.nombre = newVal?.nombre ?? null
-    form.estatus = (newVal?.estatus ? true : false)
     form.capacidad = newVal?.capacidad ?? null
+    form.estatus = (newVal?.estatus ? true : false)
+
+    edificioSeleccionado.value = newVal?.edificio ?? null
+    tipoAulaSeleccionado.value = newVal?.tipo_aula ?? null
 })
 </script>
-

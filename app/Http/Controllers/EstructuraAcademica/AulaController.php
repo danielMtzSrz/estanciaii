@@ -18,11 +18,14 @@ class AulaController extends Controller
 
     public function index()
     {
-        return Inertia::render('EstructuraAcademica/Aulas/Index', [
-            'aulas' => Aula::with(['edificio', 'tipoAula'])->get(),
-            'edificios' => Edificio::select(['id', 'nombre'])->get(),
-            'tiposAulas' => TipoAula::select(['id', 'nombre'])->get()
-        ]);
+        $aulas = Aula::get()->map(function($aula){
+            return $aula->indexMap();
+        });
+        // $aulas = Aula::with(['edificio', 'tipoAula'])->get();
+        $edificios = config('staticdata.estructura_academica.edificios');
+        $tipos_aula = config('staticdata.estructura_academica.tipos_aulas');
+
+        return Inertia::render('EstructuraAcademica/Aulas/Index', compact('aulas', 'edificios', 'tipos_aula'));
     }
 
     public function create()
@@ -30,23 +33,11 @@ class AulaController extends Controller
         //
     }
 
-    public function store(StoreAulaRequest $request)
+    public function store(Request $request)
     {
-        try {
+        Aula::create($request->all());
 
-            Aula::create($request->validated());
-
-            return back()->with(
-                [
-                    'backgroundNotification' => 'success',
-                    'titleNotification' => '¡Éxito!',
-                    'messageNotification' => 'Aula creada correctamente',
-                    'lifeNotification' => 5000
-                ]
-            );
-        } catch (Error $e) {
-            dd($e);
-        }
+        return back()->with(config('messages.mensaje_exito'));
     }
 
     public function show($id)
@@ -59,25 +50,13 @@ class AulaController extends Controller
         //
     }
 
-    public function update(UpdateAulaRequest $request, $id)
+    public function update(Request $request, $id)
     {
         $aula = Aula::find($id);
 
-        try {
+        $aula->update($request->all());
 
-            $aula->update($request->validated());
-
-            return back()->with(
-                [
-                    'backgroundNotification' => 'success',
-                    'titleNotification' => '¡Éxito!',
-                    'messageNotification' => 'Aula modificada correctamente',
-                    'lifeNotification' => 5000
-                ]
-            );
-        } catch (Error $e) {
-            dd($e);
-        }
+        return back()->with(config('messages.mensaje_actualizar'));
     }
 
     public function destroy($id)
