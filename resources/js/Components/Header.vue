@@ -152,7 +152,7 @@ export default {
                             icon: "bi bi-pencil-square",
                             command: () => {
                                 this.$inertia.visit(
-                                    route("Calendarizaciones.TipoConv.index")
+                                    route("Calendarizaciones.TiposConvocatoria.index")
                                 );
                             },
                         },

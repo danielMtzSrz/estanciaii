@@ -171,15 +171,4 @@ const items = ref([
         },
     },
 ])
-
-// columns.value = [
-//     { field: 'id', header: 'ID', sortable: true },
-//     { field: 'edificio.nombre', header: 'Edificio', sortable: true },
-//     { field: 'tipo_aula.nombre', header: 'Tipo de Aula', sortable: true },
-//     { field: 'nombre', header: 'Nombre', sortable: true },
-//     { field: 'estatus', header: 'Estatus', sortable: true },
-//     { field: 'capacidad', header: 'Capacidad', sortable: true },
-//     { field: 'created_at', header: 'Fecha de creación', sortable: true },
-//     { field: 'updated_at', header: 'Fecha de actualización', sortable: true }
-// ];
 </script>

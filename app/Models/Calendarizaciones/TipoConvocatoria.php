@@ -8,18 +8,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TipoConvocatoria extends Model{
 
-    protected $table = 'tiposconvocatorias';
+    protected $table = 'tipos_convocatoria';
 
     use HasFactory;
     use SoftDeletes;
 
     protected $fillable = [
         'nombre',
-        'plantilla',
-        'log_id'
+        'contenido'
     ];
 
-    public function convocatorias(){
+    public function convocatorias()
+    {
         return $this->hasMany('App\Models\Calendarizaciones\Convocatoria');
     }
 

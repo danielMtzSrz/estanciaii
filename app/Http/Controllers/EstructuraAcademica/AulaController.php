@@ -15,7 +15,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
 use Inertia\Inertia;
-use Error;
 
 class AulaController extends Controller
 {
