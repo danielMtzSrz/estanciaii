@@ -1,73 +1,74 @@
 <template>
-    <GenericModal :dataModal="dataModal" @closeModal="closeModal" :title="titulo">
-        <template #header>
-            <h3 class="font-bold">{{ titulo }}</h3>
-        </template>
+    <GenericModal
+        :dataModal="dataModal"
+        @closeModal="closeModal()" 
+        :header="titulo"
+    >
         <template #content>
-            <form @submit.prevent="submit(false)">
-                <div class="row p-fluid">
-                    <div class="mt-4 col-md-12">
+            <form @submit.prevent="submit" enctype="multipart/form-data">
+                <div class="row col-12 pt-4">
+
+                    <div class="col-sm-12">
                         <Dropdown 
                             label="Tipo de periodo"
-                            :data="dataModal.dataTipoPeriodo"
-                            :value="tipoPeriodo"
-                            :errors="form.errors.tipo_periodo_id"
+                            :data="dataTiposPeriodo"
                             textDropdown="nombre"
-                            @input="form.tipo_periodo_id = $event.id, tipoPeriodo=$event"
+                            v-model="tipoPeriodoSeleccionado"
                         />
                     </div>
-                    <!-- Input name -->
-                    <div class="mt-4 col-md-12">
-                        <InputText 
-                            label="Título"
-                            name="titulo"
+
+                    <div class="col-sm-12">
+                        <InputText
+                            label="Nombre"
+                            v-model="form.titulo"
                             :errors="form.errors.titulo"
-                            :value="form.titulo"
-                            @input="form.titulo = $event"
                         />
                     </div>
-                    <!-- Fin input name -->
-                    <!-- Input description -->
-                    <div class="mt-4 col-md-12">
+
+                    <div class="col-sm-12">
                         <Textarea
-                            label="Descripción del periodo"
-                            name="descripcion"
+                            label="Descripción"
+                            v-model="form.descripcion"
                             :errors="form.errors.descripcion"
-                            :value="form.descripcion"
-                            @input="form.descripcion = $event"
                         />
                     </div>
-                    <!-- Fin input description -->
-                    <div class="mt-4 col-md-6">
+
+                    <div class="col-sm-12 col-md-4">
                         <Calendar 
-                            label="Fecha de inicio"
-                            name="fecha_inicio"
+                            label="Horario inicio"
                             icon="pi pi-calendar"
-                            :value="mostrarFechaInicio"
+                            :value="fechaInicio"
+                            @input="form.fecha_inicio = $event.valueFormat, fechaInicio = $event.valueShow"
                             :errors="form.errors.fecha_inicio"
-                            @input="form.fecha_inicio = $event.valueFormat, mostrarFechaInicio = $event.valueShow"
+                            :showTime="false"
                         />
                     </div>
-                    <div class="mt-4 col-md-6">
+
+                    <div class="col-sm-12 col-md-4">
                         <Calendar 
-                            label="Fecha final"
-                            name="fecha_fin"
+                            label="Horario inicio"
                             icon="pi pi-calendar"
-                            :value="mostrarFechaFin"
+                            :value="fechaFin"
+                            @input="form.fecha_fin = $event.valueFormat, fechaFin = $event.valueShow"
                             :errors="form.errors.fecha_fin"
-                            @input="form.fecha_fin = $event.valueFormat, mostrarFechaFin = $event.valueShow"
+                            :showTime="false"
                         />
                     </div>
-                    <div class="col-sm-12 mt-3">
-                        <div class="field-checkbox">
-                            <div class="d-flex align-content-center">
-                                <Checkbox v-model="form.periodo_activo" :binary="true" />
-                                <label>&nbsp;{{ form.periodo_activo ? 'Periodo activo' : 'Periodo inactivo' }}</label>
-                            </div>
-                        </div>
+
+                    <div class="col-sm-12 col-md-4">
+                        <label for="estatus" class="flex ms-1">Estatus</label>
+                        <InputSwitch
+                            inputId="estatus"
+                            v-model="form.periodo_activo"
+                            class="mt-3 ms-2"
+                        />
                     </div>
+
+                    <pre>{{ form }}</pre>
+
                 </div>
-                <div class="float-end space-x-2 mt-3">
+
+                <div class="float-end space-x-2 py-4">
                     <Button
                         type="button"
                         label="Cancelar"
@@ -88,96 +89,111 @@
 
 <script setup>
 
-import { ref, watch, computed } from 'vue';
+// Vue
+import { ref, watch } from "vue";
 
 // Inertia
 import { useForm } from "@inertiajs/inertia-vue3";
 
 // Primevue
 import Button from "primevue/button";
-import ColorPicker from 'primevue/colorpicker';
-import Checkbox from 'primevue/checkbox';
+import InputSwitch from "primevue/inputswitch";
+
+// Layouts
+import GenericModal from "@/Components/GenericModal.vue";
 
 // Inputs
 import InputText from "@/Components/Forms/InputText.vue";
 import Textarea from "@/Components/Forms/Textarea.vue";
-import Dropdown from '@/Components/Forms/Dropdown.vue';
-import Calendar from '@/Components/Forms/Calendar.vue';
+import Dropdown from "@/Components/Forms/Dropdown.vue";
+import Calendar from "@/Components/Forms/Calendar.vue";
 
-import GenericModal from '@/Components/GenericModal.vue';
+// Variables
+const dataTiposPeriodo = ref(null), tipoPeriodoSeleccionado = ref(null)
 
-const tipoPeriodo = ref(null)
-const mostrarFechaInicio = ref(null)
-const mostrarFechaFin = ref(null)
+const fechaInicio = ref(null), fechaFin = ref(null)
 
 const form = useForm({
+    _method: null,
     tipo_periodo_id: null,
     titulo: null,
     descripcion: null,
-    fecha_inicio : null,
+    fecha_inicio: null,
     fecha_fin: null,
     periodo_activo: null
-})
+});
 
-const ruta = ref(null)
-const titulo = ref(null)
+const ruta = ref(null),
+      titulo = ref(null);
 
+// Props
 const props = defineProps({
     dataModal: {
         type: Object,
-        default: null
+        default: null,
     },
-})
+});
 
-const emits = defineEmits(['visible'])
+// Emits
+const emits = defineEmits(["closeModal"]);
 
+// Methods
 const closeModal = () => {
-    emits("visible", false);
+    emits("closeModal");
     form.reset();
     form.errors = {}
-}
+};
 
-// Métodos
 const submit = () => {
-    if(!props.dataModal.dataRegistro){
+
+    if (!props.dataModal.dataRegistro) {
         form.transform((data) => ({
             ...data,
-            periodo_activo: data.periodo_activo ? 1 : 0,
+            tipo_periodo_id: tipoPeriodoSeleccionado.value?.id,
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
             },
         });
-    }else{
+
+    } else {
         form.transform((data) => ({
             ...data,
-            periodo_activo: data.periodo_activo ? 1 : 0,
-        })).put(route(ruta.value, props.dataModal.dataRegistro), {
+            tipo_periodo_id: tipoPeriodoSeleccionado.value?.id,
+        })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();
             },
         });
     }
-}
+};
 
-watch(() => props.dataModal, (newVal, oldVal) => {
-    ruta.value = !props.dataModal.dataRegistro ? 'Calendarizaciones.Periodos.store' : 'Calendarizaciones.Periodos.update'
-    titulo.value = !props.dataModal.dataRegistro ? 'Nuevo periodo' : 'Actualizar periodo'
+// Watchers
+watch(() => props.dataModal, async (newVal) => {
+    ruta.value = !newVal.dataRegistro ? 'Calendarizaciones.Periodos.store' : 'Calendarizaciones.Periodos.update'
+    titulo.value = !newVal.dataRegistro ? 'Nuevo periodo' : 'Actualizar periodo'
+
+    const dataTiposPeriodoAxios = await axios.get(`/api/tipos_periodo`);
+    dataTiposPeriodo.value = dataTiposPeriodoAxios.data;
 })
 
-watch(() => props.dataModal.dataRegistro, (newVal, oldVal) => {
-    form.reset();
+watch(() => props.dataModal.dataRegistro, (newVal) => {
+    form.reset()
 
-    mostrarFechaInicio.value = newVal?.fecha_inicio ?? null
-    mostrarFechaFin.value = newVal?.fecha_fin ?? null
-    // En caso de que se modifique el registro se llenarán estos campos correspondientes al form.
-    tipoPeriodo.value = newVal?.tipoPeriodo ?? null
-    form.tipo_periodo_id = newVal?.tipoPeriodo.id ?? null
+    form._method = newVal ? "put" : null
+
+    form.nombre = newVal?.nombre ?? null
+    form.contenido = newVal?.contenido ?? null
+
+    form.tipo_periodo_id = newVal?.tipo_periodo_id ?? null
     form.titulo = newVal?.titulo ?? null
     form.descripcion = newVal?.descripcion ?? null
     form.fecha_inicio = newVal?.fecha_inicio ?? null
     form.fecha_fin = newVal?.fecha_fin ?? null
-    form.periodo_activo = (newVal?.periodo_activo ? true : false)
+    form.periodo_activo = newVal?.periodo_activo ?? null
+
+    fechaInicio.value = newVal?.fecha_inicio ?? null
+    fechaFin.value = newVal?.fecha_fin ?? null
+    tipoPeriodoSeleccionado.value = newVal?.tipo_periodo ?? null
 })
 </script>
-

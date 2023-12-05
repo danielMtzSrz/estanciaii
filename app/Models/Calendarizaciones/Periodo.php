@@ -24,33 +24,54 @@ class Periodo extends Model{
         'log_id'
     ];
 
+    // Métodos
+    public function indexMap()
+    {
+        return [
+            'id' => $this->id,
+            'tipo_periodo' => $this->tipoPeriodo,
+            'tipo_periodo_nombre' => $this->tipoPeriodo->nombre,
+            'titulo' => $this->titulo,
+            'descripcion' => $this->descripcion,
+            'fecha_inicio' => $this->fecha_inicio,
+            'fecha_fin' => $this->fecha_fin,
+            'periodo_activo' => (boolean) $this->periodo_activo
+        ];
+    }
+
     // Relación con el modelo TipoPeriodo
-    public function tipoPeriodo(){
+    public function tipoPeriodo()
+    {
         return $this->belongsTo('App\Models\Calendarizaciones\TipoPeriodo');
     }
 
     // Relación con el modelo Convocatorias
-    public function convocatorias(){
+    public function convocatorias()
+    {
         return $this->hasMany('App\Models\Calendarizaciones\Convocatoria');
     }
 
     // Relación con el modelo de proyecciones
-    public function proyecciones(){
+    public function proyecciones()
+    {
         return $this->hasMany('App\Models\SinGrupo\Proyeccione');
     }
 
     // Relación con el modelo GestionAcademica\GrupoMateria
-    public function grupoMateria(){
+    public function grupoMateria()
+    {
         return $this->hasMany(GrupoMateria::class);
     }
 
     // Relación con el modelo GestionAcademica\Inscripciones
-    public function incripcion(){
+    public function incripcion()
+    {
         return $this->hasMany('App\Models\GestionAcademica\Inscripcione');
     }
 
     // Relación con el modelo ServiciosFinancieros\Pagos
-    public function pagos(){
+    public function pagos()
+    {
         return $this->hasMany('App\Models\ServiciosFinancieros\Pago');
     }
 }

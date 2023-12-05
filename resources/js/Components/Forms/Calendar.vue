@@ -58,7 +58,7 @@ const props = defineProps({
     modelValue: null
 })
 
-const emits = defineEmits(['input'])
+const emits = defineEmits(["update:modelValue", "input"]);
 
 const selected = (event) => {
     inputValue.value = event
@@ -74,6 +74,7 @@ const selected = (event) => {
     }else{
         valorFormateado = event.toLocaleDateString("en-CA")
     }
+    emits('update:modelValue', valorFormateado)
     emits('input', {valueFormat: valorFormateado, valueShow: event});
 }
 </script> 

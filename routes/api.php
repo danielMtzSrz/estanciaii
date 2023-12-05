@@ -3,7 +3,10 @@
 use App\Http\Controllers\Api\Domicilios;
 use App\Http\Controllers\Api\Empresas;
 use App\Http\Controllers\Api\TipoAnuncioApi;
+use App\Http\Controllers\Api\TiposPeriodoApi;
+
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,6 +29,9 @@ Route::get('empresas', [Empresas::class, 'Empresas'])->name('empresas');
 
 // Tipos de anuncios
 Route::get('tipos_anuncio', [TipoAnuncioApi::class, 'TipoAnuncio'])->name('tipos_anuncio');
+
+// Tipos de periodos
+Route::get('tipos_periodo', [TiposPeriodoApi::class, 'TipoPeriodo'])->name('tipos_periodo');
 
 
 // Domicilios
