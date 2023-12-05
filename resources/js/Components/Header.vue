@@ -142,7 +142,7 @@ export default {
                             command: () => {
                                 this.$inertia.visit(
                                     route(
-                                        "Calendarizaciones.TiposPeriodos.index"
+                                        "Calendarizaciones.TiposPeriodo.index"
                                     )
                                 );
                             },

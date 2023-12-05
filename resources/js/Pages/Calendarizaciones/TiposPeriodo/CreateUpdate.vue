@@ -1,33 +1,32 @@
 <template>
     <GenericModal
         :dataModal="dataModal"
-        @closeModal="closeModal()"
+        @closeModal="closeModal()" 
         :header="titulo"
     >
         <template #content>
-            <form @submit.prevent="submit">
-                <div class="row p-fluid">
-                    <!-- Input name -->
-                    <div class="col-md-12 mt-4">
-                        <InputText 
-                            label="Tipo de perodo"
-                            name="name"
+            <form @submit.prevent="submit" enctype="multipart/form-data">
+                <div class="row col-12 pt-4">
+
+                    <div class="col-sm-12">
+                        <InputText
+                            label="Nombre"
                             v-model="form.nombre"
                             :errors="form.errors.nombre"
                         />
                     </div>
 
-                    <!-- Input description -->
-                    <div class="mt-4 col-md-12">
+                    <div class="col-sm-12">
                         <Textarea
-                            label="Descripción del periodo"
-                            name="name"
-                            v-model="form.contenido"
-                            :errors="form.errors.contenido"
+                            label="Descripción"
+                            v-model="form.descripcion"
+                            :errors="form.errors.descripcion"
                         />
                     </div>
+
                 </div>
-                <div class="float-end space-x-2 mt-3">
+
+                <div class="float-end space-x-2 py-4">
                     <Button
                         type="button"
                         label="Cancelar"
@@ -47,8 +46,9 @@
 </template>
 
 <script setup>
+
 // Vue
-import { ref, watch } from 'vue';
+import { ref, watch } from "vue";
 
 // Inertia
 import { useForm } from "@inertiajs/inertia-vue3";
@@ -56,65 +56,70 @@ import { useForm } from "@inertiajs/inertia-vue3";
 // Primevue
 import Button from "primevue/button";
 
+// Layouts
+import GenericModal from "@/Components/GenericModal.vue";
+
 // Inputs
 import InputText from "@/Components/Forms/InputText.vue";
 import Textarea from "@/Components/Forms/Textarea.vue";
-import GenericModal from '@/Components/GenericModal.vue';
 
 const form = useForm({
-    id: null,
+    _method: null,
     nombre: null,
-    contenido: null
-})
+    descripcion: null
+});
 
-const ruta = ref(null)
-const titulo = ref(null)
+const ruta = ref(null),
+      titulo = ref(null);
 
+// Props
 const props = defineProps({
     dataModal: {
         type: Object,
-        default: null
+        default: null,
     },
-})
+});
 
-const emits = defineEmits(['closeModal', 'success'])
+// Emits
+const emits = defineEmits(["closeModal"]);
 
+// Methods
 const closeModal = () => {
     emits("closeModal");
     form.reset();
     form.errors = {}
-}
+};
 
-// Métodos
 const submit = () => {
-    if(!props.dataModal.dataRegistro){
+
+    if (!props.dataModal.dataRegistro) {
         form.post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
-                emits('success')
             },
         });
-    }else{
-        form.put(route(ruta.value, props.dataModal?.dataRegistro?._id), {
+
+    } else {
+        form.post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();
-                emits('success')
             },
         });
     }
-}
+};
 
-watch(() => props.dataModal, (newVal) => {
-    ruta.value = !newVal.dataRegistro ? 'Calendarizaciones.TiposPeriodos.store' : 'Calendarizaciones.TiposPeriodos.update'
+// Watchers
+watch(() => props.dataModal, async (newVal) => {
+    ruta.value = !newVal.dataRegistro ? 'Calendarizaciones.TiposPeriodo.store' : 'Calendarizaciones.TiposPeriodo.update'
     titulo.value = !newVal.dataRegistro ? 'Nuevo tipo de periodo' : 'Actualizar tipo de periodo'
 })
 
 watch(() => props.dataModal.dataRegistro, (newVal) => {
-    form.reset();
+    form.reset()
 
-    form.id = newVal?.id ?? null
+    form._method = newVal ? "put" : null
+
     form.nombre = newVal?.nombre ?? null
-    form.contenido = newVal?.contenido ?? null
+    form.descripcion = newVal?.descripcion ?? null
 })
 </script>
-

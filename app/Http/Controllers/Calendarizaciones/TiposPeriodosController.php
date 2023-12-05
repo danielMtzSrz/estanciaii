@@ -4,10 +4,6 @@ namespace App\Http\Controllers\Calendarizaciones;
 
 use App\Http\Controllers\Controller;
 
-use App\Http\Requests\Calendarizaciones\StoreTipoPeriodoRequest;
-use App\Http\Requests\Calendarizaciones\UpdateTipoPeriodoRequest;
-
-use App\Models\Calendarizaciones\TiposPeriodos;
 use App\Models\Calendarizaciones\TipoPeriodo;
 
 use Illuminate\Support\Facades\Redirect;
@@ -19,9 +15,9 @@ class TiposPeriodosController extends Controller{
 
     public function index()
     {
-        $tiposPeriodos = TipoPeriodo::all();
+        $tipos_periodo = TipoPeriodo::all();
         
-        return Inertia::render('Calendarizaciones/TiposPeriodos/Index', compact('tiposPeriodos'));
+        return Inertia::render('Calendarizaciones/TiposPeriodo/Index', compact('tipos_periodo'));
     }
 
     public function store(Request $request)
@@ -33,56 +29,19 @@ class TiposPeriodosController extends Controller{
 
     public function update(Request $request, $id)
     {
-        $tipoPeriodo = TipoPeriodo::find($id);
+        $tipo_periodo = TipoPeriodo::find($id);
 
-        $tipoPeriodo->update($request->all());
+        $tipo_periodo->update($request->all());
 
         return back()->with(config('messages.mensaje_actualizar'));
     }
 
     public function destroy($id)
     {
-        $tipoPeriodo = TipoPeriodo::find($id);
+        $tipo_periodo = TipoPeriodo::find($id);
         
-        $tipoPeriodo->delete();
+        $tipo_periodo->delete();
 
         return back()->with(config('messages.mensaje_eliminar'));
-    }
-
-    public function trashed()
-    {
-        $tipoPeriodo = TipoPeriodo::onlyTrashed()->get();
-
-        return Inertia::render("Calendarizaciones/TiposPeriodos/Trashed", compact('tipoPeriodo'));
-    }
-
-    public function restore($id)
-    {   
-        $tipoPeriodo = TipoPeriodo::withTrashed()->findOrFail($id);
-        $tipoPeriodo->restore();
-
-        return Redirect::route('Calendarizaciones.TiposPeriodos.trashed')->with(
-            [
-                'titleNotification' => '¡Éxito!',
-                'backgroundNotification' => 'success',
-                'messageNotification' => 'Tipo de periodo restaurado.',
-                'lifeNotification' => 5000
-            ]
-        );
-    }
-
-    public function forceDestroy($id)
-    {    
-        $tipoPeriodo = TipoPeriodo::withTrashed()->findOrFail($id);
-        $tipoPeriodo->forceDelete();
-
-        return Redirect::route('Calendarizaciones.TiposPeriodos.trashed')->with(
-            [
-                'titleNotification' => '¡Éxito!',
-                'backgroundNotification' => 'success',
-                'messageNotification' => 'Tipo de periodo eliminado definitivamente.',
-                'lifeNotification' => 5000
-            ]
-        );
     }
 }

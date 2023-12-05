@@ -1,42 +1,32 @@
 <template>
-    <GenericModal :dataModal="dataModal" @closeModal="closeModal" :title="titulo">
-        <template #header>
-            <h3 class="font-bold">{{ titulo }}</h3>
-        </template>
+    <GenericModal
+        :dataModal="dataModal"
+        @closeModal="closeModal()" 
+        :header="titulo"
+    >
         <template #content>
-            <form @submit.prevent="submit(false)">
-                <div class="row p-fluid">
-                    <div class="mt-2 col-md-12">
-                        <Dropdown 
-                            :data="dataModal.dataTiposConvocatorias"
-                            label="Tipo de convocatoria"
-                            textDropdown="nombre"
-                            :value="tipoConvocatoria"
-                            @input="form.tipo_convocatoria_id = $event.id, tipoConvocatoria=$event"
-                            :errors="form.errors.tipo_convocatoria_id"
+            <form @submit.prevent="submit" enctype="multipart/form-data">
+                <div class="row col-12 pt-4">
+
+                    <div class="col-sm-12">
+                        <InputText
+                            label="Nombre"
+                            v-model="form.nombre"
+                            :errors="form.errors.nombre"
                         />
                     </div>
-                    <div class="mt-2 col-md-12">
-                        <Dropdown 
-                            :data="dataModal.dataPeriodos"
-                            label="Periodo"
-                            textDropdown="titulo"
-                            :value="periodo"
-                            @input="form.periodo_id = $event.id, periodo=$event"
-                            :errors="form.errors.periodo_id"
-                        />
-                    </div>
-                    <div class="mt-4 col-md-12">
+
+                    <div class="col-sm-12">
                         <Textarea
                             label="Contenido"
-                            name="contenido"
-                            :value="form.contenido"
-                            @input="form.contenido = $event"
+                            v-model="form.contenido"
                             :errors="form.errors.contenido"
                         />
                     </div>
+
                 </div>
-                <div class="float-end space-x-2">
+
+                <div class="float-end space-x-2 py-4">
                     <Button
                         type="button"
                         label="Cancelar"
@@ -57,89 +47,79 @@
 
 <script setup>
 
-import { ref, watch, computed } from 'vue';
+// Vue
+import { ref, watch } from "vue";
 
 // Inertia
 import { useForm } from "@inertiajs/inertia-vue3";
 
 // Primevue
 import Button from "primevue/button";
-import ColorPicker from 'primevue/colorpicker';
-import Checkbox from 'primevue/checkbox';
+
+// Layouts
+import GenericModal from "@/Components/GenericModal.vue";
 
 // Inputs
 import InputText from "@/Components/Forms/InputText.vue";
 import Textarea from "@/Components/Forms/Textarea.vue";
-import Dropdown from '@/Components/Forms/Dropdown.vue';
-import Calendar from '@/Components/Forms/Calendar.vue';
-import Divider from 'primevue/divider';
-
-import GenericModal from '@/Components/GenericModal.vue';
-
-const periodo = ref(null)
-const tipoConvocatoria = ref(null)
-const mostrarFechaInicio = ref(null)
-const mostrarFechaFin = ref(null)
 
 const form = useForm({
-    tipo_convocatoria_id : null,
-    periodo_id: null,
-    contenido: null,
-})
+    _method: null,
+    nombre: null,
+    contenido: null
+});
 
-const ruta = ref(null)
-const titulo = ref(null)
+const ruta = ref(null),
+      titulo = ref(null);
 
+// Props
 const props = defineProps({
     dataModal: {
         type: Object,
-        default: null
+        default: null,
     },
-})
+});
 
-const emits = defineEmits(['visible'])
+// Emits
+const emits = defineEmits(["closeModal"]);
 
+// Methods
 const closeModal = () => {
-    emits("visible", false);
+    emits("closeModal");
     form.reset();
     form.errors = {}
-}
+};
 
-// Métodos
 const submit = () => {
-    if(!props.dataModal.dataRegistro){
+
+    if (!props.dataModal.dataRegistro) {
         form.post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
             },
         });
-    }else{
-        form.put(route(ruta.value, props.dataModal.dataRegistro), {
+
+    } else {
+        form.post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();
             },
         });
     }
-}
+};
 
-watch(() => props.dataModal, (newVal, oldVal) => {
-    ruta.value = !props.dataModal.dataRegistro ? 'Calendarizaciones.Convocatorias.store' : 'Calendarizaciones.Convocatorias.update'
-    titulo.value = !props.dataModal.dataRegistro ? 'Nueva convocatoria' : 'Actualizar convocatoria'
+// Watchers
+watch(() => props.dataModal, async (newVal) => {
+    ruta.value = !newVal.dataRegistro ? 'Calendarizaciones.Convocatorias.store' : 'Calendarizaciones.Convocatorias.update'
+    titulo.value = !newVal.dataRegistro ? 'Nuevo tipo de convocatoria' : 'Actualizar tipo de convocatoria'
 })
 
-watch(() => props.dataModal.dataRegistro, (newVal, oldVal) => {
-    form.reset();
+watch(() => props.dataModal.dataRegistro, (newVal) => {
+    form.reset()
 
-    mostrarFechaInicio.value = newVal?.fecha_inicio ?? null
-    mostrarFechaFin.value = newVal?.fecha_fin ?? null
-    
-    // En caso de que se modifique el registro se llenarán estos campos correspondientes al form.
-    tipoConvocatoria.value = newVal?.tipoConvocatoria ?? null
-    periodo.value = newVal?.periodo ?? null
+    form._method = newVal ? "put" : null
 
-    form.tipo_convocatoria_id = newVal?.tipoConvocatoria.id ?? null
-    form.periodo_id = newVal?.periodo.id ?? null
+    form.nombre = newVal?.nombre ?? null
     form.contenido = newVal?.contenido ?? null
 })
 </script>
-

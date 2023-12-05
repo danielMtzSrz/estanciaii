@@ -12,15 +12,16 @@ use Illuminate\Support\Facades\Redirect;
 class ConvocatoriasController extends Controller{
 
     public function index(){
-        $convocatorias = Convocatoria::all()->transform(function($convocatoria){
-            return [
-                'id' => $convocatoria->id,
-                'tipoConvocatoria' => $convocatoria->tipoConvocatoria,
-                'periodo' => $convocatoria->periodo,
-                'servicio' => $convocatoria->servicio,
-                'contenido' => $convocatoria->contenido,
-            ];
-        });
+        $convocatorias = Convocatoria::get();
+        // $convocatorias = Convocatoria::all()->map(function($convocatoria){
+        //     return [
+        //         'id' => $convocatoria->id,
+        //         'tipoConvocatoria' => $convocatoria->tipoConvocatoria,
+        //         'periodo' => $convocatoria->periodo,
+        //         'servicio' => $convocatoria->servicio,
+        //         'contenido' => $convocatoria->contenido,
+        //     ];
+        // });
         $periodos = Periodo::all();
         $tiposConvocatorias = TipoConvocatoria::all();
         return Inertia::render('Calendarizaciones/Convocatorias/Index', compact('convocatorias', 'periodos', 'tiposConvocatorias'));

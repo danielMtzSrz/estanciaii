@@ -9,7 +9,7 @@ use App\Http\Controllers\Calendarizaciones\{CalendarizacionesController, Convoca
 Route::resource("Periodos", PeriodosController::class)->except(['show', 'create', 'edit']);
 
 // Tipos de periodos
-Route::resource("TiposPeriodos", TiposPeriodosController::class)->except(['show', 'create', 'edit', 'destroy']);
+Route::resource("TiposPeriodo", TiposPeriodosController::class)->except(['show', 'create', 'edit']);
 
 // Tipos de convocatorias
 Route::resource("TiposConvocatoria", TiposConvocatoriasController::class)->except(['show', 'create', 'edit']);

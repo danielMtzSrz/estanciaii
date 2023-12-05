@@ -7,16 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class TipoPeriodo extends Model
 {
-    protected $connection = 'mongodb';
-
-    protected $collection = 'tipoPeriodo';
+    protected $table = 'tipos_periodo';
 
     use HasFactory;
-    // use SoftDeletes;
 
     protected $fillable = [
         'nombre',
-        'contenido',
+        'descripcion',
     ];
 
     protected $dates = [
@@ -25,7 +22,8 @@ class TipoPeriodo extends Model
     ];
 
     // Relación con el modelo Periodos
-    public function periodo(){
+    public function periodo()
+    {
         return $this->hasMany('App\Models\Calendarizaciones\Periodo');
     }
 }

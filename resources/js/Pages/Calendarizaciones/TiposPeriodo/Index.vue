@@ -1,10 +1,10 @@
 <template>
-    <GenericLayout titleModule="Tipos de periodos">
+    <GenericLayout titleModule="Tipos de periodo">
         <template #content>
             <DynamicTable
-                :data="tiposPeriodos"
+                :data="tipos_periodo"
                 :items="items"
-                titleModule="Tipos de periodos"
+                titleModule="Tipos de periodo"
             >
                 <template #header>
                     <Button
@@ -33,7 +33,7 @@
                             display: true, 
                             proceso: {
                                 'proceso': 'delete',
-                                'ruta': 'Calendarizaciones.TiposPeriodos.destroy',
+                                'ruta': 'Calendarizaciones.TiposPeriodo.destroy',
                             }
                         })"
                     />
@@ -45,13 +45,13 @@
             <CreateUpdate
                 :dataModal="{
                     display: displayCreateUpdate,
-                    dataRegistro: dataRegistro,
+                    dataRegistro: dataRegistro
                 }"
                 @closeModal="modalCreateUpdate({display: false, data: null})"
             />
             <GenericAlert
                 :dataModal="{
-                    display: display_generic_alert,
+                    display: displayGenericAlert,
                     dataRegistro : dataRegistro,
                     dataProceso : dataProceso
                 }"
@@ -72,10 +72,10 @@ import DynamicTable from "@/Components/DynamicTable.vue";
 import GenericAlert from "@/Components/GenericAlert.vue";
 
 // Componentes de los modales
-import CreateUpdate from "@/Pages/Calendarizaciones/TiposPeriodos/CreateUpdate.vue";
+import CreateUpdate from "@/Pages/Calendarizaciones/TiposPeriodo/CreateUpdate.vue";
 
 // Variables para los modales
-const displayCreateUpdate = ref(false), display_generic_alert = ref(false);
+const displayCreateUpdate = ref(false), displayGenericAlert = ref(false);
 const dataRegistro = ref(null), dataProceso = ref(null)
 
 // Métodos
@@ -86,15 +86,15 @@ const modalCreateUpdate = (event) => {
 
 const modalGenericAlert = (event) => {
     dataRegistro.value = event.data;
-    display_generic_alert.value = event.display;
+    displayGenericAlert.value = event.display;
     dataProceso.value = event.proceso;
 }
 
 // Propiedades
 const props = defineProps({
-    tiposPeriodos: {
+    tipos_periodo: {
         type: Object,
-        default: null,
+        default: null
     }
 })
 
@@ -114,8 +114,8 @@ const items = ref([
     },
     {
         dataField: {
-            field: 'contenido',
-            header : 'Contenido',
+            field: 'descripcion',
+            header : 'Descripción',
             sortable: true,
             type: 'text',
         },
@@ -123,30 +123,6 @@ const items = ref([
             active: true,
             type: 'text',
         },
-    },
-    {
-        dataField: {
-            field: 'created_at',
-            header : 'Fecha de creación',
-            sortable: true,
-            type: 'date',
-        },
-        filters: {
-            active: true,
-            type: 'text',
-        },
-    },
-    {
-        dataField: {
-            field: 'updated_at',
-            header : 'Última actualización',
-            sortable: true,
-            type: 'date',
-        },
-        filters: {
-            active: true,
-            type: 'text',
-        },
-    },
+    }
 ])
 </script>
