@@ -111,7 +111,7 @@ const submit = () => {
 // Watchers
 watch(() => props.dataModal, async (newVal) => {
     ruta.value = !newVal.dataRegistro ? 'Calendarizaciones.TiposConvocatoria.store' : 'Calendarizaciones.TiposConvocatoria.update'
-    titulo.value = !newVal.dataRegistro ? 'Nuevo tipo de periodo' : 'Actualizar tipo de periodo'
+    titulo.value = !newVal.dataRegistro ? 'Nuevo tipo de convocatoria' : 'Actualizar tipo de convocatoria'
 })
 
 watch(() => props.dataModal.dataRegistro, (newVal) => {

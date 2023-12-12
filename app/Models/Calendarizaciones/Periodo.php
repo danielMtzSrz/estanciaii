@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Carbon\Carbon;
+
 class Periodo extends Model{
 
     protected $table = 'periodos';
@@ -33,10 +35,23 @@ class Periodo extends Model{
             'tipo_periodo_nombre' => $this->tipoPeriodo->nombre,
             'titulo' => $this->titulo,
             'descripcion' => $this->descripcion,
+            'fecha_inicio_format' => $this->fecha_inicio_format,
             'fecha_inicio' => $this->fecha_inicio,
+            'fecha_fin_format' => $this->fecha_fin_format,
             'fecha_fin' => $this->fecha_fin,
             'periodo_activo' => (boolean) $this->periodo_activo
         ];
+    }
+
+    // Attributes
+    public function getFechaInicioFormatAttribute()
+    {
+        return Carbon::parse($this->fecha_inicio)->format('Y-m-d');
+    }
+
+    public function getFechaFinFormatAttribute()
+    {
+        return Carbon::parse($this->fecha_fin)->format('Y-m-d');
     }
 
     // Relación con el modelo TipoPeriodo

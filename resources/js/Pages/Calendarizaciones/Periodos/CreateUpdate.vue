@@ -64,8 +64,6 @@
                         />
                     </div>
 
-                    <pre>{{ form }}</pre>
-
                 </div>
 
                 <div class="float-end space-x-2 py-4">
@@ -188,8 +186,8 @@ watch(() => props.dataModal.dataRegistro, (newVal) => {
     form.tipo_periodo_id = newVal?.tipo_periodo_id ?? null
     form.titulo = newVal?.titulo ?? null
     form.descripcion = newVal?.descripcion ?? null
-    form.fecha_inicio = newVal?.fecha_inicio ?? null
-    form.fecha_fin = newVal?.fecha_fin ?? null
+    form.fecha_inicio = newVal?.fecha_inicio_format ?? null
+    form.fecha_fin = newVal?.fecha_fin_format ?? null
     form.periodo_activo = newVal?.periodo_activo ?? null
 
     fechaInicio.value = newVal?.fecha_inicio ?? null
