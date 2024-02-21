@@ -1,35 +1,33 @@
 <template>
-    <GenericModal :dataModal="dataModal" @closeModal="closeModal" :title="titulo">
-        <template #header>
-            <h3 class="font-bold">{{ titulo }}</h3>
-        </template>
+    <GenericModal
+        :dataModal="dataModal"
+        @closeModal="closeModal()" 
+        :header="titulo"
+    >
         <template #content>
-            <form @submit.prevent="submit(false)">
-                <div class="row p-fluid">
-                    <div class="mt-2 col-md-6">
-                        <Dropdown
-                            :data="dataModal.dataAulas"
-                            icon="bi bi-building"
+            <form @submit.prevent="submit" enctype="multipart/form-data">
+                <div class="row col-12 pt-4">
+
+                    <div class="col-sm-12 col-md-6">
+                        <Dropdown 
                             label="Aula"
+                            :data="dataAulas"
                             textDropdown="nombre"
-                            :value="aula"
-                            @input="form.aula_id = $event.id, aula=$event"
-                            :errors="form.errors.aula_id"
+                            v-model="aulaSeleccionada"
                         />
                     </div>
-                    <div class="mt-2 col-md-6">
-                        <Dropdown
-                            :data="dataModal.dataDiasSemana"
-                            icon="bi bi-calendar-week"
-                            label="Día"
+
+                    <div class="col-sm-12 col-md-6">
+                        <Dropdown 
+                            label="Día de la semana"
+                            :data="dataDiasSemana"
                             textDropdown="nombre"
-                            :value="diaSemana"
-                            @input="form.dia_semana_id = $event.id, diaSemana=$event"
-                            :errors="form.errors.dia_semana_id"
+                            v-model="diaSemanaSeleccionado"
                         />
                     </div>
-                    <div class="mt-4 col-md-6">
-                        <Calendar
+
+                    <div class="col-sm-12 col-md-6">
+                        <CalendarTime
                             label="Hora de inicio"
                             name="hora_inicio"
                             icon="pi pi-clock"
@@ -38,8 +36,9 @@
                             @input="form.hora_inicio = $event.valueFormat, horaInicio = $event.valueShow"
                         />
                     </div>
-                    <div class="mt-4 col-md-6">
-                        <Calendar
+
+                    <div class="col-sm-12 col-md-6">
+                        <CalendarTime
                             label="Hora de fin"
                             name="hora_fin"
                             icon="pi pi-clock"
@@ -48,8 +47,12 @@
                             @input="form.hora_fin = $event.valueFormat, horaFin = $event.valueShow"
                         />
                     </div>
+
                 </div>
-                <div class="mt-3 float-end space-x-2">
+
+                <pre>{{ form }}</pre>
+
+                <div class="float-end space-x-2 py-4">
                     <Button
                         type="button"
                         label="Cancelar"
@@ -70,92 +73,108 @@
 
 <script setup>
 
-import { ref, watch, computed } from 'vue';
+// Vue
+import { ref, watch } from "vue";
 
 // Inertia
 import { useForm } from "@inertiajs/inertia-vue3";
 
 // Primevue
 import Button from "primevue/button";
-import ColorPicker from 'primevue/colorpicker';
-import Checkbox from 'primevue/checkbox';
+
+// Layouts
+import GenericModal from "@/Components/GenericModal.vue";
 
 // Inputs
-import InputText from "@/Components/Forms/InputText.vue";
-import Textarea from "@/Components/Forms/Textarea.vue";
-import Dropdown from '@/Components/Forms/Dropdown.vue';
-import Calendar from '@/Components/Forms/CalendarTime.vue';
-import Divider from 'primevue/divider';
+import Dropdown from "@/Components/Forms/Dropdown.vue";
+import CalendarTime from "@/Components/Forms/CalendarTime.vue";
 
-import GenericModal from '@/Components/GenericModal.vue';
+// Variables
+const dataAulas = ref(null), aulaSeleccionada = ref(null)
+const dataDiasSemana = ref(null), diaSemanaSeleccionado = ref(null)
 
-const aula = ref(null)
-const diaSemana = ref(null)
-const horaInicio = ref(null)
-const horaFin = ref(null)
+const horaInicio = ref(null), horaFin = ref(null)
 
 const form = useForm({
-    aula_id : null,
+    _method: null,
+    aula_id: null,
     dia_semana_id: null,
-    hora_inicio : null,
-    hora_fin: null,
-})
+    hora_inicio: null,
+    hora_fin: null
+});
 
-const ruta = ref(null)
-const titulo = ref(null)
+const ruta = ref(null),
+      titulo = ref(null);
 
+// Props
 const props = defineProps({
     dataModal: {
         type: Object,
-        default: null
+        default: null,
     },
-})
+});
 
-const emits = defineEmits(['visible'])
+// Emits
+const emits = defineEmits(["closeModal"]);
 
+// Methods
 const closeModal = () => {
-    emits("visible", false);
+    emits("closeModal");
     form.reset();
     form.errors = {}
-}
+};
 
-// Métodos
 const submit = () => {
-    if(!props.dataModal.dataRegistro){
-        form.post(route(ruta.value), {
+
+    if (!props.dataModal.dataRegistro) {
+        form.transform((data) => ({
+            ...data,
+            aula_id: aulaSeleccionada.value?.id,
+            dia_semana_id: diaSemanaSeleccionado.value?.id,
+        })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
             },
         });
-    }else{
-        form.put(route(ruta.value, props.dataModal.dataRegistro), {
+
+    } else {
+        form.transform((data) => ({
+            ...data,
+            aula_id: aulaSeleccionada.value?.id,
+            dia_semana_id: diaSemanaSeleccionado.value?.id,
+        })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();
             },
         });
     }
-}
+};
 
-watch(() => props.dataModal, (newVal, oldVal) => {
-    ruta.value = !props.dataModal.dataRegistro ? 'Calendarizaciones.Horarios.store' : 'Calendarizaciones.Horarios.update'
-    titulo.value = !props.dataModal.dataRegistro ? 'Nuevo horario' : 'Actualizar horario'
+// Watchers
+watch(() => props.dataModal, async (newVal) => {
+    ruta.value = !newVal.dataRegistro ? 'Calendarizaciones.Horarios.store' : 'Calendarizaciones.Horarios.update'
+    titulo.value = !newVal.dataRegistro ? 'Nuevo horario' : 'Actualizar horario'
+
+    const dataAulasAxios = await axios.get(`/api/aulas`);
+    dataAulas.value = dataAulasAxios.data;
+
+    dataDiasSemana.value = props.dataModal.dataDiasSemana;
 })
 
-watch(() => props.dataModal.dataRegistro, (newVal, oldVal) => {
-    form.reset();
+watch(() => props.dataModal.dataRegistro, (newVal) => {
+    form.reset()
+
+    form._method = newVal ? "put" : null
+
+    form.aula_id = newVal?.aula_id ?? null
+    form.dia_semana_id = newVal?.dia_semana_id ?? null
+    form.hora_inicio = newVal?.hora_inicio ?? null
+    form.hora_fin = newVal?.hora_fin ?? null
 
     horaInicio.value = newVal?.hora_inicio ?? null
     horaFin.value = newVal?.hora_fin ?? null
 
-    // En caso de que se modifique el registro se llenarán estos campos correspondientes al form.
-    aula.value = newVal?.aula ?? null
-    diaSemana.value = newVal?.diaSemana ?? null
-
-    // form.aula_id = newVal?.aula.id ?? null
-    form.aula_id = newVal?.aula.id ?? null
-    form.dia_semana_id = newVal?.diaSemana.id ?? null
-    form.hora_inicio = newVal?.hora_inicio ?? null
-    form.hora_fin = newVal?.hora_fin ?? null
+    aulaSeleccionada.value = newVal?.aula ?? null
+    diaSemanaSeleccionado.value = newVal?.dia_semana ?? null
 })
 </script>
-

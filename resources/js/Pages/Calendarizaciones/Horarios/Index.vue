@@ -1,93 +1,95 @@
 <template>
     <GenericLayout titleModule="Horarios">
         <template #content>
-            <GenericTable :data="horarios">
-                <template #headerContent>
+            <DynamicTable
+                :data="horarios"
+                :items="items"
+                titleModule="Horarios"
+            >
+                <template #header>
                     <Button
                         type="button"
                         label="Nuevo"
                         icon="pi pi-plus"
-                        class="p-button-raised p-button-rounded p-button-text p-button-success p-button-sm"
-                        @click="modalCreateUpdate(null, true)"
+                        class="p-button-raised p-button-rounded p-button-success p-button-sm p-button-text"
+                        @click="modalCreateUpdate({display: true})"
                     />
-                    
-                    <Link :href="route('Calendarizaciones.Horarios.trashed')">
-                        <Button 
-                            type="button"
-                            label="Papelera"
-                            icon="pi pi-trash"
-                            class="p-button-raised p-button-rounded p-button-text p-button-help p-button-sm" 
-                        />
-                    </Link>
                 </template>
-                <template #content>
-                    <Column v-for="col of columns" :field="col.field" :header="col.header" :key="col.field" :sortable="col.sortable"></Column>
-                    <Column headerStyle="width: 8em" bodyStyle="text-align: center">
-                        <template #body="slotProps">
-                            <!-- <Button
-                            v-permission="'permission.update'" -->
-                            <Button
-                                type="button"
-                                icon="pi pi-pencil"
-                                class="p-button-warning p-button-text p-button-raised p-button-rounded"
-                                @click="modalCreateUpdate(slotProps.data, true)"
-                            />
-                            <Button
-                                type="button"
-                                icon="pi pi-trash"
-                                class="p-button-danger p-button-text p-button-raised p-button-rounded"
-                                @click="modalEliminar(slotProps.data, true)"
-                            />
-                        </template>
-                    </Column>
+
+                <template #buttons="{ data }">
+                    <Button
+                        type="button"
+                        icon="pi pi-pencil"
+                        class="p-button-warning p-button-text p-button-raised p-button-rounded"
+                        v-tooltip.top="'Actualizar'"
+                        @click="modalCreateUpdate({display: true, data: data})"
+                    />
+                    <Button
+                        type="button"
+                        icon="pi pi-trash"
+                        class="p-button-danger p-button-text p-button-raised p-button-rounded"
+                        @click="modalGenericAlert({
+                            data: data, 
+                            display: true, 
+                            proceso: {
+                                'proceso': 'delete',
+                                'ruta': 'Calendarizaciones.Horarios.destroy',
+                            }
+                        })"
+                    />
                 </template>
-            </GenericTable>
+            </DynamicTable>
         </template>
 
         <template #footer>
-            <!-- Modal crear - actualizar -->
-            <form-create-update
+            <CreateUpdate
                 :dataModal="{
                     display: displayCreateUpdate,
                     dataRegistro: dataRegistro,
-                    dataDiasSemana: diasSemana,
-                    dataAulas: aulas,
+                    dataDiasSemana: dias_semana
                 }"
-                v-on:visible="(visible) => modalCreateUpdate(null, visible)"
+                @closeModal="modalCreateUpdate({display: false, data: null})"
             />
-            <!-- Modal eliminar -->
-            <form-delete
+            <GenericAlert
                 :dataModal="{
-                    display: displayEliminar,
-                    dataRegistro : dataRegistro
+                    display: displayGenericAlert,
+                    dataRegistro : dataRegistro,
+                    dataProceso : dataProceso
                 }"
-                v-on:visible="(visible) => modalEliminar(null, visible)"
+                @closeModal="modalGenericAlert({display: false, data: null, dataProceso: null})"
             />
         </template>
     </GenericLayout>
 </template>
 
 <script setup>
-import {ref, onMounted} from 'vue';
+// Vue
+import { ref } from 'vue';
 
-// Componentes de primevue
-import Column from 'primevue/column';
-import Button from "primevue/button";
-import InputText from "primevue/inputtext";
+// Layouts
+import GenericLayout from "@/Layouts/GenericLayout.vue";
+import DynamicTable from "@/Components/DynamicTable.vue";
 
-// Componentes personalizados
-import GenericLayout from '@/Layouts/GenericLayout.vue';
-import GenericTable from '@/Components/GenericTable.vue';
+import GenericAlert from "@/Components/GenericAlert.vue";
 
 // Componentes de los modales
-import FormCreateUpdate from '@/Pages/Calendarizaciones/Horarios/CreateUpdate.vue';
-import FormDelete from '@/Pages/Calendarizaciones/Horarios/Delete.vue';
+import CreateUpdate from "@/Pages/Calendarizaciones/Horarios/CreateUpdate.vue";
 
-// Variables
-const displayCreateUpdate = ref(null)
-const displayEliminar = ref(null)
-const dataRegistro = ref(null)
-const columns = ref(null)
+// Variables para los modales
+const displayCreateUpdate = ref(false), displayGenericAlert = ref(false);
+const dataRegistro = ref(null), dataProceso = ref(null)
+
+// Métodos
+const modalCreateUpdate = (event) => {
+    displayCreateUpdate.value = event.display;
+    dataRegistro.value = event?.data ?? null;
+}
+
+const modalGenericAlert = (event) => {
+    dataRegistro.value = event.data;
+    displayGenericAlert.value = event.display;
+    dataProceso.value = event.proceso;
+}
 
 // Propiedades
 const props = defineProps({
@@ -95,33 +97,61 @@ const props = defineProps({
         type: Object,
         default: null
     },
-    diasSemana: {
+    dias_semana: {
         type: Object,
         default: null
-    },
-    aulas: {
-        type: Object,
-        default: null
-    },
+    }
 })
 
-// Métodos
-const modalCreateUpdate = (data, show) => {
-    dataRegistro.value = data
-    displayCreateUpdate.value = show
-}
-const modalEliminar = (data, show) => {
-    dataRegistro.value = data;
-    displayEliminar.value = show;
-}
-
-onMounted(() => {
-    columns.value = [
-        {field: 'id', header: 'ID', sortable: true},
-        {field: 'aula.nombre', header: 'Aula', sortable: true},
-        {field: 'diaSemana.nombre', header: 'Día', sortable: true},
-        {field: 'hora_inicio', header: 'Hora inicio', sortable: true},
-        {field: 'hora_fin', header: 'Hora fin', sortable: true},
-    ];
-})
+// Array-Object para los items del DataTable
+const items = ref([
+    {
+        dataField: {
+            field: 'aula_nombre',
+            header : 'Aula',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'text',
+        },
+    },
+    {
+        dataField: {
+            field: 'dia_semana_nombre',
+            header : 'Día de la semana',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'text',
+        },
+    },
+    {
+        dataField: {
+            field: 'hora_inicio',
+            header : 'Hora de inicio',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: false,
+            type: 'text',
+        },
+    },
+    {
+        dataField: {
+            field: 'hora_fin',
+            header : 'Hora de fin',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'text',
+        },
+    }
+])
 </script>

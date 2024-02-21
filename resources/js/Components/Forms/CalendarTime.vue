@@ -1,23 +1,25 @@
 <template>
-    <div class="p-inputgroup">
-        <span v-if="icon" class="p-inputgroup-addon">
-            <i :class="icon"></i>
-        </span>
-        <span class="p-float-label">
-            <Calendar
-                :class="{'p-invalid': errors}"
-                :name="name"
-                @date-select="selected($event)"
-                hourFormat="24"
-                :timeOnly="true"
-                v-model="inputValue"
-            />
-            <label class="mb-2"> {{ label }}</label>
-        </span>
+    <div class="mb-5">
+        <div class="p-inputgroup">
+            <span v-if="icon" class="p-inputgroup-addon">
+                <i :class="icon"></i>
+            </span>
+            <span class="p-float-label">
+                <Calendar
+                    :class="{'p-invalid': errors}"
+                    :name="name"
+                    @date-select="selected($event)"
+                    hourFormat="24"
+                    :timeOnly="true"
+                    v-model="inputValue"
+                />
+                <label class="mb-2"> {{ label }}</label>
+            </span>
+        </div>
+        <small class="p-error" v-if="errors">
+            {{errors}}
+        </small>
     </div>
-    <small class="p-error" v-if="errors">
-        {{errors}}
-    </small>
 </template>
 
 <script setup>

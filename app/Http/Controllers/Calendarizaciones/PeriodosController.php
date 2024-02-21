@@ -30,7 +30,6 @@ class PeriodosController extends Controller{
         Periodo::create($request->all());
 
         return back()->with(config('messages.mensaje_exito'));
-        
     }
 
     public function update(Request $request, $id)

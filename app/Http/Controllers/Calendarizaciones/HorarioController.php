@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Calendarizaciones;
 
 use App\Http\Controllers\Controller;
-use App\Models\EstructuraAcademica\Aula;
-use App\Models\Calendarizaciones\{Horarios, DiaSemana};
-use App\Http\Requests\Calendarizaciones\{StoreHorarioRequest, UpdateHorarioRequest};
+
+use App\Models\Calendarizaciones\Horarios;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -13,135 +13,46 @@ use Inertia\Inertia;
 
 class HorarioController extends Controller{
 
-    public function index(){
-        $horarios = Horarios::all()->transform(function($horario){
+    public function index()
+    {
+        $horarios = Horarios::get()->map(function($horario){
             return [
                 'id' => $horario->id,
                 'aula' => $horario->aula,
-                'diaSemana' => $horario->diaSemana,
+                'aula_nombre' => $horario->aula->nombre,
+                'dia_semana' => $horario->diasSemana(),
+                'dia_semana_nombre' => $horario->diasSemana()['nombre'],
                 'hora_inicio' => $horario->hora_inicio,
-                'hora_fin' => $horario->hora_fin,
-            ];
-        });        
-        $diasSemana = DiaSemana::all();
-        $aulas = Aula::all();
-        return Inertia::render('Calendarizaciones/Horarios/Index', compact('horarios', 'diasSemana', 'aulas'));
-    }
-
-    public function create(){
-        //
-    }
-
-    public function store(StoreHorarioRequest $request){
-        try {
- 
-            Horarios::create($request->validated());
-
-            return back()->with(
-                [
-                    'backgroundNotification' => 'success',
-                    'titleNotification' => '¡Éxito!',
-                    'messageNotification' => 'Horario creado correctamente',
-                    'lifeNotification' => 5000
-                ]
-            );
-        } catch (Error $e) {
-            dd($e);
-        }
-    }
-
-    public function show(Horarios $horarios){
-        //
-    }
-
-    public function edit(Horarios $horarios){
-        //
-    }
-
-    public function update(UpdateHorarioRequest $request, $id){
-        
-        $horario = Horarios::find($id);
-
-        try {
- 
-            $horario->update($request->validated());
-
-            return back()->with(
-                [
-                    'backgroundNotification' => 'success',
-                    'titleNotification' => '¡Éxito!',
-                    'messageNotification' => 'Horario modificado correctamente',
-                    'lifeNotification' => 5000
-                ]
-            );
-        } catch (Error $e) {
-            dd($e);
-        }
-    }
-
-    public function destroy($id){
-        $horario = Horarios::find($id);
-        
-        try {
- 
-            $horario->delete();
-
-            return back()->with(
-                [
-                    'backgroundNotification' => 'success',
-                    'titleNotification' => '¡Éxito!',
-                    'messageNotification' => 'Horario eliminado correctamente',
-                    'lifeNotification' => 5000
-                ]
-            );
-        } catch (Error $e) {
-            dd($e);
-        }
-    }
-
-    public function trashed(){
-
-        $horarios = Horarios::onlyTrashed()->get()->transform(function($horario){
-            return [
-                'id' => $horario->id,
-                'aula' => $horario->aula,
-                'diaSemana' => $horario->diaSemana,
-                'hora_inicio' => $horario->hora_inicio,
-                'hora_fin' => $horario->hora_fin,
-                'deleted_at' => $horario->deleted_at
+                'hora_fin' => $horario->hora_fin
             ];
         });
-
-        return Inertia::render("Calendarizaciones/Horarios/Trashed", compact('horarios'));
+        $dias_semana = config('staticdata.dates.dias_semana');
+        
+        return Inertia::render('Calendarizaciones/Horarios/Index', compact('horarios', 'dias_semana'));
     }
 
-    public function restore($id){
-        
-        $horario = Horarios::withTrashed()->findOrFail($id);
-        $horario->restore();
+    public function store(Request $request)
+    {
+        Horarios::create($request->all());
 
-        return Redirect::route('Calendarizaciones.Horarios.trashed')->with(
-            [
-                'titleNotification' => '¡Éxito!',
-                'backgroundNotification' => 'success',
-                'messageNotification' => 'Horario restaurado.',
-                'lifeNotification' => 5000
-            ]
-        );
+        return back()->with(config('messages.mensaje_exito'));
     }
 
-    public function forceDestroy($id){
-        
-        $horario = Horarios::withTrashed()->findOrFail($id);
-        $horario->forceDelete();
+    public function update(Request $request, $id)
+    {
+        $horario = Horarios::find($id);
 
-        return Redirect::route('Calendarizaciones.Horarios.trashed')->with(
-            [
-                'titleNotification' => '¡Éxito!',
-                'backgroundNotification' => 'success',
-                'messageNotification' => 'Horario eliminado definitivamente.',
-                'lifeNotification' => 5000
-            ]
-        );
+        $horario->update($request->all());
+    
+        return back()->with(config('messages.mensaje_actualizar'));
+    }
+
+    public function destroy($id)
+    {
+        $horario = Horarios::find($id);
+
+        $horario->delete();
+
+        return back()->with(config('messages.mensaje_eliminar'));
     }
 }
