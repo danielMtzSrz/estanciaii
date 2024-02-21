@@ -8,13 +8,24 @@
             <form @submit.prevent="submit" enctype="multipart/form-data">
                 <div class="row col-12 pt-4">
 
-                    <div class="col-sm-12">
-                        <InputText
-                            label="Nombre"
-                            v-model="form.nombre"
-                            :errors="form.errors.nombre"
+                    <div class="col-sm-12 col-md-6">
+                        <Dropdown 
+                            label="Periodo"
+                            :data="dataPeriodos"
+                            textDropdown="titulo"
+                            v-model="periodoSeleccionado"
                         />
                     </div>
+
+                    <div class="col-sm-12 col-md-6">
+                        <Dropdown 
+                            label="Tipo de convocatoria"
+                            :data="dataTiposConvocatoria"
+                            textDropdown="nombre"
+                            v-model="tipoConvocatoriaSeleccionado"
+                        />
+                    </div>
+                    
 
                     <div class="col-sm-12">
                         <Textarea
@@ -60,17 +71,23 @@ import Button from "primevue/button";
 import GenericModal from "@/Components/GenericModal.vue";
 
 // Inputs
-import InputText from "@/Components/Forms/InputText.vue";
+import Dropdown from "@/Components/Forms/Dropdown.vue";
 import Textarea from "@/Components/Forms/Textarea.vue";
+
+// Variables
+
+const dataTiposConvocatoria = ref(null), tipoConvocatoriaSeleccionado = ref(null)
+const dataPeriodos = ref(null), periodoSeleccionado = ref(null)
+
 
 const form = useForm({
     _method: null,
-    nombre: null,
+    periodo_id: null,
+    tipo_convocatoria_id: null,
     contenido: null
 });
 
-const ruta = ref(null),
-      titulo = ref(null);
+const ruta = ref(null), titulo = ref(null);
 
 // Props
 const props = defineProps({
@@ -93,14 +110,22 @@ const closeModal = () => {
 const submit = () => {
 
     if (!props.dataModal.dataRegistro) {
-        form.post(route(ruta.value), {
+        form.transform((data) => ({
+            ...data,
+            periodo_id: periodoSeleccionado.value?.id,
+            tipo_convocatoria_id: tipoConvocatoriaSeleccionado.value?.id,
+        })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
             },
         });
 
     } else {
-        form.post(route(ruta.value, props.dataModal.dataRegistro), {
+        form.transform((data) => ({
+            ...data,
+            periodo_id: periodoSeleccionado.value?.id,
+            tipo_convocatoria_id: tipoConvocatoriaSeleccionado.value?.id,
+        })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();
             },
@@ -111,7 +136,13 @@ const submit = () => {
 // Watchers
 watch(() => props.dataModal, async (newVal) => {
     ruta.value = !newVal.dataRegistro ? 'Calendarizaciones.Convocatorias.store' : 'Calendarizaciones.Convocatorias.update'
-    titulo.value = !newVal.dataRegistro ? 'Nuevo tipo de convocatoria' : 'Actualizar tipo de convocatoria'
+    titulo.value = !newVal.dataRegistro ? 'Nueva convocatoria' : 'Actualizar convocatoria'
+
+    const dataTiposConvocatoriaAxios = await axios.get(`/api/tipos_convocatoria`);
+    dataTiposConvocatoria.value = dataTiposConvocatoriaAxios.data;
+
+    const dataPeriodosAxios = await axios.get(`/api/periodos`);
+    dataPeriodos.value = dataPeriodosAxios.data;
 })
 
 watch(() => props.dataModal.dataRegistro, (newVal) => {
@@ -119,7 +150,11 @@ watch(() => props.dataModal.dataRegistro, (newVal) => {
 
     form._method = newVal ? "put" : null
 
-    form.nombre = newVal?.nombre ?? null
+    form.periodo_id = newVal?.periodo_id ?? null,
+    form.tipo_convocatoria_id = newVal?.tipo_convocatoria_id ?? null,
     form.contenido = newVal?.contenido ?? null
+
+    tipoConvocatoriaSeleccionado.value = newVal?.tipo_convocatoria ?? null,
+    periodoSeleccionado.value = newVal?.periodo ?? null
 })
 </script>

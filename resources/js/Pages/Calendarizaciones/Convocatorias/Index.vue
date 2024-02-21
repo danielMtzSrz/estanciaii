@@ -1,10 +1,10 @@
 <template>
-    <GenericLayout titleModule="Tipos de convocatoria">
+    <GenericLayout titleModule="Convocatorias">
         <template #content>
             <DynamicTable
-                :data="tipos_convocatoria"
+                :data="convocatorias"
                 :items="items"
-                titleModule="Tipos de convocatoria"
+                titleModule="Convocatorias"
             >
                 <template #header>
                     <Button
@@ -33,7 +33,7 @@
                             display: true, 
                             proceso: {
                                 'proceso': 'delete',
-                                'ruta': 'Calendarizaciones.TiposConvocatoria.destroy',
+                                'ruta': 'Calendarizaciones.Convocatorias.destroy',
                             }
                         })"
                     />
@@ -72,7 +72,7 @@ import DynamicTable from "@/Components/DynamicTable.vue";
 import GenericAlert from "@/Components/GenericAlert.vue";
 
 // Componentes de los modales
-import CreateUpdate from "@/Pages/Calendarizaciones/TiposConvocatorias/CreateUpdate.vue";
+import CreateUpdate from "@/Pages/Calendarizaciones/Convocatorias/CreateUpdate.vue";
 
 // Variables para los modales
 const displayCreateUpdate = ref(false), displayGenericAlert = ref(false);
@@ -92,7 +92,7 @@ const modalGenericAlert = (event) => {
 
 // Propiedades
 const props = defineProps({
-    tipos_convocatoria: {
+    convocatorias: {
         type: Object,
         default: null
     }
@@ -102,8 +102,20 @@ const props = defineProps({
 const items = ref([
     {
         dataField: {
-            field: 'nombre',
-            header : 'Nombre',
+            field: 'periodo_nombre',
+            header : 'Periodo',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'text',
+        },
+    },
+    {
+        dataField: {
+            field: 'tipo_convocatoria_nombre',
+            header : 'Tipo de convocatoria',
             sortable: true,
             type: 'text',
         },
@@ -116,11 +128,11 @@ const items = ref([
         dataField: {
             field: 'contenido',
             header : 'Contenido',
-            sortable: true,
-            type: 'text',
+            sortable: false,
+            type: 'html',
         },
         filters: {
-            active: true,
+            active: false,
             type: 'text',
         },
     }

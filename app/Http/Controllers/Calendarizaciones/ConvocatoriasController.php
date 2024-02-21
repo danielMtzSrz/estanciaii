@@ -3,144 +3,48 @@
 namespace App\Http\Controllers\Calendarizaciones;
 
 use App\Http\Controllers\Controller;
-use App\Models\Calendarizaciones\{Convocatoria, Periodo, TipoConvocatoria};
-use App\Http\Requests\Calendarizaciones\StoreConvocatoriaRequest;
-use App\Http\Requests\Calendarizaciones\UpdateConvocatoriaRequest;
-use Inertia\Inertia;
+
+use App\Models\Calendarizaciones\Convocatoria;
+
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\Request;
 
-class ConvocatoriasController extends Controller{
+use Inertia\Inertia;
 
-    public function index(){
-        $convocatorias = Convocatoria::get();
-        // $convocatorias = Convocatoria::all()->map(function($convocatoria){
-        //     return [
-        //         'id' => $convocatoria->id,
-        //         'tipoConvocatoria' => $convocatoria->tipoConvocatoria,
-        //         'periodo' => $convocatoria->periodo,
-        //         'servicio' => $convocatoria->servicio,
-        //         'contenido' => $convocatoria->contenido,
-        //     ];
-        // });
-        $periodos = Periodo::all();
-        $tiposConvocatorias = TipoConvocatoria::all();
-        return Inertia::render('Calendarizaciones/Convocatorias/Index', compact('convocatorias', 'periodos', 'tiposConvocatorias'));
-    }
+class ConvocatoriasController extends Controller {
 
-    public function create(){
-        //
-    }
-
-    public function store(StoreConvocatoriaRequest $request){
-        
-        try {
- 
-            Convocatoria::create($request->validated());
-
-            return back()->with(
-                [
-                    'backgroundNotification' => 'success',
-                    'titleNotification' => '¡Éxito!',
-                    'messageNotification' => 'Convocatoria creada correctamente',
-                    'lifeNotification' => 5000
-                ]
-            );
-        } catch (Error $e) {
-            dd($e);
-        }
-    }
-
-    public function show(Convocatorias $convocatorias){
-        //
-    }
-
-    public function edit(Convocatorias $convocatorias){
-        //
-    }
-
-    public function update(UpdateConvocatoriaRequest $request, $id){
-        
-        $tipoPeriodo = Convocatoria::find($id);
-
-        try {
- 
-            $tipoPeriodo->update($request->validated());
-
-            return back()->with(
-                [
-                    'backgroundNotification' => 'success',
-                    'titleNotification' => '¡Éxito!',
-                    'messageNotification' => 'Convocatoria creada correctamente',
-                    'lifeNotification' => 5000
-                ]
-            );
-        } catch (Error $e) {
-            dd($e);
-        }
-    }
-
-    public function destroy($id){
-        $tipoPeriodo = Convocatoria::find($id);
-        
-        try {
- 
-            $tipoPeriodo->delete();
-
-            return back()->with(
-                [
-                    'backgroundNotification' => 'success',
-                    'titleNotification' => '¡Éxito!',
-                    'messageNotification' => 'Convocatoria eliminada correctamente',
-                    'lifeNotification' => 5000
-                ]
-            );
-        } catch (Error $e) {
-            dd($e);
-        }
-    }
-
-    public function trashed(){
-
-        $convocatorias = Convocatoria::onlyTrashed()->get()->transform(function($convocatoria){
-            return [
-                'id' => $convocatoria->id,
-                'tipoConvocatoria' => $convocatoria->tipoConvocatoria,
-                'periodo' => $convocatoria->periodo,
-                'servicio' => $convocatoria->servicio,
-                'contenido' => $convocatoria->contenido,
-            ];
+    public function index()
+    {
+        $convocatorias = Convocatoria::get()->map(function($convocatoria){
+            return $convocatoria->indexMap();
         });
 
-        return Inertia::render("Calendarizaciones/Convocatorias/Trashed", compact('convocatorias'));
+        return Inertia::render('Calendarizaciones/Convocatorias/Index', compact('convocatorias'));
     }
 
-    public function restore($id){
-        
-        $convocatoria = Convocatoria::withTrashed()->findOrFail($id);
-        $convocatoria->restore();
+    public function store(Request $request)
+    {        
+        Convocatoria::create($request->all());
 
-        return Redirect::route('Calendarizaciones.Convocatorias.trashed')->with(
-            [
-                'titleNotification' => '¡Éxito!',
-                'backgroundNotification' => 'success',
-                'messageNotification' => 'Convocatoria restaurada.',
-                'lifeNotification' => 5000
-            ]
-        );
+        return back()->with(config('messages.mensaje_exito'));
+        
     }
 
-    public function forceDestroy($id){
-        
-        $convocatoria = Convocatoria::withTrashed()->findOrFail($id);
-        $convocatoria->forceDelete();
+    public function update(Request $request, $id)
+    {
+        $tipoPeriodo = Convocatoria::find($id);
+ 
+        $tipoPeriodo->update($request->all());
 
-        return Redirect::route('Calendarizaciones.Convocatorias.trashed')->with(
-            [
-                'titleNotification' => '¡Éxito!',
-                'backgroundNotification' => 'success',
-                'messageNotification' => 'Convocatoria eliminada definitivamente.',
-                'lifeNotification' => 5000
-            ]
-        );
+        return back()->with(config('messages.mensaje_actualizar'));
+    }
+
+    public function destroy($id)
+    {
+        $tipoPeriodo = Convocatoria::find($id);
+ 
+        $tipoPeriodo->delete();
+
+        return back()->with(config('messages.mensaje_eliminar'));
     }
 }

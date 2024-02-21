@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\Domicilios;
 use App\Http\Controllers\Api\Empresas;
 use App\Http\Controllers\Api\TipoAnuncioApi;
 use App\Http\Controllers\Api\TiposPeriodoApi;
+use App\Http\Controllers\Api\TiposConvocatoriaApi;
+use App\Http\Controllers\Api\PeriodosApi;
 
 use Illuminate\Http\Request;
 
@@ -32,6 +34,12 @@ Route::get('tipos_anuncio', [TipoAnuncioApi::class, 'TipoAnuncio'])->name('tipos
 
 // Tipos de periodos
 Route::get('tipos_periodo', [TiposPeriodoApi::class, 'TipoPeriodo'])->name('tipos_periodo');
+
+// Tipos de convocatorias
+Route::get('tipos_convocatoria', [TiposConvocatoriaApi::class, 'TiposConvocatoria'])->name('tipos_convocatoria');
+
+// Periodos
+Route::get('periodos', [PeriodosApi::class, 'Periodos'])->name('periodos');
 
 
 // Domicilios
