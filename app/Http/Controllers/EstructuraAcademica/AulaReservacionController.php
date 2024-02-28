@@ -3,142 +3,63 @@
 namespace App\Http\Controllers\EstructuraAcademica;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\EstructuraAcademica\StoreAulaReservacionRequest;
-use App\Http\Requests\EstructuraAcademica\UpdateAulaReservacionRequest;
+
 use App\Models\EstructuraAcademica\Aula;
 use App\Models\EstructuraAcademica\AulaReservacion;
 use App\Models\User;
-use Error;
+
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
+
 use Inertia\Inertia;
 
 class AulaReservacionController extends Controller{
 
-    public function index(){
+    public function index()
+    {
+        $aulas_reservacion = AulaReservacion::with(['aula', 'solicitante'])->get()->map(function($aula_reservacion){
+            return [
+                'id' => $aula_reservacion->id,
+                'aula' => $aula_reservacion->aula,
+                'aula_nombre' => $aula_reservacion->aula->nombre,
+                'solicitante' => [
+                    'id' => $aula_reservacion->solicitante->id,
+                    'nombre' => $aula_reservacion->solicitante->name." ".$aula_reservacion->solicitante->apellido_paterno." ".$aula_reservacion->solicitante->apellido_materno,
+                    'profile_photo_path' => $aula_reservacion->solicitante->profile_photo_path
+                ],
+                'solicitante_profile_photo_path' => $aula_reservacion->solicitante->profile_photo_path,
+                'solicitante_nombre' => $aula_reservacion->solicitante->name." ".$aula_reservacion->solicitante->apellido_paterno." ".$aula_reservacion->solicitante->apellido_materno,
+                'horario_inicio' => $aula_reservacion->horario_inicio,
+                'horario_final' => $aula_reservacion->horario_final,
+                'asunto' => $aula_reservacion->asunto,
+                'descripcion' => $aula_reservacion->descripcion
+            ];
+        });
 
-        return Inertia::render('EstructuraAcademica/AulasReservacion/Index', [
-            'aulasReservacion' => AulaReservacion::with(['aula', 'solicitante'])->get(),
-            'aulas' => Aula::select(['id', 'nombre'])->get(),
-            'solicitantes' => User::select(['id', 'name'])->get()
-        ]);
-
+        return Inertia::render('EstructuraAcademica/AulasReservacion/Index', compact('aulas_reservacion'));
     }
 
-    public function create()
+    public function store(Request $request)
     {
-        //
+        AulaReservacion::create($request->all());
+
+        return back()->with(config('messages.mensaje_exito'));
     }
 
-    public function store(StoreAulaReservacionRequest $request)
+    public function update(Request $request, $id)
     {
-        try {
+        $aula_reservacion = AulaReservacion::find($id);
 
-            AulaReservacion::create($request->validated());
+        $aula_reservacion->update($request->all());
 
-            return back()->with(
-                [
-                    'backgroundNotification' => 'success',
-                    'titleNotification' => '¡Éxito!',
-                    'messageNotification' => 'Reservación creada correctamente',
-                    'lifeNotification' => 5000
-                ]
-            );
-        } catch (Error $e) {
-            dd($e);
-        }
-    }
-
-    public function show($id)
-    {
-        //
-    }
-
-    public function edit($id)
-    {
-        //
-    }
-
-    public function update(UpdateAulaReservacionRequest $request, $id)
-    {
-        $aulaReservacion = AulaReservacion::find($id);
-
-        try {
-
-            $aulaReservacion->update($request->validated());
-
-            return back()->with(
-                [
-                    'backgroundNotification' => 'success',
-                    'titleNotification' => '¡Éxito!',
-                    'messageNotification' => 'Reservación modificada correctamente',
-                    'lifeNotification' => 5000
-                ]
-            );
-        } catch (Error $e) {
-            dd($e);
-        }
+        return back()->with(config('messages.mensaje_actualizar'));
     }
 
     public function destroy($id)
     {
-        $aulaReservacion = AulaReservacion::find($id);
+        $aula_reservacion = AulaReservacion::find($id);
 
-        try {
+        $aula_reservacion->delete();
 
-            $aulaReservacion->delete();
-
-            return back()->with(
-                [
-                    'backgroundNotification' => 'success',
-                    'titleNotification' => '¡Éxito!',
-                    'messageNotification' => 'Reservación eliminada correctamente',
-                    'lifeNotification' => 5000
-                ]
-            );
-        } catch (Error $e) {
-            dd($e);
-        }
-    }
-
-    public function trashed()
-    {
-        return Inertia::render('EstructuraAcademica/AulasReservacion/Trashed', [
-            'aulasReservacion' => AulaReservacion::with(['aula', 'solicitante'])->onlyTrashed()->get(),
-            'aulas' => Aula::select(['id', 'nombre'])->get(),
-            'solicitantes' => User::select(['id', 'name'])->get()
-        ]);
-    }
-
-    public function restore($id)
-    {
-
-        $aulaReservacion = AulaReservacion::withTrashed()->findOrFail($id);
-        $aulaReservacion->restore();
-
-        return Redirect::route('EstructuraAcademica.AulasReservacion.trashed')->with(
-            [
-                'titleNotification' => '¡Éxito!',
-                'backgroundNotification' => 'success',
-                'messageNotification' => 'Reservación restaurada.',
-                'lifeNotification' => 5000
-            ]
-        );
-    }
-
-    public function forceDestroy($id)
-    {
-
-        $aulaReservacion = AulaReservacion::withTrashed()->findOrFail($id);
-        $aulaReservacion->forceDelete();
-
-        return Redirect::route('EstructuraAcademica.AulasReservacion.trashed')->with(
-            [
-                'titleNotification' => '¡Éxito!',
-                'backgroundNotification' => 'success',
-                'messageNotification' => 'Reservación eliminada definitivamente.',
-                'lifeNotification' => 5000
-            ]
-        );
+        return back()->with(config('messages.mensaje_eliminar'));
     }
 }

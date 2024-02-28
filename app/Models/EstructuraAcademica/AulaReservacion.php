@@ -6,15 +6,12 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AulaReservacion extends Model
 {
-
-    protected $table = 'aulasreservacion';
+    protected $table = 'aulas_reservacion';
 
     use HasFactory;
-    use SoftDeletes;
 
     protected $fillable = [
         'aula_id',
@@ -22,8 +19,7 @@ class AulaReservacion extends Model
         'horario_inicio',
         'horario_final',
         'asunto',
-        'descripcion',
-        'log_id'
+        'descripcion'
     ];
 
     // Relación con la tabla EstructuraAcademica/Aula
@@ -45,13 +41,13 @@ class AulaReservacion extends Model
 
     protected function createdAt() : Attribute {
         return Attribute::make(
-            get: fn($value) => Carbon::parse($value) -> diffForHumans()
+            get: fn($value) => Carbon::parse($value)->diffForHumans()
         );
     }
 
     protected function updatedAt() : Attribute {
         return Attribute::make(
-            get: fn($value) => Carbon::parse($value) -> diffForHumans()
+            get: fn($value) => Carbon::parse($value)->diffForHumans()
         );
     }
 }
