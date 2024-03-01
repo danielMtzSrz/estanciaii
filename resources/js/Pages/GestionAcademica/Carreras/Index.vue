@@ -1,129 +1,152 @@
 <template>
-
-   <GenericLayout titleModule="Carreras">
-      <template #content>
-          <GenericTable :data="carreras">
-              <template #headerContent>
-                  <Button
-                      type="button"
-                      label="Nuevo"
-                      icon="pi pi-plus"
-                      class="p-button-raised p-button-rounded p-button-text p-button-success p-button-sm"
-                      @click="modalCreateUpdate(null, true)"
-                  />
-                  <Link :href="route('GestionAcademica.Carreras.trashed')">
-                    <Button 
+    <GenericLayout titleModule="Carreras">
+        <template #content>
+            <DynamicTable
+                :data="carreras"
+                :items="items"
+                titleModule="Carreras"
+            >
+                <template #header>
+                    <Button
                         type="button"
-                        label="Papelera"
-                        icon="pi pi-trash"
-                        class="p-button-raised p-button-rounded p-button-text p-button-help p-button-sm" 
+                        label="Nuevo"
+                        icon="pi pi-plus"
+                        class="p-button-raised p-button-rounded p-button-success p-button-sm p-button-text"
+                        @click="modalCreateUpdate({display: true})"
                     />
-                  </Link>
-              </template>
-              <template #content>
-                  <Column v-for="col of columns" :field="col.field" :header="col.header" :key="col.field" :sortable="col.sortable">
-                     <template #body="{data}" v-if="data===null"><p>Nulo</p></template>   
-                     <template #body="{ data }" v-else-if="col.field=='estatus'"><p>{{ data.estatus===1 ? 'Activo' : 'Inactivo' }}</p></template>
-                     <template  #body="{ data }" v-else-if="col.field == 'created_at'">{{ moment( new Date(data.created_at)).calendar() }}</template>
-                     <template  #body="{ data }" v-else-if="col.field == 'updated_at'">{{ moment( new Date(data.updated_at)).calendar() }}</template>
+                </template>
 
-                  </Column>
+                <template #buttons="{ data }">
+                    <Button
+                        type="button"
+                        icon="pi pi-pencil"
+                        class="p-button-warning p-button-text p-button-raised p-button-rounded"
+                        v-tooltip.top="'Actualizar'"
+                        @click="modalCreateUpdate({display: true, data: data})"
+                    />
+                    <Button
+                        type="button"
+                        icon="pi pi-trash"
+                        class="p-button-danger p-button-text p-button-raised p-button-rounded"
+                        @click="modalGenericAlert({
+                            data: data, 
+                            display: true, 
+                            proceso: {
+                                'proceso': 'delete',
+                                'ruta': 'GestionAcademica.Carreras.destroy',
+                            }
+                        })"
+                    />
+                </template>
+            </DynamicTable>
+        </template>
 
-                  <Column headerStyle="width: 8em" bodyStyle="text-align: center">
-                      <template #body="slotProps">
-                          <Button
-                              type="button"
-                              icon="pi pi-pencil"
-                              class="p-button-warning p-button-text p-button-raised p-button-rounded"
-                              @click="modalCreateUpdate(slotProps.data, true)"
-                          />
-                          <Button
-                              type="button"
-                              icon="pi pi-trash"
-                              class="p-button-danger p-button-text p-button-raised p-button-rounded"
-                              @click="modalEliminar(slotProps.data, true)"
-                          />
-                      </template>
-                  </Column>
-              </template>
-        </GenericTable>
-    
-      </template>
-
-      <template #footer>
-          <form-create-update
-              :dataModal="{
-                  display: displayCreateUpdate,
-                  dataRegistro: dataRegistro,
-                  dataTipoCoordinacion: tiposCoordinacion
-              }"
-              v-on:visible="(visible) => modalCreateUpdate(null, visible)"
-          />
-          <form-delete
-              :dataModal="{
-                  display: displayEliminar,
-                  dataRegistro : dataRegistro
-              }"
-              v-on:visible="(visible) => modalEliminar(null, visible)"
-          />
-      </template>
-  </GenericLayout>
-  
+        <template #footer>
+            <CreateUpdate
+                :dataModal="{
+                    display: displayCreateUpdate,
+                    dataRegistro: dataRegistro,
+                }"
+                @closeModal="modalCreateUpdate({display: false, data: null})"
+            />
+            <GenericAlert
+                :dataModal="{
+                    display: displayGenericAlert,
+                    dataRegistro : dataRegistro,
+                    dataProceso : dataProceso
+                }"
+                @closeModal="modalGenericAlert({display: false, data: null, dataProceso: null})"
+            />
+        </template>
+    </GenericLayout>
 </template>
 
 <script setup>
-   import {ref, onMounted} from 'vue';
-   import moment from 'moment';
-   import Column from 'primevue/column';
-   import Button from "primevue/button";
-   import InputText from "primevue/inputtext";
+// Vue
+import { ref } from 'vue';
 
-   import GenericLayout from '@/Layouts/GenericLayout.vue';
-   import GenericTable from '@/Components/GenericTable.vue';
+// Layouts
+import GenericLayout from "@/Layouts/GenericLayout.vue";
+import DynamicTable from "@/Components/DynamicTable.vue";
 
-   import FormCreateUpdate from '@/Pages/GestionAcademica/Carreras/CreateUpdate.vue';
-   import FormDelete from '@/Pages/GestionAcademica/Carreras/Delete.vue';
+import GenericAlert from "@/Components/GenericAlert.vue";
 
-   const displayCreateUpdate = ref(null)
-   const displayEliminar = ref(null)
-   const dataRegistro = ref(null)
-   const columns = ref(null)
+// Componentes de los modales
+import CreateUpdate from "@/Pages/GestionAcademica/Carreras/CreateUpdate.vue";
 
+// Variables para los modales
+const displayCreateUpdate = ref(false), displayGenericAlert = ref(false);
+const dataRegistro = ref(null), dataProceso = ref(null)
 
-   const props = defineProps({
-       carreras: {
-           type: Object,
-           default: {}
-       },
-       departamentos: {
-           type: Object,
-           default: {}
-       }
-   })
-   const tiposCoordinacion = [{id:0, nombre:'A'},{id:1, nombre:'B'},{id:2, nombre:'C'},{id:3, nombre:'D'},{id:4, nombre:'E'}]
+// Métodos
+const modalCreateUpdate = (event) => {
+    displayCreateUpdate.value = event.display;
+    dataRegistro.value = event?.data ?? null;
+}
 
-   const modalCreateUpdate = (data, show) => {
-       dataRegistro.value = data
-       displayCreateUpdate.value = show
-   }
-   const modalEliminar = (data, show) => {
-       dataRegistro.value = data;
-       displayEliminar.value = show;
-   }
+const modalGenericAlert = (event) => {
+    dataRegistro.value = event.data;
+    displayGenericAlert.value = event.display;
+    dataProceso.value = event.proceso;
+}
 
-   onMounted(() => {
-       columns.value = [
-           {field: 'id', header: 'ID', sortable: true},
-           {field: 'nombre', header: 'Nombre', sortable: true},
-           {field: 'descripcion', header: 'Descripción', sortable: true},
-           {field: 'estatus', header: 'Estatus', sortable: true},
-           {field: 'tipo_coordinacion_carrera', header: 'Tipo de coordinación', sortable: true},
-           {field: 'created_at', header: 'Fecha de creación', sortable: true},
-           {field: 'updated_at', header: 'Fecha de modificación', sortable: true},
-       ];
-   })
+// Propiedades
+const props = defineProps({
+    carreras: {
+        type: Object,
+        default: null
+    }
+})
+
+// Array-Object para los items del DataTable
+const items = ref([
+    {
+        dataField: {
+            field: 'imagen',
+            header : 'Logo',
+            sortable: false,
+            type: 'image',
+        },
+        filters: {
+            active: false,
+            type: 'text',
+        },
+    },
+    {
+        dataField: {
+            field: 'nombre',
+            header : 'Carrera',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'text',
+        },
+    },
+    {
+        dataField: {
+            field: 'descripcion',
+            header : 'Descripción',
+            sortable: false,
+            type: 'html',
+        },
+        filters: {
+            active: false,
+            type: 'text',
+        },
+    },
+    {
+        dataField: {
+            field: 'estatus',
+            header : 'Estatus',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'text',
+        },
+    }
+])
 </script>
-
-<style>
-
-</style>
