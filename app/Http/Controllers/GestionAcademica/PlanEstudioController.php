@@ -13,14 +13,24 @@ class PlanEstudioController extends Controller
 {
     public function index()
     {
-        $planes_estudio = PlanEstudio::get();
+        $planes_estudio = PlanEstudio::with(['carrera', 'mapaCurricular'])->get()->map(function($plan_estudio){
+            return [
+                'id' => $plan_estudio->id,
+                'mapa_curricular' => $plan_estudio->mapaCurricular,
+                'mapa_curricular_clave_mapa_curricular' => $plan_estudio->mapaCurricular->clave_mapa_curricular,
+                'carrera' => $plan_estudio->carrera,
+                'carrera_imagen' => $plan_estudio->carrera->imagen,
+                'carrera_nombre' => $plan_estudio->carrera->nombre,
+                'estatus' => $plan_estudio->estatus ? 'Activo' : 'Inactivo'
+            ];
+        });
 
         return Inertia::render('GestionAcademica/PlanesEstudios/Index', compact('planes_estudio'));
     }
 
     public function store(Request $request)
     {
-        PlanEstudio::create($request->validated());
+        PlanEstudio::create($request->all());
 
         return back()->with(config('messages.mensaje_exito'));
     }
@@ -29,7 +39,7 @@ class PlanEstudioController extends Controller
     {
         $planEstudio = PlanEstudio::find($id);
             
-        $planEstudio->update($request->validated());
+        $planEstudio->update($request->all());
 
         return back()->with(config('messages.mensaje_actualizar'));
     }

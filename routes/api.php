@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\TiposConvocatoriaApi;
 use App\Http\Controllers\Api\PeriodosApi;
 use App\Http\Controllers\Api\AulasApi;
 use App\Http\Controllers\Api\CarrerasApi;
+use App\Http\Controllers\Api\MapasCurricularesApi;
 
 use Illuminate\Http\Request;
 
@@ -55,6 +56,9 @@ Route::get('carreras', [CarrerasApi::class, 'Carreras'])->name('carreras');
 
 // Turnos
 Route::get('turnos', [CarrerasApi::class, 'Turnos'])->name('turnos');
+
+// Turnos
+Route::get('mapas_curriculares', [MapasCurricularesApi::class, 'MapasCurriculares'])->name('mapas_curriculares');
 
 // Domicilios
 Route::prefix('domicilio')->name('domicilio.')->group(function () {
