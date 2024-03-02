@@ -16,13 +16,11 @@ class Horarios extends Model{
         'hora_fin',
     ];
 
-    // Relación con el modelo EstructuraAcademica/Aulas
     public function aula()
     {
         return $this->belongsTo('App\Models\EstructuraAcademica\Aula');
     }
 
-    // Relación con el array estático
     public function diasSemana()
     {
         $dias_semana = config('staticdata.dates.dias_semana');

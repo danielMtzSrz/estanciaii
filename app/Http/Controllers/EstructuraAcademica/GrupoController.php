@@ -4,44 +4,49 @@ namespace App\Http\Controllers\EstructuraAcademica;
 
 use App\Http\Controllers\Controller;
 
-use App\Http\Requests\EstructuraAcademica\StoreGrupoRequest;
-use App\Http\Requests\EstructuraAcademica\UpdateGrupoRequest;
-
-use App\Models\EstructuraAcademica\Aula;
 use App\Models\EstructuraAcademica\Grupo;
-use App\Models\GestionAcademica\Carrera;
-use App\Models\User;
 
-use Error;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class GrupoController extends Controller{
 
     public function index()
     {
+        $grupos = Grupo::with(['aula', 'carrera', 'tutor'])->get()->map(function($grupo){
+            return [
+                'id' => $grupo->id,
+                'carrera' => $grupo->carrera,
+                'carrera_nombre' => $grupo->carrera->nombre,
+                'aula' => $grupo->aula,
+                'aula_nombre' => $grupo->aula->nombre,
+                'tutor' => [
+                    'id' => $grupo->tutor->id,
+                    'nombre' => $grupo->tutor->name." ".$grupo->tutor->apellido_paterno." ".$grupo->tutor->apellido_materno,
+                    'profile_photo_path' => $grupo->tutor->profile_photo_path
+                ],
+                'tutor_nombre' => $grupo->tutor->name." ".$grupo->tutor->apellido_paterno." ".$grupo->tutor->apellido_materno,
+                'nombre' => $grupo->nombre,
+                'turno' => $grupo->turno(),
+                'turno_nombre' => $grupo->turno()["nombre"]
+            ];
+        });
 
-        $grupoos = Grupo::with(['carrera', 'aula', 'tutor'])->get();
-        $carreras = Carrera::select(['id', 'nombre'])->get();
-        $aulas = Aula::select(['id', 'nombre'])->get();
-        $tutores = User::select(['id', 'name'])->get();
-
-        return Inertia::render('EstructuraAcademica/Grupos/Index', compact('grupos','carreras','aulas','tutores'));
+        return Inertia::render('EstructuraAcademica/Grupos/Index', compact('grupos'));
     }
 
-    public function store(StoreGrupoRequest $request)
+    public function store(Request $request)
     {
-        Grupo::create($request->validated());
+        Grupo::create($request->all());
 
         return back()->with(config('messages.mensaje_exito'));
     }
 
-    public function update(UpdateGrupoRequest $request, $id)
+    public function update(Request $request, $id)
     {
         $grupo = Grupo::find($id);
 
-        $grupo->update($request->validated());
+        $grupo->update($request->all());
 
         return back()->with(config('messages.mensaje_actualizar'));
     }
@@ -49,7 +54,6 @@ class GrupoController extends Controller{
     public function destroy($id)
     {
         $grupo = Grupo::find($id);
-
 
         $grupo->delete();
 

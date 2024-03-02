@@ -31,6 +31,10 @@ return [
     ],
 
     'gestion_academica' => [
+        'turnos' => [
+            ['id' => 1, 'nombre' => 'Matutino'],
+            ['id' => 2, 'nombre' => 'Vespertino']
+        ],
         'cuatrimestres' => [
             ['id' => 1, 'nombre' => '1er Cuatrimestre'],
             ['id' => 2, 'nombre' => '2do Cuatrimestre'],

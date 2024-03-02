@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\TiposPeriodoApi;
 use App\Http\Controllers\Api\TiposConvocatoriaApi;
 use App\Http\Controllers\Api\PeriodosApi;
 use App\Http\Controllers\Api\AulasApi;
+use App\Http\Controllers\Api\CarrerasApi;
 
 use Illuminate\Http\Request;
 
@@ -48,6 +49,12 @@ Route::get('periodos', [PeriodosApi::class, 'Periodos'])->name('periodos');
 
 // Aulas
 Route::get('aulas', [AulasApi::class, 'Aulas'])->name('aulas');
+
+// Carreras
+Route::get('carreras', [CarrerasApi::class, 'Carreras'])->name('carreras');
+
+// Turnos
+Route::get('turnos', [CarrerasApi::class, 'Turnos'])->name('turnos');
 
 // Domicilios
 Route::prefix('domicilio')->name('domicilio.')->group(function () {

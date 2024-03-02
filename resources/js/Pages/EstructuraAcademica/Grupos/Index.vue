@@ -1,120 +1,164 @@
 <template>
     <GenericLayout titleModule="Grupos">
         <template #content>
-            <GenericTable :data="grupos">
-                <template #headerContent>
-                    <Button type="button" label="Nuevo" icon="pi pi-plus"
-                        class="p-button-raised p-button-rounded p-button-text p-button-success p-button-sm"
-                        @click="modalCreateUpdate(null, true)" />
-                    <Link :href="route('EstructuraAcademica.Grupos.trashed')">
-                    <Button type="button" label="Papelera" icon="pi pi-trash"
-                        class="p-button-raised p-button-rounded p-button-text p-button-help p-button-sm" />
-                    </Link>
+            <DynamicTable
+                :data="grupos"
+                :items="items"
+                titleModule="Grupos"
+            >
+                <template #header>
+                    <Button
+                        type="button"
+                        label="Nuevo"
+                        icon="pi pi-plus"
+                        class="p-button-raised p-button-rounded p-button-success p-button-sm p-button-text"
+                        @click="modalCreateUpdate({display: true})"
+                    />
                 </template>
-                <template #content>
-                    <Column v-for="col of columns" :field="col.field" :header="col.header" :key="col.field"
-                        :sortable="col.sortable"></Column>
-                    <Column headerStyle="width: 8em" bodyStyle="text-align: center">
-                        <template #body="slotProps">
-                            <Button type="button" icon="pi pi-pencil"
-                                class="p-button-warning p-button-text p-button-raised p-button-rounded"
-                                @click="modalCreateUpdate(slotProps.data, true)" />
-                            <Button type="button" icon="pi pi-trash"
-                                class="p-button-danger p-button-text p-button-raised p-button-rounded" @click="modalGenericAlert(slotProps.data, true,
-                                    {
-                                        'proceso': 'destroy',
-                                        'ruta': 'EstructuraAcademica.Grupos.destroy',
-                                        'registro': `del grupo ${slotProps.data.nombre}`
-                                    }
-                                )" />
-                        </template>
-                    </Column>
+
+                <template #buttons="{ data }">
+                    <Button
+                        type="button"
+                        icon="pi pi-pencil"
+                        class="p-button-warning p-button-text p-button-raised p-button-rounded"
+                        v-tooltip.top="'Actualizar'"
+                        @click="modalCreateUpdate({display: true, data: data})"
+                    />
+                    <Button
+                        type="button"
+                        icon="pi pi-trash"
+                        class="p-button-danger p-button-text p-button-raised p-button-rounded"
+                        @click="modalGenericAlert({
+                            data: data, 
+                            display: true, 
+                            proceso: {
+                                'proceso': 'delete',
+                                'ruta': 'EstructuraAcademica.Grupos.destroy',
+                            }
+                        })"
+                    />
                 </template>
-            </GenericTable>
+            </DynamicTable>
         </template>
+
         <template #footer>
-            <!-- Modal crear - actualizar -->
-            <form-create-update :dataModal="{
-                display: displayCreateUpdate,
-                dataRegistro: dataRegistro,
-                dataCarreras: carreras,
-                dataAulas: aulas,
-                dataTutores: tutores
-            }" v-on:visible="(visible) => modalCreateUpdate(null, visible)" />
-            <!-- Modal eliminar -->
-            <GenericAlert :dataModal="{
-                display: displayAlert,
-                dataRegistro: dataRegistro,
-                dataProceso: dataProceso
-            }" v-on:visible="(visible) => modalGenericAlert(null, visible, null)" />
+            <CreateUpdate
+                :dataModal="{
+                    display: displayCreateUpdate,
+                    dataRegistro: dataRegistro,
+                }"
+                @closeModal="modalCreateUpdate({display: false, data: null})"
+            />
+            <GenericAlert
+                :dataModal="{
+                    display: displayGenericAlert,
+                    dataRegistro : dataRegistro,
+                    dataProceso : dataProceso
+                }"
+                @closeModal="modalGenericAlert({display: false, data: null, dataProceso: null})"
+            />
         </template>
     </GenericLayout>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+// Vue
+import { ref } from 'vue';
 
-// Componentes de primevue
-import Column from 'primevue/column';
-import Button from "primevue/button";
+// Layouts
+import GenericLayout from "@/Layouts/GenericLayout.vue";
+import DynamicTable from "@/Components/DynamicTable.vue";
 
-// Componentes personalizados
-import GenericLayout from '@/Layouts/GenericLayout.vue';
-import GenericTable from '@/Components/GenericTable.vue';
+import GenericAlert from "@/Components/GenericAlert.vue";
 
 // Componentes de los modales
-import FormCreateUpdate from '@/Pages/EstructuraAcademica/Grupos/CreateUpdate.vue';
-import GenericAlert from '@/Components/GenericAlert.vue';
+import CreateUpdate from "@/Pages/EstructuraAcademica/Grupos/CreateUpdate.vue";
 
-// Variables
-const displayCreateUpdate = ref(null)
-const displayAlert = ref(null)
-const dataProceso = ref(null)
-const dataRegistro = ref(null)
-const columns = ref(null)
+// Variables para los modales
+const displayCreateUpdate = ref(false), displayGenericAlert = ref(false);
+const dataRegistro = ref(null), dataProceso = ref(null)
+
+// Métodos
+const modalCreateUpdate = (event) => {
+    displayCreateUpdate.value = event.display;
+    dataRegistro.value = event?.data ?? null;
+}
+
+const modalGenericAlert = (event) => {
+    dataRegistro.value = event.data;
+    displayGenericAlert.value = event.display;
+    dataProceso.value = event.proceso;
+}
 
 // Propiedades
 const props = defineProps({
     grupos: {
-        type: Array,
-        default: null
-    },
-    carreras: {
-        type: Array,
-        default: null
-    },
-    aulas: {
-        type: Array,
-        default: null
-    },
-    tutores: {
-        type: Array,
+        type: Object,
         default: null
     }
 })
 
-// Métodos
-const modalCreateUpdate = (data, show) => {
-    dataRegistro.value = data
-    displayCreateUpdate.value = show
-}
-
-const modalGenericAlert = (data, show, dataProcess) => {
-    dataRegistro.value = data
-    displayAlert.value = show
-    dataProceso.value = dataProcess
-}
-
-onMounted(() => {
-    columns.value = [
-        { field: 'id', header: 'ID', sortable: true },
-        { field: 'carrera.nombre', header: 'Carrera', sortable: true },
-        { field: 'aula.nombre', header: 'Aula', sortable: true },
-        { field: 'tutor.name', header: 'Tutor', sortable: true },
-        { field: 'nombre', header: 'Nombre', sortable: true },
-        { field: 'turno', header: 'Turno', sortable: true },
-        { field: 'created_at', header: 'Fecha de creación', sortable: true },
-        { field: 'updated_at', header: 'Fecha de actualización', sortable: true }
-    ];
-})
+// Array-Object para los items del DataTable
+const items = ref([
+    {
+        dataField: {
+            field: 'carrera_nombre',
+            header : 'Carrera',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'text',
+        },
+    },
+    {
+        dataField: {
+            field: 'aula_nombre',
+            header : 'Carrera',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'text',
+        },
+    },
+    {
+        dataField: {
+            field: 'nombre',
+            header : 'Grupo',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'text',
+        },
+    },
+    {
+        dataField: {
+            field: 'tutor_nombre',
+            header : 'Tutor',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'text',
+        },
+    },
+    {
+        dataField: {
+            field: 'turno_nombre',
+            header : 'Turno',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'text',
+        },
+    }
+])
 </script>

@@ -1,42 +1,72 @@
 <template>
-    <GenericModal :dataModal="dataModal" @closeModal="closeModal" :title="titulo">
-        <template #header>
-            <h3 class="font-bold">{{ titulo }}</h3>
-        </template>
+    <GenericModal
+        :dataModal="dataModal"
+        @closeModal="closeModal()" 
+        :header="titulo"
+    >
         <template #content>
-            <form @submit.prevent="submit(false)">
-                <div class="row p-fluid">
-                    <div class="mt-4 col-md-12">
-                        <Dropdown :data="dataModal.dataCarreras" label="Carrera" textDropdown="nombre"
-                            :value="carrera" @input="form.carrera_id = $event.id, carrera = $event"
-                            :errors="form.errors.carrera_id" />
+            <form @submit.prevent="submit" enctype="multipart/form-data">
+                <div class="row col-12 pt-4">
+
+                    <div class="col-sm-12 col-md-8">
+                        <Dropdown 
+                            label="Carrera"
+                            :data="dataCarreras"
+                            textDropdown="nombre"
+                            v-model="carreraSeleccionada"
+                        />
                     </div>
-                    <div class="mt-4 col-md-12">
-                        <Dropdown :data="dataModal.dataAulas" label="Aula" textDropdown="nombre"
-                            :value="aula" @input="form.aula_id = $event.id, aula = $event"
-                            :errors="form.errors.aula_id" />
+
+                    <div class="col-sm-12 col-md-4">
+                        <Dropdown 
+                            label="Aula"
+                            :data="dataAulas"
+                            textDropdown="nombre"
+                            v-model="aulaSeleccionada"
+                        />
                     </div>
-                    <div class="mt-4 col-md-12">
-                        <Dropdown :data="dataModal.dataTutores" label="Tutor" textDropdown="name"
-                            :value="tutor" @input="form.tutor_id = $event.id, tutor = $event"
-                            :errors="form.errors.tutor_id" />
+
+                    <div class="col-sm-12 col-md-6">
+                        <Dropdown 
+                            label="Tutor"
+                            :data="dataUsuarios"
+                            textDropdown="nombre"
+                            imageDropdown="profile_photo_path"
+                            v-model="usuarioSeleccionado"
+                        />
                     </div>
-                    <div class="mt-4 col-md-12">
-                        <InputText label="Nombre" name="nombre" :errors="form.errors.nombre" :value="form.nombre"
-                            @input="form.nombre = $event" />
+
+                    <div class="col-sm-12 col-md-3">
+                        <InputText
+                            label="Nombre"
+                            v-model="form.nombre"
+                            :errors="form.errors.nombre"
+                        />
                     </div>
-                    <div class="col-md-6">
-                        <label for="turno" class="flex ms-1">{{ form.turno ? 'Turno vespertino' : 'Turno matutino' }}</label>
-                        <InputSwitch inputId="turno" v-model="form.turno" class="mt-3 ms-2" />
+
+                    <div class="col-sm-12 col-md-3">
+                        <Dropdown 
+                            label="Turno"
+                            :data="dataTurnos"
+                            textDropdown="nombre"
+                            v-model="turnoSeleccionado"
+                        />
                     </div>
                 </div>
-                <div class="float-end space-x-2">
-                    <Button type="button" label="Cancelar"
+
+                <div class="float-end space-x-2 py-4">
+                    <Button
+                        type="button"
+                        label="Cancelar"
                         class="p-button-text p-button-raised p-button-rounded p-button-warning"
-                        @click="closeModal()" />
-                    <Button type="submit" label="Guardar"
+                        @click="closeModal()"
+                    />
+                    <Button
+                        type="submit"
+                        label="Guardar"
                         class="p-button-text p-button-raised p-button-rounded p-button-success"
-                        :loading="form.processing" />
+                        :loading="form.processing"
+                    />
                 </div>
             </form>
         </template>
@@ -45,92 +75,118 @@
 
 <script setup>
 
-import { ref, watch } from 'vue';
+// Vue
+import { ref, watch } from "vue";
 
 // Inertia
 import { useForm } from "@inertiajs/inertia-vue3";
 
 // Primevue
 import Button from "primevue/button";
+import Checkbox from 'primevue/checkbox';
+
+// Layouts
+import GenericModal from "@/Components/GenericModal.vue";
 
 // Inputs
-import Dropdown from '@/Components/Forms/Dropdown.vue';
 import InputText from "@/Components/Forms/InputText.vue";
-import InputSwitch from 'primevue/inputswitch';
+import Dropdown from "@/Components/Forms/Dropdown.vue";
 
-import GenericModal from '@/Components/GenericModal.vue';
-
-const carrera = ref(null)
-const aula = ref(null)
-const tutor = ref(null)
+// Variables
+const dataUsuarios = ref(null), dataAulas = ref(null), dataCarreras = ref(null), dataTurnos = ref(null)
+const usuarioSeleccionado = ref(null), aulaSeleccionada = ref(null), carreraSeleccionada = ref(null), turnoSeleccionado = ref(null)
 
 const form = useForm({
-    carrera_id: null,
-    aula_id: null,
-    tutor_id: null,
-    nombre: null,
-    turno: null,
-})
+    _method : null,
+    carrera_id : null,
+    aula_id : null,
+    tutor_id : null,
+    nombre : null,
+    turno : null
+});
 
-const ruta = ref(null)
-const titulo = ref(null)
+const ruta = ref(null), titulo = ref(null);
 
+// Props
 const props = defineProps({
     dataModal: {
         type: Object,
-        default: null
+        default: null,
     },
-})
+});
 
-const emits = defineEmits(['visible'])
+// Emits
+const emits = defineEmits(["closeModal"]);
 
+// Methods
 const closeModal = () => {
-    emits("visible", false);
+    emits("closeModal");
     form.reset();
     form.errors = {}
-}
+};
 
-// Métodos
 const submit = () => {
+
     if (!props.dataModal.dataRegistro) {
         form.transform((data) => ({
             ...data,
-            turno: data.turno ? 1 : 0,
+            carrera_id : carreraSeleccionada.value?.id,
+            aula_id : aulaSeleccionada.value?.id,
+            tutor_id : usuarioSeleccionado.value?.id,
+            turno : turnoSeleccionado.value?.id
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
             },
         });
+
     } else {
         form.transform((data) => ({
             ...data,
-            turno: data.turno ? 1 : 0,
-        })).put(route(ruta.value, props.dataModal.dataRegistro), {
+            carrera_id : carreraSeleccionada.value?.id,
+            aula_id : aulaSeleccionada.value?.id,
+            tutor_id : usuarioSeleccionado.value?.id,
+            turno : turnoSeleccionado.value?.id
+        })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();
             },
         });
     }
-}
+};
 
-watch(() => props.dataModal, (newVal, oldVal) => {
+// Watchers
+watch(() => props.dataModal, async (newVal) => {
     ruta.value = !props.dataModal.dataRegistro ? 'EstructuraAcademica.Grupos.store' : 'EstructuraAcademica.Grupos.update'
-    titulo.value = !props.dataModal.dataRegistro ? 'Nuevo grupo' : 'Actualizar grupo'
+    titulo.value = !newVal.dataRegistro ? 'Nuevo grupo' : 'Actualizar grupo'
+
+    const dataUsuariosAxios = await axios.get(`/api/usuarios`);
+    dataUsuarios.value = dataUsuariosAxios.data;
+
+    const dataAulasAxios = await axios.get(`/api/aulas`);
+    dataAulas.value = dataAulasAxios.data;
+
+    const dataCarrerasAxios = await axios.get(`/api/carreras`);
+    dataCarreras.value = dataCarrerasAxios.data;
+
+    const dataTurnosAxios = await axios.get(`/api/turnos`);
+    dataTurnos.value = dataTurnosAxios.data;
 })
 
-watch(() => props.dataModal.dataRegistro, (newVal, oldVal) => {
-    form.reset();
+watch(() => props.dataModal.dataRegistro, (newVal) => {
+    form.reset()
 
-    // En caso de que se modifique el registro se llenarán estos campos correspondientes al form.
-    carrera.value = newVal?.carrera ?? null
-    aula.value = newVal?.aula ?? null
-    tutor.value = newVal?.tutor ?? null
+    form._method = newVal ? "put" : null
 
     form.carrera_id = newVal?.carrera.id ?? null
     form.aula_id = newVal?.aula.id ?? null
     form.tutor_id = newVal?.tutor.id ?? null
     form.nombre = newVal?.nombre ?? null
-    form.turno = (newVal?.turno ? true : false)
+    form.turno = newVal?.turno.id ?? null
+
+    usuarioSeleccionado.value = newVal?.tutor
+    carreraSeleccionada.value = newVal?.carrera
+    aulaSeleccionada.value = newVal?.aula
+    turnoSeleccionado.value = newVal?.turno
 })
 </script>
-
