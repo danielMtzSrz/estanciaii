@@ -3,181 +3,57 @@
 namespace App\Http\Controllers\GestionAcademica;
 
 use App\Http\Controllers\Controller;
+
 use App\Models\GestionAcademica\MapaCurricular;
-use Illuminate\Support\Facades\Redirect;
-use App\Http\Requests\GestionAcademica\StoreMapaCurricularRequest;
-use App\Http\Requests\GestionAcademica\UpdateMapaCurricularRequest;
+
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Carbon\Carbon;
 
 class MapaCurricularController extends Controller
 {
     public function index()
     {
-        $mapasCurriculares = MapaCurricular::orderBy('clave_mapa_curricular')->get();
-        return Inertia::render('GestionAcademica/MapasCurriculares/Index', compact('mapasCurriculares'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\StoreMapaCurricularRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreMapaCurricularRequest $request)
-    {
-        try {
- 
-            MapaCurricular::create($request->validated());
-
-            return back()->with(
-                [
-                    'backgroundNotification' => 'success',
-                    'titleNotification' => '¡Éxito!',
-                    'messageNotification' => 'Registro creado correctamente',
-                    'lifeNotification' => 5000
-                ]
-            );
-        } catch (Error $e) {
-            dd($e);
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\GestionAcademica\MapaCurricular  $mapaCurricular
-     * @return \Illuminate\Http\Response
-     */
-    public function show()
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\GestionAcademica\MapaCurricular  $mapaCurricular
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-      
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\UpdateMapaCurricularRequest  $request
-     * @param  \App\Models\GestionAcademica\MapaCurricular  $mapaCurricular
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateMapaCurricularRequest $request, $id)
-    {
-        try {
-
-            $mapaCurricular = MapaCurricular::find($id);
-
-            $mapaCurricular->update($request->validated());
-
-            return back()->with(
-                [
-                    'backgroundNotification' => 'success',
-                    'titleNotification' => '¡Éxito!',
-                    'messageNotification' => 'Registro modificado correctamente',
-                    'lifeNotification' => 5000
-                ]
-            );
-        } catch (Error $e) {
-            dd($e);
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\GestionAcademica\MapaCurricular  $mapaCurricular
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        try{
-            $mapaCurricular = MapaCurricular::find($id);
-
-            $mapaCurricular->delete();
-
-            return back()->with(
-                [
-                    'backgroundNotification' => 'success',
-                    'titleNotification' => '¡Éxito!',
-                    'messageNotification' => 'Registro eliminado correctamente',
-                    'lifeNotification' => 5000
-                ]
-            );
-        }catch(Error $e){
-            dd($e);
-        }
-    }
-
-    public function trashed(){
-
-        $mapasCurriculares = MapaCurricular::onlyTrashed()->get()->transform(function($mapaCurricular){
+        $mapas_curriculares = MapaCurricular::get()->map(function($mapa_curricular){
             return [
-                'id' => $mapaCurricular->id,
-                'clave_mapa_curricular'=>$mapaCurricular->clave_mapa_curricular,
-                'total_cuatrimestres'=>$mapaCurricular->total_cuatrimestres,
-                'total_horas'=>$mapaCurricular->total_horas,
-                'total_creditos'=>$mapaCurricular->total_creditos,
-                'total_materias'=>$mapaCurricular->total_materias,
-                'duracion'=>$mapaCurricular->duracion,
-                'vigencia'=>$mapaCurricular->vigencia,
-                'fecha_revision'=>$mapaCurricular->fecha_revision,
-                'created_at' => $mapaCurricular->created_at,
-                'updated_at' => $mapaCurricular->updated_at,
-                'deleted_at' => $mapaCurricular->deleted_at
+                'id' => $mapa_curricular->id,
+                'clave_mapa_curricular' => $mapa_curricular->clave_mapa_curricular,
+                'total_cuatrimestres' => $mapa_curricular->total_cuatrimestres,
+                'total_horas' => $mapa_curricular->total_horas,
+                'total_creditos' => $mapa_curricular->total_creditos,
+                'total_materias' => $mapa_curricular->total_materias,
+                'duracion' => $mapa_curricular->duracion,
+                'vigencia' => $mapa_curricular->vigencia,
+                'fecha_revision' => $mapa_curricular->fecha_revision,
+                'fecha_revision_format' => Carbon::parse($mapa_curricular->fecha_revision)->format('Y-m-d')
             ];
         });
 
-        return Inertia::render("GestionAcademica/MapasCurriculares/Trashed", compact('mapasCurriculares'));
+        return Inertia::render('GestionAcademica/MapasCurriculares/Index', compact('mapas_curriculares'));
     }
 
-    public function restore($id){
-        
-        $mapaCurricular = MapaCurricular::withTrashed()->findOrFail($id);
-        $mapaCurricular->restore();
+    public function store(Request $request)
+    {
+        MapaCurricular::create($request->all());
 
-        return Redirect::route('GestionAcademica.MapasCurriculares.trashed')->with(
-            [
-                'titleNotification' => '¡Éxito!',
-                'backgroundNotification' => 'success',
-                'messageNotification' => 'Registro restaurado.',
-                'lifeNotification' => 5000
-            ]
-        );
+        return back()->with(config('messages.mensaje_exito'));
     }
 
-    public function forceDestroy($id){
-        
-        $mapaCurricular = MapaCurricular::withTrashed()->findOrFail($id);
-        $mapaCurricular->forceDelete();
+    public function update(Request $request, $id)
+    {
+        $mapaCurricular = MapaCurricular::find($id);
 
-        return Redirect::route('GestionAcademica.MapasCurriculares.trashed')->with(
-            [
-                'titleNotification' => '¡Éxito!',
-                'backgroundNotification' => 'success',
-                'messageNotification' => 'Registro eliminado definitivamente.',
-                'lifeNotification' => 5000
-            ]
-        );
+        $mapaCurricular->update($request->all());
+
+        return back()->with(config('messages.mensaje_actualizar'));
+    }
+
+    public function destroy($id)
+    {
+        $mapaCurricular = MapaCurricular::find($id);
+
+        $mapaCurricular->delete();
+
+        return back()->with(config('messages.mensaje_eliminar'));
     }
 }

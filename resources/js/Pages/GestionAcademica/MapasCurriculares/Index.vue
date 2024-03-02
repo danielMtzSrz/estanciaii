@@ -1,124 +1,152 @@
 <template>
-
-   <GenericLayout titleModule="Mapas curriculares">
+  <GenericLayout titleModule="Mapas curriculares">
       <template #content>
-        <GenericTable :data="mapasCurriculares">
-          <template #headerContent>
-            <Button
-              type="button"
-              label="Nuevo"
-              icon="pi pi-plus"
-              class="p-button-raised p-button-rounded p-button-text p-button-success p-button-sm"
-              @click="modalCreateUpdate(null, true)"
-            />
-            <Link :href="route('GestionAcademica.MapasCurriculares.trashed')">
-              <Button 
-                  type="button"
-                  label="Papelera"
-                  icon="pi pi-trash"
-                  class="p-button-raised p-button-rounded p-button-text p-button-help p-button-sm" 
-              />
-          </Link>
-          </template>
-          <template #content>
-            <Column
-              v-for="col of columns"
-              :field="col.field"
-              :header="col.header"
-              :key="col.field"
-              :sortable="col.sortable"
-            >
-              <template  #body="{ data }" v-if="col.field == 'created_at'">{{ moment( new Date(data.created_at)).calendar() }}</template>
-              <template  #body="{ data }" v-else-if="col.field == 'updated_at'">{{ moment( new Date(data.updated_at)).calendar() }}</template>
-           </Column>
-            <Column headerStyle="width: 8em" bodyStyle="text-align: center">
-              <template #body="slotProps">
-                <Button
-                  type="button"
-                  icon="pi pi-pencil"
-                  class="p-button-warning p-button-text p-button-raised p-button-rounded"
-                  @click="modalCreateUpdate(slotProps.data, true)"
-                />
-                <Button
-                  type="button"
-                  icon="pi pi-trash"
-                  class="p-button-danger p-button-text p-button-raised p-button-rounded"
-                  @click="modalEliminar(slotProps.data, true)"
-                />
+          <DynamicTable
+              :data="mapas_curriculares"
+              :items="items"
+              titleModule="Mapas curriculares"
+          >
+              <template #header>
+                  <Button
+                      type="button"
+                      label="Nuevo"
+                      icon="pi pi-plus"
+                      class="p-button-raised p-button-rounded p-button-success p-button-sm p-button-text"
+                      @click="modalCreateUpdate({display: true})"
+                  />
               </template>
-            </Column>
-          </template>
-        </GenericTable>
+
+              <template #buttons="{ data }">
+                  <Button
+                      type="button"
+                      icon="pi pi-pencil"
+                      class="p-button-warning p-button-text p-button-raised p-button-rounded"
+                      v-tooltip.top="'Actualizar'"
+                      @click="modalCreateUpdate({display: true, data: data})"
+                  />
+                  <Button
+                      type="button"
+                      icon="pi pi-trash"
+                      class="p-button-danger p-button-text p-button-raised p-button-rounded"
+                      @click="modalGenericAlert({
+                          data: data, 
+                          display: true, 
+                          proceso: {
+                              'proceso': 'delete',
+                              'ruta': 'GestionAcademica.MapasCurriculares.destroy',
+                          }
+                      })"
+                  />
+              </template>
+          </DynamicTable>
       </template>
 
       <template #footer>
-        <form-create-update
-          :dataModal="{
-            display: displayCreateUpdate,
-            dataRegistro: dataRegistro,
-          }"
-          v-on:visible="(visible) => modalCreateUpdate(null, visible)"
-        />
-        <form-delete
-          :dataModal="{
-            display: displayEliminar,
-            dataRegistro: dataRegistro,
-          }"
-          v-on:visible="(visible) => modalEliminar(null, visible)"
-        />
+          <CreateUpdate
+              :dataModal="{
+                  display: displayCreateUpdate,
+                  dataRegistro: dataRegistro,
+              }"
+              @closeModal="modalCreateUpdate({display: false, data: null})"
+          />
+          <GenericAlert
+              :dataModal="{
+                  display: displayGenericAlert,
+                  dataRegistro : dataRegistro,
+                  dataProceso : dataProceso
+              }"
+              @closeModal="modalGenericAlert({display: false, data: null, dataProceso: null})"
+          />
       </template>
-    </GenericLayout>
-    
+  </GenericLayout>
 </template>
 
 <script setup>
-   import { ref , onMounted } from "vue";
-   import moment from 'moment';
-   import Column from "primevue/column";
-   import Button from "primevue/button";
+// Vue
+import { ref } from 'vue';
 
-   import GenericLayout from "@/Layouts/GenericLayout.vue";
-   import GenericTable from "@/Components/GenericTable.vue";
+// Layouts
+import GenericLayout from "@/Layouts/GenericLayout.vue";
+import DynamicTable from "@/Components/DynamicTable.vue";
 
-   import FormCreateUpdate from "@/Pages/GestionAcademica/MapasCurriculares/CreateUpdate.vue";
-   import FormDelete from "@/Pages/GestionAcademica/MapasCurriculares/Delete.vue";
+import GenericAlert from "@/Components/GenericAlert.vue";
 
-   const displayCreateUpdate = ref(null)
-   const displayEliminar = ref(null)
-   const dataRegistro = ref(null)
-   const columns = ref(null)
-   const props = defineProps({
-     mapasCurriculares: {
-       type: Object,
-       default: {},
-     },
-   })
+// Componentes de los modales
+import CreateUpdate from "@/Pages/GestionAcademica/MapasCurriculares/CreateUpdate.vue";
 
-   const modalCreateUpdate = (data, show) => {
-     dataRegistro.value = data;
-     displayCreateUpdate.value = show;
-   }
-   const modalEliminar = (data, show) => {
-     dataRegistro.value = data;
-     displayEliminar.value = show;
-   }
+// Variables para los modales
+const displayCreateUpdate = ref(false), displayGenericAlert = ref(false);
+const dataRegistro = ref(null), dataProceso = ref(null)
 
-   onMounted(() => {
-     columns.value = [
-       { field: "id", header: "ID", sortable: true },
-       { field: "clave_mapa_curricular", header: "Clave del Mapa Curricular", sortable: true },
-       { field: "total_cuatrimestres", header: "Cuatrimestres totales", sortable: true },
-       { field: "total_horas", header: "Horas totales", sortable: true },
-       { field: "total_creditos", header: "Creditos totales", sortable: true },
-       { field: "total_materias", header: "Total de materias", sortable: true },
-       { field: "duracion", header: "Duración", sortable: true },
-       { field: "vigencia", header: "Vigencia", sortable: true },
-       { field: "created_at", header: "Fecha de creación ", sortable: true },
-       { field: "updated_at", header: "Fecha de modificación", sortable: true },
-     ];
-   })
-   </script>
+// Métodos
+const modalCreateUpdate = (event) => {
+  displayCreateUpdate.value = event.display;
+  dataRegistro.value = event?.data ?? null;
+}
 
-<style>
+const modalGenericAlert = (event) => {
+  dataRegistro.value = event.data;
+  displayGenericAlert.value = event.display;
+  dataProceso.value = event.proceso;
+}
 
-</style>
+// Propiedades
+const props = defineProps({
+  mapas_curriculares: {
+      type: Object,
+      default: null
+  }
+})
+
+// Array-Object para los items del DataTable
+const items = ref([
+  {
+      dataField: {
+          field: 'clave_mapa_curricular',
+          header : 'Clave',
+          sortable: true,
+          type: 'text',
+      },
+      filters: {
+          active: true,
+          type: 'text',
+      },
+  },
+  {
+      dataField: {
+          field: 'total_cuatrimestres',
+          header : 'Total de cuatrimestres',
+          sortable: true,
+          type: 'text',
+      },
+      filters: {
+          active: true,
+          type: 'text',
+      },
+  },
+  {
+      dataField: {
+          field: 'total_materias',
+          header : 'Total de materias',
+          sortable: true,
+          type: 'text',
+      },
+      filters: {
+          active: true,
+          type: 'text',
+      },
+  },
+  {
+      dataField: {
+          field: 'fecha_revision',
+          header : 'Fecha de revisión',
+          sortable: true,
+          type: 'date',
+      },
+      filters: {
+          active: true,
+          type: 'date',
+      },
+  }
+])
+</script>
