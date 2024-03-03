@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\PeriodosApi;
 use App\Http\Controllers\Api\AulasApi;
 use App\Http\Controllers\Api\CarrerasApi;
 use App\Http\Controllers\Api\MapasCurricularesApi;
+use App\Http\Controllers\Api\CuatrimestresApi;
+use App\Http\Controllers\Api\PlanesEstudioApi;
 
 use Illuminate\Http\Request;
 
@@ -59,6 +61,12 @@ Route::get('turnos', [CarrerasApi::class, 'Turnos'])->name('turnos');
 
 // Turnos
 Route::get('mapas_curriculares', [MapasCurricularesApi::class, 'MapasCurriculares'])->name('mapas_curriculares');
+
+// Cuatrimestres
+Route::get('cuatrimestres', [CuatrimestresApi::class, 'Cuatrimestres'])->name('cuatrimestres');
+
+// Planes de estudio
+Route::get('planes_estudio', [PlanesEstudioApi::class, 'PlanesEstudio'])->name('planes_estudio');
 
 // Domicilios
 Route::prefix('domicilio')->name('domicilio.')->group(function () {

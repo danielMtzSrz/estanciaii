@@ -1,128 +1,140 @@
 <template>
-
     <GenericLayout titleModule="Materias">
-       <template #content>
-           <GenericTable :data="materias">
-               <template #headerContent>
-                   <Button
-                       type="button"
-                       label="Nuevo"
-                       icon="pi pi-plus"
-                       class="p-button-raised p-button-rounded p-button-text p-button-success p-button-sm"
-                       @click="modalCreateUpdate(null, true)"
-                   />
-                   <Link :href="route('GestionAcademica.Materias.trashed')">
-                     <Button 
-                         type="button"
-                         label="Papelera"
-                         icon="pi pi-trash"
-                         class="p-button-raised p-button-rounded p-button-text p-button-help p-button-sm" 
-                     />
-                   </Link>
-               </template>
-               <template #content>
-                   <Column v-for="col of columns" :field="col.field" :header="col.header" :key="col.field" :sortable="col.sortable">
-                      <template #body="{data}" v-if="data===null"><p>Nulo</p></template>   
-                      <template  #body="{ data }" v-else-if="col.field == 'created_at'">{{ moment( new Date(data.created_at)).calendar() }}</template>
-                      <template  #body="{ data }" v-else-if="col.field == 'updated_at'">{{ moment( new Date(data.updated_at)).calendar() }}</template>
- 
-                   </Column>
- 
-                   <Column headerStyle="width: 8em" bodyStyle="text-align: center">
-                       <template #body="slotProps">
-                           <Button
-                               type="button"
-                               icon="pi pi-pencil"
-                               class="p-button-warning p-button-text p-button-raised p-button-rounded"
-                               @click="modalCreateUpdate(slotProps.data, true)"
-                           />
-                           <Button
-                               type="button"
-                               icon="pi pi-trash"
-                               class="p-button-danger p-button-text p-button-raised p-button-rounded"
-                               @click="modalEliminar(slotProps.data, true)"
-                           />
-                       </template>
-                   </Column>
-               </template>
-         </GenericTable>
-     
-       </template>
- 
-       <template #footer>
-           <form-create-update
-               :dataModal="{
-                   display: displayCreateUpdate,
-                   dataRegistro: dataRegistro,
-                   dataCuatrimestre: cuatrimestres,
-                   dataPlanEstudio: planesEstudios
-               }"
-               v-on:visible="(visible) => modalCreateUpdate(null, visible)"
-           />
-           <form-delete
-               :dataModal="{
-                   display: displayEliminar,
-                   dataRegistro : dataRegistro
-               }"
-               v-on:visible="(visible) => modalEliminar(null, visible)"
-           />
-       </template>
-   </GenericLayout>
-   
- </template>
- 
- <script setup>
-    import {ref, onMounted} from 'vue';
-    import moment from 'moment';
-    import Column from 'primevue/column';
-    import Button from "primevue/button";
-    import InputText from "primevue/inputtext";
- 
-    import GenericLayout from '@/Layouts/GenericLayout.vue';
-    import GenericTable from '@/Components/GenericTable.vue';
- 
-    import FormCreateUpdate from '@/Pages/GestionAcademica/Materias/CreateUpdate.vue';
-    import FormDelete from '@/Pages/GestionAcademica/Materias/Delete.vue';
- 
-    const displayCreateUpdate = ref(null)
-    const displayEliminar = ref(null)
-    const dataRegistro = ref(null)
-    const columns = ref(null)
- 
- 
-    const props = defineProps({
-        materias: {
-            type: Object,
-            default: {}
-        },
-
-        cuatrimestres: {
-            type: Object,
-            default: {}
-        },
-        planesEstudios: {
-            type: Object,
-            default: {}
-        }
-    })
- 
-    const modalCreateUpdate = (data, show) => {
-        dataRegistro.value = data
-        displayCreateUpdate.value = show
+        <template #content>
+            <DynamicTable
+                :data="materias"
+                :items="items"
+                titleModule="Materias"
+            >
+                <template #header>
+                    <Button
+                        type="button"
+                        label="Nuevo"
+                        icon="pi pi-plus"
+                        class="p-button-raised p-button-rounded p-button-success p-button-sm p-button-text"
+                        @click="modalCreateUpdate({display: true})"
+                    />
+                </template>
+  
+                <template #buttons="{ data }">
+                    <Button
+                        type="button"
+                        icon="pi pi-pencil"
+                        class="p-button-warning p-button-text p-button-raised p-button-rounded"
+                        v-tooltip.top="'Actualizar'"
+                        @click="modalCreateUpdate({display: true, data: data})"
+                    />
+                    <Button
+                        type="button"
+                        icon="pi pi-trash"
+                        class="p-button-danger p-button-text p-button-raised p-button-rounded"
+                        @click="modalGenericAlert({
+                            data: data, 
+                            display: true, 
+                            proceso: {
+                                'proceso': 'delete',
+                                'ruta': 'GestionAcademica.Materias.destroy',
+                            }
+                        })"
+                    />
+                </template>
+            </DynamicTable>
+        </template>
+  
+        <template #footer>
+            <CreateUpdate
+                :dataModal="{
+                    display: displayCreateUpdate,
+                    dataRegistro: dataRegistro,
+                }"
+                @closeModal="modalCreateUpdate({display: false, data: null})"
+            />
+            <GenericAlert
+                :dataModal="{
+                    display: displayGenericAlert,
+                    dataRegistro : dataRegistro,
+                    dataProceso : dataProceso
+                }"
+                @closeModal="modalGenericAlert({display: false, data: null, dataProceso: null})"
+            />
+        </template>
+    </GenericLayout>
+  </template>
+  
+  <script setup>
+  // Vue
+  import { ref } from 'vue';
+  
+  // Layouts
+  import GenericLayout from "@/Layouts/GenericLayout.vue";
+  import DynamicTable from "@/Components/DynamicTable.vue";
+  
+  import GenericAlert from "@/Components/GenericAlert.vue";
+  
+  // Componentes de los modales
+  import CreateUpdate from "@/Pages/GestionAcademica/Materias/CreateUpdate.vue";
+  
+  // Variables para los modales
+  const displayCreateUpdate = ref(false), displayGenericAlert = ref(false);
+  const dataRegistro = ref(null), dataProceso = ref(null)
+  
+  // Métodos
+  const modalCreateUpdate = (event) => {
+    displayCreateUpdate.value = event.display;
+    dataRegistro.value = event?.data ?? null;
+  }
+  
+  const modalGenericAlert = (event) => {
+    dataRegistro.value = event.data;
+    displayGenericAlert.value = event.display;
+    dataProceso.value = event.proceso;
+  }
+  
+  // Propiedades
+  const props = defineProps({
+    materias: {
+        type: Object,
+        default: null
     }
-    const modalEliminar = (data, show) => {
-        dataRegistro.value = data;
-        displayEliminar.value = show;
+  })
+  
+  // Array-Object para los items del DataTable
+  const items = ref([
+    {
+        dataField: {
+            field: 'plan_estudios_clave',
+            header : 'Plan de estudios',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: false,
+            type: 'text',
+        },
+    },
+    {
+        dataField: {
+            field: 'cuatrimestre_nombre',
+            header : 'Cuatrimestre',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'text',
+        },
+    },
+    {
+        dataField: {
+            field: 'nombre',
+            header : 'Nombre',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'text',
+        },
     }
- 
-    onMounted(() => {
-        columns.value = [
-            {field: 'id', header: 'ID', sortable: true},
-            {field: 'cuatrimestre.nombre', header: 'Cuatrimestre', sortable: true},
-            {field: 'nombre', header: 'Nombre', sortable: true},
-            {field: 'planEstudio.id', header: 'Plan de Estudios', sortable: true},
-            {field: 'created_at', header: 'Fecha de creación', sortable: true},
-            {field: 'updated_at', header: 'Fecha de modificación', sortable: true},
-        ];
-    })
- </script>
+  ])
+  </script>
