@@ -5,7 +5,7 @@ use App\Http\Controllers\GestionAcademica\TipoEvaluacionController;
 use App\Http\Controllers\GestionAcademica\GradoAcademicoController;
 use App\Http\Controllers\GestionAcademica\CuatrimestreController;
 use App\Http\Controllers\GestionAcademica\MapaCurricularController;
-use App\Http\Controllers\GestionAcademica\{CarreraController, GrupoMateriaController, MateriaController, PlanEstudioController};
+use App\Http\Controllers\GestionAcademica\{CarreraController, GrupoMateriaController, MateriaController, PlanEstudioController, AsesoriasController};
 use Inertia\Inertia;
 
 
@@ -62,6 +62,14 @@ Route::middleware([
         Route::get('eliminados', [PlanEstudioController::class, 'trashed'])->name('trashed');
         Route::post('restablecer/{planEstudio}', [PlanEstudioController::class, 'restore'])->name('restore');
         Route::delete('forzarEliminado/{planEstudio}', [PlanEstudioController::class, 'forceDestroy'])->name('forceDelete');
+    });
+
+    // Asesorías
+    Route::resource("Asesorias", AsesoriasController::class)->except(['show', 'create', 'edit']);
+    Route::name('Asesorias.')->prefix('Asesorias')->group(function () {
+        Route::get('eliminados', [AsesoriasController::class, 'trashed'])->name('trashed');
+        Route::post('restablecer/{planEstudio}', [AsesoriasController::class, 'restore'])->name('restore');
+        Route::delete('forzarEliminado/{planEstudio}', [AsesoriasController::class, 'forceDestroy'])->name('forceDelete');
     });
 
 });

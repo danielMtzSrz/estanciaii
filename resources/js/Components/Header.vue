@@ -267,6 +267,17 @@ export default {
                                 );
                             },
                         },
+                        {
+                            label: "Asesorías",
+                            icon: "bi bi-journal-bookmark",
+                            command: () => {
+                                this.$inertia.visit(
+                                    route(
+                                        "GestionAcademica.Asesorias.index"
+                                    )
+                                );
+                            },
+                        },
 
                     ]
                 },
