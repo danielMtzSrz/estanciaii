@@ -2,18 +2,18 @@ CREATE TABLE `estados` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `pais_id` bigint,
   `nombre` varchar(255),
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `municipios` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `estado_id` bigint,
   `nombre` varchar(255),
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `colonias` (
@@ -21,29 +21,18 @@ CREATE TABLE `colonias` (
   `municipio_id` bigint,
   `cp` varchar(255),
   `nombre` varchar(255),
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `paises` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `nombre` varchar(255),
   `nacionalidad` varchar(255),
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
-);
-
-CREATE TABLE `horarios` (
-  `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `aula_id` bigint,
-  `dia_semana_id` bigint,
-  `hora_inicio` time,
-  `hora_fin` time,
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `periodos` (
@@ -51,21 +40,21 @@ CREATE TABLE `periodos` (
   `tipo_periodo_id` bigint,
   `titulo` varchar(255),
   `descripcion` varchar(255),
-  `fecha_inicio` datetime,
-  `fecha_fin` datetime,
+  `fecha_inicio` datetime(3),
+  `fecha_fin` datetime(3),
   `periodo_activo` boolean,
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `tipos_convocatoria` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `nombre` varchar(255),
   `contenido` varchar(255),
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `convocatorias` (
@@ -73,18 +62,18 @@ CREATE TABLE `convocatorias` (
   `periodo_id` bigint,
   `tipo_convocatoria_id` bigint,
   `contenido` varchar(255),
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `tipos_periodo` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `nombre` varchar(255),
   `descripcion` varchar(255),
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `grupos` (
@@ -93,10 +82,11 @@ CREATE TABLE `grupos` (
   `aula_id` bigint,
   `tutor_id` bigint,
   `nombre` varchar(255),
-  `turno` boolean,
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `turno` int,
+  `horarios` json,
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `aulas` (
@@ -106,22 +96,23 @@ CREATE TABLE `aulas` (
   `nombre` varchar(255),
   `estatus` bool,
   `capacidad` int,
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `horarios` json,
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `aulas_reservacion` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `aula_id` bigint,
   `solicitante_id` bigint,
-  `horario_inicio` timestamp,
-  `horario_final` timestamp,
+  `horario_inicio` datetime(3),
+  `horario_final` datetime(3),
   `asunto` varchar(255),
   `descripcion` varchar(255),
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `carreras` (
@@ -130,10 +121,9 @@ CREATE TABLE `carreras` (
   `imagen` varchar(255),
   `descripcion` varchar(255),
   `estatus` boolean,
-  `tipo_coordinacion_carrera` int,
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `materias` (
@@ -141,9 +131,9 @@ CREATE TABLE `materias` (
   `cuatrimestre_id` bigint,
   `nombre` varchar(255),
   `plan_estudios_id` bigint,
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `planes_estudio` (
@@ -151,30 +141,21 @@ CREATE TABLE `planes_estudio` (
   `carrera_id` bigint,
   `mapa_curricular_id` bigint,
   `estatus` varchar(255),
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `grupo_materia` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `profesor_id` bigint,
   `materia_id` bigint,
-  `horario_id` bigint,
   `grupo_id` bigint,
   `periodo_id` bigint,
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
-);
-
-CREATE TABLE `horarios_grupo_materia` (
-  `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `horario_id` bigint,
-  `grupo_materia_id` bigint,
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `horarios` json,
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `mapas_curriculares` (
@@ -186,10 +167,10 @@ CREATE TABLE `mapas_curriculares` (
   `total_materias` int,
   `duracion` int,
   `vigencia` int,
-  `fecha_revision` datetime,
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `fecha_revision` datetime(3),
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `asesorias` (
@@ -198,10 +179,11 @@ CREATE TABLE `asesorias` (
   `user_id` bigint,
   `descripcion` varchar(255),
   `ubicacion` varchar(255),
-  `hora_inicio` datetime,
-  `hora_fin` datetime,
-  `created_at` datetime,
-  `updated_at` datetime
+  `hora_inicio` datetime(3),
+  `hora_fin` datetime(3),
+  `created_at` timestamp,
+  `updated_at` timestamp,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `failed_jobs` (
@@ -212,34 +194,34 @@ CREATE TABLE `failed_jobs` (
   `payload` longtext NOT NULL,
   `exception` longtext NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP),
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `model_has_permissions` (
   `permission_id` bigint NOT NULL,
   `model_type` varchar(255) NOT NULL,
   `model_id` bigint NOT NULL,
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `model_has_roles` (
   `role_id` bigint NOT NULL,
   `model_type` varchar(255) NOT NULL,
   `model_id` bigint NOT NULL,
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `password_resets` (
   `email` varchar(255) NOT NULL,
   `token` varchar(255) NOT NULL,
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `permissions` (
@@ -248,9 +230,9 @@ CREATE TABLE `permissions` (
   `name` varchar(255) NOT NULL,
   `guard_name` varchar(255) NOT NULL,
   `description` text NOT NULL,
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `personal_access_tokens` (
@@ -260,62 +242,61 @@ CREATE TABLE `personal_access_tokens` (
   `name` varchar(255) NOT NULL,
   `token` varchar(64) NOT NULL,
   `abilities` text,
-  `last_used_at` timestamp DEFAULT NULL,
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `last_used_at` timestamp DEFAULT null,
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `roles` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `guard_name` varchar(255) NOT NULL,
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `role_has_permissions` (
   `permission_id` bigint NOT NULL,
   `role_id` bigint NOT NULL,
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `sessions` (
   `id` varchar(255) PRIMARY KEY,
-  `user_id` bigint DEFAULT NULL,
-  `ip_address` varchar(45) DEFAULT NULL,
+  `user_id` bigint DEFAULT null,
+  `ip_address` varchar(45) DEFAULT null,
   `user_agent` text,
   `payload` text NOT NULL,
   `last_activity` int NOT NULL,
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `expediente` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `user_id` bigint,
-  `habilidades_blandas` text,
-  `habilidades_profesionales` text,
-  `experiencia_profesional` text,
-  `educacion` text,
-  `idiomas` text,
-  `contacto` text,
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `habilidades_blandas` json,
+  `habilidades_profesionales` json,
+  `experiencia_profesional` json,
+  `educacion` json,
+  `idiomas` json,
+  `contacto` json,
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 CREATE TABLE `tipos_anuncio` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `empresa_id` bigint,
   `nombre` varchar(255),
   `contenido` varchar(255),
   `imagen` varchar(255),
-  `created_at` datetime,
-  `updated_at` datetime
+  `created_at` timestamp,
+  `updated_at` timestamp
 );
 
 CREATE TABLE `anuncios` (
@@ -325,8 +306,8 @@ CREATE TABLE `anuncios` (
   `titulo` varchar(255),
   `contenido` varchar(255),
   `imagen` varchar(255),
-  `created_at` datetime,
-  `updated_at` datetime
+  `created_at` timestamp,
+  `updated_at` timestamp
 );
 
 CREATE TABLE `empresas` (
@@ -340,8 +321,8 @@ CREATE TABLE `empresas` (
   `razon_social` varchar(255),
   `rfc` varchar(255),
   `imagen` varchar(255),
-  `created_at` datetime,
-  `updated_at` datetime
+  `created_at` timestamp,
+  `updated_at` timestamp
 );
 
 CREATE TABLE `users` (
@@ -364,17 +345,17 @@ CREATE TABLE `users` (
   `calle` varchar(255),
   `numero_exterior` int,
   `numero_interior` int,
-  `email_verified_at` timestamp DEFAULT NULL,
+  `email_verified_at` timestamp DEFAULT null,
   `password` varchar(255) NOT NULL,
   `two_factor_secret` text,
   `two_factor_recovery_codes` text,
-  `two_factor_confirmed_at` timestamp DEFAULT NULL,
-  `remember_token` varchar(100) DEFAULT NULL,
-  `current_team_id` bigint DEFAULT NULL,
-  `profile_photo_path` varchar(2048) DEFAULT NULL,
-  `created_at` timestamp DEFAULT NULL,
-  `updated_at` timestamp DEFAULT NULL,
-  `deleted_at` timestamp DEFAULT NULL
+  `two_factor_confirmed_at` timestamp DEFAULT null,
+  `remember_token` varchar(100) DEFAULT null,
+  `current_team_id` bigint DEFAULT null,
+  `profile_photo_path` varchar(2048) DEFAULT null,
+  `created_at` timestamp DEFAULT null,
+  `updated_at` timestamp DEFAULT null,
+  `deleted_at` timestamp DEFAULT null
 );
 
 ALTER TABLE `empresas` ADD FOREIGN KEY (`colonia_id`) REFERENCES `colonias` (`id`);
@@ -403,8 +384,6 @@ ALTER TABLE `municipios` ADD FOREIGN KEY (`estado_id`) REFERENCES `estados` (`id
 
 ALTER TABLE `colonias` ADD FOREIGN KEY (`municipio_id`) REFERENCES `municipios` (`id`);
 
-ALTER TABLE `horarios` ADD FOREIGN KEY (`aula_id`) REFERENCES `aulas` (`id`);
-
 ALTER TABLE `periodos` ADD FOREIGN KEY (`tipo_periodo_id`) REFERENCES `tipos_periodo` (`id`);
 
 ALTER TABLE `convocatorias` ADD FOREIGN KEY (`periodo_id`) REFERENCES `periodos` (`id`);
@@ -421,15 +400,9 @@ ALTER TABLE `grupo_materia` ADD FOREIGN KEY (`profesor_id`) REFERENCES `users` (
 
 ALTER TABLE `grupo_materia` ADD FOREIGN KEY (`materia_id`) REFERENCES `materias` (`id`);
 
-ALTER TABLE `grupo_materia` ADD FOREIGN KEY (`horario_id`) REFERENCES `horarios` (`id`);
-
 ALTER TABLE `grupo_materia` ADD FOREIGN KEY (`grupo_id`) REFERENCES `grupos` (`id`);
 
 ALTER TABLE `grupo_materia` ADD FOREIGN KEY (`periodo_id`) REFERENCES `periodos` (`id`);
-
-ALTER TABLE `horarios_grupo_materia` ADD FOREIGN KEY (`horario_id`) REFERENCES `horarios` (`id`);
-
-ALTER TABLE `horarios_grupo_materia` ADD FOREIGN KEY (`grupo_materia_id`) REFERENCES `grupo_materia` (`id`);
 
 ALTER TABLE `users` ADD FOREIGN KEY (`nacionalidad_id`) REFERENCES `paises` (`id`);
 

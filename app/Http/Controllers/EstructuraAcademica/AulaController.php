@@ -21,9 +21,11 @@ class AulaController extends Controller
 
     public function index()
     {
-        $aulas = Aula::get()->map(function($aula){
-            return $aula->indexMap();
-        });
+        // $aulas = Aula::get()->map(function($aula){
+        //     return $aula->indexMap();
+        // });
+        $aulas = Aula::get();
+        // dd($aulas);
         $edificios = config('staticdata.estructura_academica.edificios');
         $tipos_aula = config('staticdata.estructura_academica.tipos_aulas');
 
@@ -32,6 +34,7 @@ class AulaController extends Controller
 
     public function store(Request $request)
     {
+        dd($request->all());
         Aula::create($request->all());
 
         return back()->with(config('messages.mensaje_exito'));
