@@ -31,20 +31,21 @@ class Aula extends Model
     ];
 
     // Maps
-    // public function indexMap()
-    // {
-    //     return [
-    //         'id' => $this->id,
-    //         'tipo_aula' => $this->tipoAula(),
-    //         'tipo_aula_nombre' => $this->tipoAula()['nombre'],
-    //         'edificio' => $this->edificio(),
-    //         'edificio_nombre' => $this->edificio()['nombre'],
-    //         'nombre' => $this->nombre,
-    //         'capacidad' => $this->capacidad,
-    //         'estatus' => $this->estatus,
-    //         'estatus_label' => $this->estatus_label
-    //     ];
-    // }
+    public function indexMap()
+    {
+        return [
+            'id' => $this->id,
+            'tipo_aula' => $this->tipoAula(),
+            'tipo_aula_nombre' => $this->tipoAula()['nombre'],
+            'edificio' => $this->edificio(),
+            'edificio_nombre' => $this->edificio()['nombre'],
+            'horarios' => $this->horarios,
+            'nombre' => $this->nombre,
+            'capacidad' => $this->capacidad,
+            'estatus' => $this->estatus,
+            'estatus_label' => $this->estatus_label
+        ];
+    }
 
     // Variables computadas
     public function getEstatusLabelAttribute()

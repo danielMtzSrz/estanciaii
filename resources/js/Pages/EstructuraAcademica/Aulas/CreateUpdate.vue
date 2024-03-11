@@ -7,15 +7,6 @@
         <template #content>
             <form @submit.prevent="submit" enctype="multipart/form-data">
                 <div class="row col-12 pt-4">
-                    
-                    <div class="flex-auto">
-                        <label for="templatedisplay" class="font-bold block mb-2"> Custom Icon </label>
-                        <Calendar v-model="form.templatedisplay" showIcon iconDisplay="input" timeOnly inputId="templatedisplay">
-                            <template #inputicon="{ clickCallback }">
-                                <InputIcon class="pi pi-clock cursor-pointer" @click="clickCallback" />
-                            </template>
-                        </Calendar>
-                    </div>
 
                     <div class="col-sm-12 col-md-6">
                         <Dropdown 
@@ -61,44 +52,9 @@
                         </div>
                     </div>
 
-                    <!-- Componente horario -->
-
-                    <div v-for="(dia_semana, index) in dias_semana" class="row" :key="index">
-                        <div class="col-sm-12 m-auto" :class="form.horarios[`${dia_semana.key}`] ? 'col-md-4' : 'col-md-12'">
-                            <div class="field-checkbox">
-                                <div class="flex align-items-end">
-                                    <Checkbox v-model="form.horarios[`${dia_semana.key}`]" :binary="true"/>
-                                    <label>&nbsp;{{ dia_semana.nombre }}</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-12 col-md-4" v-if="form.horarios[`${dia_semana.key}`]">
-                            <CalendarTime
-                                label="Hora de inicio"
-                                name="hora_inicio"
-                                icon="pi pi-clock"
-                                :value="form.horarios[dia_semana.key + '_hora_inicio']"
-                                @input="form.horarios[`${dia_semana.key}_hora_inicio`] = $event.valueFormat"
-                            />
-                        </div>
-
-                        <div class="col-sm-12 col-md-4" v-if="form.horarios[`${dia_semana.key}`]">
-                            <CalendarTime
-                                label="Hora de fin"
-                                name="hora_fin"
-                                icon="pi pi-clock"
-                                :value="form.horarios[dia_semana.key + '_hora_fin']"
-                                @input="form.horarios[`${dia_semana.key}_hora_fin`] = $event.valueFormat"
-                            />
-                        </div>
-                        
-                    </div>
-
-                    <!-- Componente horario fin -->
-
-                    
-                    <pre>{{ form }}</pre>
+                    <Schedules
+                        v-model="form.horarios"
+                    />
 
                 </div>
 
@@ -141,10 +97,12 @@ import GenericModal from "@/Components/GenericModal.vue";
 import InputText from "@/Components/Forms/InputText.vue";
 import InputNumber from "@/Components/Forms/InputNumber.vue";
 import Dropdown from "@/Components/Forms/Dropdown.vue";
-import CalendarTime from "@/Components/Forms/CalendarTime.vue";
+import Schedules from "@/Components/Forms/Schedules.vue";
 
 // Variables
 const edificioSeleccionado = ref(null), tipoAulaSeleccionado = ref(null)
+
+const mySchedules = ref([{ day: 'Lunes', time: '08:00 AM' }])
 
 const form = useForm({
     _method: null,
@@ -153,8 +111,7 @@ const form = useForm({
     nombre: null,
     capacidad: null,
     estatus: null,
-    horarios : {},
-    templatedisplay: null
+    horarios : {}
 })
 
 const ruta = ref(null), titulo = ref(null)
@@ -229,6 +186,8 @@ watch(() => props.dataModal.dataRegistro, (newVal) => {
     form.nombre = newVal?.nombre ?? null
     form.capacidad = newVal?.capacidad ?? null
     form.estatus = (newVal?.estatus ? true : false)
+
+    form.horarios = newVal?.horarios ?? null
 
     edificioSeleccionado.value = newVal?.edificio ?? null
     tipoAulaSeleccionado.value = newVal?.tipo_aula ?? null
