@@ -17,9 +17,6 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 // Agrupación de los controladores con el middleware de autenticación
-
-use App\Http\Controllers\Prueba\PruebaController;
-
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/', function (Request $request) {
         session(['breadcrumbItems' => []]);
@@ -43,7 +40,4 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // Anuncios
     Route::resource("tiposanuncios", TiposAnunciosController::class)->except('show','create','edit');
     Route::resource('anuncios', AnunciosController::class);
-
-    // Prueba
-    Route::resource('prueba', PruebaController::class);
 });

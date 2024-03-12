@@ -54,12 +54,6 @@ class RouteServiceProvider extends ServiceProvider
                 ->prefix('GestionAcademica')
                 ->name('GestionAcademica.')
                 ->group(base_path('routes/GestionAcademica.php'));
-
-            Route::middleware('web')
-                ->namespace($this->namespace)
-                ->prefix('ProgramacionAcademica/DireccionCarrera')
-                ->name('ProgramacionAcademica.DireccionCarrera.')
-                ->group(base_path('routes/Modulos/ProgramacionAcademica/DireccionCarrera.php'));
         });
     }
 
