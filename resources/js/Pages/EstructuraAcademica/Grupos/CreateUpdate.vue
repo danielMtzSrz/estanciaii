@@ -14,6 +14,7 @@
                             :data="dataCarreras"
                             textDropdown="nombre"
                             v-model="carreraSeleccionada"
+                            :errors="form.errors.carrera_id"
                         />
                     </div>
 
@@ -23,6 +24,7 @@
                             :data="dataAulas"
                             textDropdown="nombre"
                             v-model="aulaSeleccionada"
+                            :errors="form.errors.aula_id"
                         />
                     </div>
 
@@ -33,6 +35,7 @@
                             textDropdown="nombre"
                             imageDropdown="profile_photo_path"
                             v-model="usuarioSeleccionado"
+                            :errors="form.errors.tutor_id"
                         />
                     </div>
 
@@ -50,8 +53,15 @@
                             :data="dataTurnos"
                             textDropdown="nombre"
                             v-model="turnoSeleccionado"
+                            :errors="form.errors.turno"
                         />
                     </div>
+
+                    <Schedules
+                        v-model="form.horarios"
+                        :errors="form.errors.horarios"
+                    />
+
                 </div>
 
                 <div class="float-end space-x-2 py-4">
@@ -83,7 +93,6 @@ import { useForm } from "@inertiajs/inertia-vue3";
 
 // Primevue
 import Button from "primevue/button";
-import Checkbox from 'primevue/checkbox';
 
 // Layouts
 import GenericModal from "@/Components/GenericModal.vue";
@@ -91,6 +100,7 @@ import GenericModal from "@/Components/GenericModal.vue";
 // Inputs
 import InputText from "@/Components/Forms/InputText.vue";
 import Dropdown from "@/Components/Forms/Dropdown.vue";
+import Schedules from "@/Components/Forms/Schedules.vue";
 
 // Variables
 const dataUsuarios = ref(null), dataAulas = ref(null), dataCarreras = ref(null), dataTurnos = ref(null)
@@ -102,7 +112,8 @@ const form = useForm({
     aula_id : null,
     tutor_id : null,
     nombre : null,
-    turno : null
+    turno : null,
+    horarios : null
 });
 
 const ruta = ref(null), titulo = ref(null);
@@ -183,6 +194,8 @@ watch(() => props.dataModal.dataRegistro, (newVal) => {
     form.tutor_id = newVal?.tutor.id ?? null
     form.nombre = newVal?.nombre ?? null
     form.turno = newVal?.turno.id ?? null
+
+    form.horarios = newVal?.horarios ?? null
 
     usuarioSeleccionado.value = newVal?.tutor
     carreraSeleccionada.value = newVal?.carrera

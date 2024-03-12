@@ -32,16 +32,32 @@ class AulaController extends Controller
 
     public function store(Request $request)
     {
-        Aula::create($request->all());
+        $validated_data = $request->validate([
+            'edificio_id' => 'required',
+            'tipo_aula_id' => 'required',
+            'nombre' => 'required',
+            'capacidad' => 'required',
+            'horarios' => 'required'
+        ]);
+
+        Aula::create($validated_data);
 
         return back()->with(config('messages.mensaje_exito'));
     }
 
     public function update(Request $request, $id)
     {
+        $validated_data = $request->validate([
+            'edificio_id' => 'required',
+            'tipo_aula_id' => 'required',
+            'nombre' => 'required',
+            'capacidad' => 'required',
+            'horarios' => 'required'
+        ]);
+
         $aula = Aula::find($id);
 
-        $aula->update($request->all());
+        $aula->update($validated_data);
 
         return back()->with(config('messages.mensaje_actualizar'));
     }

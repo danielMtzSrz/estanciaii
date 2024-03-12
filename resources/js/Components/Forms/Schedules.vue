@@ -5,11 +5,15 @@
             <b>Horarios</b>
         </div>
     </Divider>
+    <small class="p-error mb-2" v-if="errors">
+        {{ errors }}
+    </small>
     <div v-for="(dia, index) in dias_semana" :key="index" class="row mb-5">
         <div :class="horarios[dia.key] ? 'col-md-4' : 'col-sm-12'">
             <div class="field-checkbox">
                 <div class="flex align-items-end">
                     <Checkbox
+                        :class="{ 'p-invalid': errors }"
                         v-model="horarios[dia.key]"
                         :binary="true"
                     />
@@ -71,6 +75,7 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
+    errors: null
 });
 
 const emit = defineEmits(["update:modelValue"]);

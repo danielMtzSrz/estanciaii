@@ -54,6 +54,7 @@
 
                     <Schedules
                         v-model="form.horarios"
+                        :errors="form.errors.horarios"
                     />
 
                 </div>
@@ -88,7 +89,6 @@ import { useForm } from "@inertiajs/inertia-vue3";
 // Primevue
 import Button from "primevue/button";
 import Checkbox from 'primevue/checkbox'
-import Calendar from 'primevue/calendar'
 
 // Layouts
 import GenericModal from "@/Components/GenericModal.vue";
@@ -102,8 +102,6 @@ import Schedules from "@/Components/Forms/Schedules.vue";
 // Variables
 const edificioSeleccionado = ref(null), tipoAulaSeleccionado = ref(null)
 
-const mySchedules = ref([{ day: 'Lunes', time: '08:00 AM' }])
-
 const form = useForm({
     _method: null,
     edificio_id: null,
@@ -115,16 +113,6 @@ const form = useForm({
 })
 
 const ruta = ref(null), titulo = ref(null)
-
-const dias_semana = ref([
-    {key : "lunes", nombre : "Lunes"},
-    {key : "martes", nombre : "Martes"},
-    {key : "miercoles", nombre : "Miércoles"},
-    {key : "jueves", nombre : "Jueves"},
-    {key : "viernes", nombre : "Viernes"},
-    {key : "sabado", nombre : "Sábado"},
-    {key : "domingo", nombre : "Domingo"}
-]);
 
 // Props
 const props = defineProps({

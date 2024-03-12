@@ -21,7 +21,12 @@ class Grupo extends Model
         'aula_id',
         'tutor_id',
         'nombre',
-        'turno'
+        'turno',
+        'horarios'
+    ];
+
+    protected $casts = [
+        'horarios' => 'array'
     ];
 
     public function aula()

@@ -25,6 +25,7 @@ class GrupoController extends Controller{
                     'nombre' => $grupo->tutor->name." ".$grupo->tutor->apellido_paterno." ".$grupo->tutor->apellido_materno,
                     'profile_photo_path' => $grupo->tutor->profile_photo_path
                 ],
+                'horarios' => $grupo->horarios,
                 'tutor_nombre' => $grupo->tutor->name." ".$grupo->tutor->apellido_paterno." ".$grupo->tutor->apellido_materno,
                 'nombre' => $grupo->nombre,
                 'turno' => $grupo->turno(),
@@ -37,13 +38,31 @@ class GrupoController extends Controller{
 
     public function store(Request $request)
     {
-        Grupo::create($request->all());
+        $validated_data = $request->validate([
+            'carrera_id' => 'required',
+            'aula_id' => 'required',
+            'tutor_id' => 'required',
+            'nombre' => 'required',
+            'turno' => 'required',
+            'horarios' => 'required'
+        ]);
+        
+        Grupo::create($validated_data);
 
         return back()->with(config('messages.mensaje_exito'));
     }
 
     public function update(Request $request, $id)
     {
+        $validated_data = $request->validate([
+            'carrera_id' => 'required',
+            'aula_id' => 'required',
+            'tutor_id' => 'required',
+            'nombre' => 'required',
+            'turno' => 'required',
+            'horarios' => 'required'
+        ]);
+
         $grupo = Grupo::find($id);
 
         $grupo->update($request->all());
