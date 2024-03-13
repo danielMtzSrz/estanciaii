@@ -278,7 +278,17 @@ export default {
                                 );
                             },
                         },
-
+                        {
+                            label: "Asignar materias",
+                            icon: "bi bi-journal-bookmark",
+                            command: () => {
+                                this.$inertia.visit(
+                                    route(
+                                        "GestionAcademica.GrupoMateria.index"
+                                    )
+                                );
+                            },
+                        }
                     ]
                 },
                 // {

@@ -32,7 +32,7 @@ Route::middleware([
         Route::delete('forzarEliminado/{cuatrimestre}', [CuatrimestreController::class, 'forceDestroy'])->name('forceDelete');
     });
 
-    //Grupo-materia
+    // Grupo-materia
     Route::resource("GrupoMateria", GrupoMateriaController::class)->except(['show', 'create', 'edit']);
     Route::name('GrupoMateria.')->prefix('GrupoMateria')->group(function () {
         Route::get('eliminados', [GrupoMateriaController::class, 'trashed'])->name('trashed');

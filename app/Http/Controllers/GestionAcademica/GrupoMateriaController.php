@@ -3,118 +3,60 @@
 namespace App\Http\Controllers\GestionAcademica;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GestionAcademica\StoreGrupoMateriaRequest;
-use App\Http\Requests\GestionAcademica\UpdateGrupoMateriaRequest;
+
 use App\Models\GestionAcademica\GrupoMateria;
-use App\Models\GestionAcademica\CargaAcademica;
-use App\Models\Persona\Usuario;
-use App\Models\Persona\Personal;
-use App\Models\GestionAcademica\Materia;
-use App\Models\Calendarizaciones\Horario;
-use App\Models\EstructuraAcademica\Grupo;
-use App\Models\Calendarizaciones\Periodo;
+
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class GrupoMateriaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $gruposMaterias = GrupoMateria::orderBy('nombre', 'ASC')->get()->transform(function ($grupoMateria){
-            return[
-                'id'=>$grupoMateria->id,
-                'profesor'=>$grupoMateria->profesor,
-                'materia'=>$grupoMateria->materia,
-                'horario'=>$grupoMateria->horario,
-                'grupo'=>$grupoMateria->grupo,
-                'periodo'=>$grupoMateria->periodo,
-                'created_at'=>$grupoMateria->created_at,
-                'updated_at'=>$grupoMateria->updated_at
+        $grupo_materias = GrupoMateria::with(['profesor', 'materia', 'grupo', 'periodo'])->get()->map(function($grupo_materia){
+            return [
+                'id' => $grupo_materia->id,
+                'profesor' => [
+                    'id' => $grupo_materia->profesor->id,
+                    'nombre' => $grupo_materia->profesor->name." ".$grupo_materia->profesor->apellido_paterno." ".$grupo_materia->profesor->apellido_materno,
+                    'profile_photo_path' => $grupo_materia->profesor->profile_photo_path
+                ],
+                'profesor_nombre' => $grupo_materia->profesor->name." ".$grupo_materia->profesor->apellido_paterno." ".$grupo_materia->profesor->apellido_materno,
+                'materia' => $grupo_materia->materia,
+                'materia_nombre' => $grupo_materia->materia->nombre,
+                'grupo' => $grupo_materia->grupo,
+                'grupo_nombre' => $grupo_materia->grupo->nombre,
+                'periodo' => $grupo_materia->periodo,
+                'periodo_nombre' => $grupo_materia->periodo->titulo,
+                'horarios' => $grupo_materia->horarios,
             ];
         });
 
-        $profesores = Personal::orderBy('usuario_id', 'ASC')->get()->transform( function ($profesor){
-            return[
-                'id'=>$profesor->id,
-                'usuario'=>$profesor->usuario,
-                'foto'=>$profesor->foto
-            ];
-        });
-        
-        $materias = Materia::orderBy('nombre', 'ASC')->get();
-        $horarios = Horario::orderBy('aula_id', 'ASC')->get();
-
+        return Inertia::render('GestionAcademica/GrupoMateria/Index', compact('grupo_materias'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $grupo_materia = GrupoMateria::create($request->all());
+
+        return back()->with(config('messages.mensaje_exito'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\GestionAcademica\GrupoMateria  $grupoMateria
-     * @return \Illuminate\Http\Response
-     */
-    public function show(GrupoMateria $grupoMateria)
+    public function update(Request $request, $id)
     {
-        //
+        $grupo_materia = GrupoMateria::find($id);
+
+        $grupo_materia->update($request->all());
+
+        return back()->with(config('messages.mensaje_actualizar'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\GestionAcademica\GrupoMateria  $grupoMateria
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(GrupoMateria $grupoMateria)
+    public function destroy($id)
     {
-        //
-    }
+        $grupo_materia = GrupoMateria::find($id);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\GestionAcademica\GrupoMateria  $grupoMateria
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, GrupoMateria $grupoMateria)
-    {
-        //
-    }
+        $grupo_materia->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\GestionAcademica\GrupoMateria  $grupoMateria
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(GrupoMateria $grupoMateria)
-    {
-        //
+        return back()->with(config('messages.mensaje_eliminar'));
     }
 }

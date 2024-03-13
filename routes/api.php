@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\MapasCurricularesApi;
 use App\Http\Controllers\Api\CuatrimestresApi;
 use App\Http\Controllers\Api\PlanesEstudioApi;
 use App\Http\Controllers\Api\MateriasApi;
+use App\Http\Controllers\Api\GruposApi;
 
 use Illuminate\Http\Request;
 
@@ -71,6 +72,9 @@ Route::get('planes_estudio', [PlanesEstudioApi::class, 'PlanesEstudio'])->name('
 
 // Materias
 Route::get('materias', [MateriasApi::class, 'Materias'])->name('materias');
+
+// Grupos
+Route::get('grupos', [GruposApi::class, 'Grupos'])->name('grupos');
 
 // Domicilios
 Route::prefix('domicilio')->name('domicilio.')->group(function () {
