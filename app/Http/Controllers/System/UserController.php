@@ -71,8 +71,6 @@ class UserController extends Controller
     {
         // $user->roles()->sync($request->roles);
 
-        // dd($request->all());
-
         if($request->file('profile_photo_path')){
             \Storage::disk('public')->delete($user->profile_photo_path);
         }
@@ -83,8 +81,6 @@ class UserController extends Controller
             $user->profile_photo_path = $request->file('profile_photo_path')->store('profile_photo_path', 'public');
             $user->save();
         }
-
-        
 
         return back()->with(config('messages.mensaje_actualizar'));
     }

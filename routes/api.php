@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\CuatrimestresApi;
 use App\Http\Controllers\Api\PlanesEstudioApi;
 use App\Http\Controllers\Api\MateriasApi;
 use App\Http\Controllers\Api\GruposApi;
+use App\Http\Controllers\Api\GeneralApi;
 
 use Illuminate\Http\Request;
 
@@ -75,6 +76,11 @@ Route::get('materias', [MateriasApi::class, 'Materias'])->name('materias');
 
 // Grupos
 Route::get('grupos', [GruposApi::class, 'Grupos'])->name('grupos');
+
+// General
+Route::get('generos', [GeneralApi::class, 'Generos'])->name('generos');
+Route::get('tipos_sangre', [GeneralApi::class, 'TiposSangre'])->name('tipos_sangre');
+Route::get('estados_civiles', [GeneralApi::class, 'EstadosCiviles'])->name('estados_civiles');
 
 // Domicilios
 Route::prefix('domicilio')->name('domicilio.')->group(function () {

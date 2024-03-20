@@ -2,15 +2,10 @@
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
 import JetActionMessage from '@/Jetstream/ActionMessage.vue';
-import JetButton from '@/Jetstream/Button.vue';
 import JetFormSection from '@/Jetstream/FormSection.vue';
-import JetInput from '@/Jetstream/Input.vue';
-import JetInputError from '@/Jetstream/InputError.vue';
-import JetLabel from '@/Jetstream/Label.vue';
 
 import Button from 'primevue/button';
 import Password from 'primevue/password';
-import InputText from "@/Components/Forms/InputText.vue";
 
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);
@@ -78,7 +73,6 @@ const updatePassword = () => {
                                         required
                                     >
                                         <template #footer>
-                                            <Divider />
                                             <p class="mt-2">Sugerencias</p>
                                             <ul
                                                 class="pl-2 ml-2 mt-0"
@@ -109,7 +103,6 @@ const updatePassword = () => {
                                         required
                                     >
                                         <template #footer>
-                                            <Divider />
                                             <p class="mt-2">Sugerencias</p>
                                             <ul
                                                 class="pl-2 ml-2 mt-0"
