@@ -1,25 +1,26 @@
 <script setup>
 import { ref, reactive, nextTick } from 'vue';
-import JetButton from './Button.vue';
+
 import JetDialogModal from './DialogModal.vue';
-import JetInput from './Input.vue';
 import JetInputError from './InputError.vue';
-import JetSecondaryButton from './SecondaryButton.vue';
+
+import Button from 'primevue/button';
+import Password from 'primevue/password';
 
 const emit = defineEmits(['confirmed']);
 
 defineProps({
     title: {
         type: String,
-        default: 'Confirm Password',
+        default: 'Confirmar contraseña',
     },
     content: {
         type: String,
-        default: 'For your security, please confirm your password to continue.',
+        default: 'Por su seguridad, por favor ingrese su contraseña para continuar.',
     },
     button: {
         type: String,
-        default: 'Confirm',
+        default: 'Confirmar',
     },
 });
 
@@ -76,41 +77,42 @@ const closeModal = () => {
             <slot />
         </span>
 
-        <JetDialogModal :show="confirmingPassword" @close="closeModal">
-            <template #title>
-                {{ title }}
-            </template>
+        <JetDialogModal :show="confirmingPassword" @close="closeModal" :header="title">
 
             <template #content>
-                {{ content }}
+                <p>{{ content }}</p>
 
-                <div class="mt-4">
-                    <JetInput
-                        ref="passwordInput"
-                        v-model="form.password"
-                        type="password"
-                        class="mt-1 block w-3/4"
-                        placeholder="Password"
-                        @keyup.enter="confirmPassword"
+                <Password
+                    inputClass="col-sm-12 col-md-6 mt-2"
+                    :class="{'p-invalid': form.error}"
+                    v-model="form.password"
+                    :feedback="false"
+                    placeholder="Contraseña"
+                    @keyup.enter="confirmPassword"
+                />
+                
+                <JetInputError :message="form.error" class="mt-2" />
+
+                <div class="flex flex-row justify-end space-x-2 text-right mt-4">
+                    <Button
+                        type="submit"
+                        class="p-button-raised p-button-rounded p-button-warning p-button-text"
+                        label="Cancelar"
+                        :class="{ 'opacity-25': form.processing }"
+                        :disabled="form.processing"
+                        @click="closeModal"
                     />
 
-                    <JetInputError :message="form.error" class="mt-2" />
+                    <Button
+                        type="submit"
+                        icon="pi pi-save"
+                        class="p-button-raised p-button-rounded p-button-success ml-2"
+                        :label="button"
+                        :class="{ 'opacity-25': form.processing }"
+                        :disabled="form.processing"
+                        @click="confirmPassword"
+                    />
                 </div>
-            </template>
-
-            <template #footer>
-                <JetSecondaryButton @click="closeModal">
-                    Cancel
-                </JetSecondaryButton>
-
-                <JetButton
-                    class="ml-3"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                    @click="confirmPassword"
-                >
-                    {{ button }}
-                </JetButton>
             </template>
         </JetDialogModal>
     </span>
