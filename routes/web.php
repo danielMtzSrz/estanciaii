@@ -10,6 +10,7 @@ use App\Http\Controllers\System\{PaisesController, EstadosController, Municipios
 
 // Vacantes
 use App\Http\Controllers\System\{TiposAnunciosController, AnunciosController};
+use App\Http\Controllers\System\PanelPrincipalController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -18,11 +19,7 @@ use Inertia\Inertia;
 
 // Agrupación de los controladores con el middleware de autenticación
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-    Route::get('/', function (Request $request) {
-        session(['breadcrumbItems' => []]);
-
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+    Route::get("dashboard", [PanelPrincipalController::class, 'index'])->name('dashboard');
 
     // Rutas de system
     Route::resource('user', UserController::class);
