@@ -26,27 +26,25 @@
                                     type="submit"
                                     label="Ver horario"
                                     class="p-button-raised p-button-rounded p-button-success w-100 sm:w-auto mt-2 sm:mt-0"
-                                    @click="openModal(grupo.horarios)"
+                                    @click="modalShowSchedule({display: true, data: grupo})"
                                 />
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <GenericModal
-                    :dataModal="dataModal"
-                    @closeModal="closeModal" 
-                    header="Grupo"
-                >
-                    <template #content>
-                        <FullCalendar :options="calendarOptions" />
-                        <pre>{{ dataHorarios }}</pre>
-                    </template>
-                </GenericModal>
-
             </div>
 
             <pre>{{grupos}}</pre>
+        </template>
+
+        <template #footer>
+            <ShowSchedule
+                :dataModal="{
+                    display: displayShowSchedule,
+                    dataRegistro: dataRegistro,
+                }"
+                @closeModal="modalShowSchedule({display: false, data: null})"
+            />
         </template>
     </GenericLayout>
 </template>
@@ -57,16 +55,16 @@ import { ref } from 'vue'
 
 // Layout padre
 import GenericLayout from "@/Layouts/GenericLayout.vue";
-import GenericModal from "@/Components/GenericModal.vue";
-
-// Fullcalendar
-import '@fullcalendar/core/vdom'
-import FullCalendar from '@fullcalendar/vue3'
-import timeGridPlugin from '@fullcalendar/timegrid';
+import ShowSchedule from "./ShowSchedule.vue"
 
 // Primevue
 import Avatar from 'primevue/avatar'
 
+// Variables
+const displayShowSchedule = ref(null)
+const dataRegistro = ref(null)
+
+// Props
 const props = defineProps({
     grupos: {
         type: Object,
@@ -74,74 +72,9 @@ const props = defineProps({
     }
 })
 
-const calendarOptions = ref({
-    plugins: [timeGridPlugin],
-    initialView: 'timeGridWeek',
-    headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'timeGridDay,timeGridWeek'
-    },
-    allDaySlot: false,
-    expandRows: true,
-    events: [
-        {
-            title: 'Horario Lunes',
-            startTime: '10:00:00',
-            endTime: '13:00:00',
-            daysOfWeek: [1],
-        },
-        {
-            title: 'Horario Jueves',
-            startTime: '10:00:00',
-            endTime: '13:00:00',
-            daysOfWeek: [4],
-        }
-    ]
-})
-
-const dataHorarios = ref(null)
-
-const dataModal = ref({
-    display : false
-})
-
-function agruparHorarios(horarios) {
-    const resultado = {};
-
-    Object.keys(horarios).forEach(clave => {
-        
-        if (!clave.includes('_hora')) {
-            const dia = clave; // Ej: 'lunes'
-            const activo = horarios[clave];
-            
-            if (!resultado[dia]) {
-                resultado[dia] = { activo };
-            } else {
-                resultado[dia].activo = activo;
-            }
-        } else {
-            const [dia, tipoHora] = clave.split('_hora_');
-            const valorHora = horarios[clave];
-            
-            if (!resultado[dia]) {
-                resultado[dia] = { activo: false };
-            }
-            
-            resultado[dia][tipoHora] = valorHora;
-        }
-    });
-
-  return resultado;
+// Métodos
+const modalShowSchedule = (event) => {
+    displayShowSchedule.value = event.display;
+    dataRegistro.value = event?.data ?? null;
 }
-
-const openModal = (horarios) => {
-    dataHorarios.value = agruparHorarios(horarios);
-    dataModal.value = {display : true};
-}
-
-// Methods
-const closeModal = () => {
-    dataModal.value = {display : false};
-};
 </script>

@@ -19,7 +19,7 @@ use Inertia\Inertia;
 
 // Agrupación de los controladores con el middleware de autenticación
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-    Route::get("dashboard", [PanelPrincipalController::class, 'index'])->name('dashboard');
+    Route::get("/", [PanelPrincipalController::class, 'index'])->name('dashboard');
 
     // Rutas de system
     Route::resource('user', UserController::class);

@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\PlanesEstudioApi;
 use App\Http\Controllers\Api\MateriasApi;
 use App\Http\Controllers\Api\GruposApi;
 use App\Http\Controllers\Api\GeneralApi;
+use App\Http\Controllers\Api\HorariosApi;
 
 use Illuminate\Http\Request;
 
@@ -76,6 +77,11 @@ Route::get('materias', [MateriasApi::class, 'Materias'])->name('materias');
 
 // Grupos
 Route::get('grupos', [GruposApi::class, 'Grupos'])->name('grupos');
+
+// Horarios
+Route::prefix('horario')->name('horario.')->group(function () {
+    Route::get('grupo_materia/{id_grupo}', [HorariosApi::class, 'MateriaHorario'])->name('grupo_materia');
+});
 
 // General
 Route::get('generos', [GeneralApi::class, 'Generos'])->name('generos');
