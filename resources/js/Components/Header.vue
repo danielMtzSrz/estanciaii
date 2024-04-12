@@ -34,7 +34,7 @@ const logout = () => {
             <template #start>
                 <div class="d-flex align-items-center">
                     <!-- <Sidebar :items="items"/> -->
-                    <Button icon="pi pi-home" plain text @click="Inertia.visit('/')"/>
+                    <Button icon="pi pi-home" class="p-button-text p-button-plain" @click="Inertia.visit('/')"/>
                     <span class="mx-2 my-0 py-0 text-2xl font-light" style="font-family: Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;">{{ title ?? "Bienvenido" }}</span>
                 </div>
             </template>

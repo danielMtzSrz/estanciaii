@@ -28,7 +28,7 @@ const logout = () => {
 
 <template>
     <div class="flex justify-content-center align-items-center mx-2">
-        <p class="m-0 hidden text-600 mr-2 md:block">{{ $page.props.user.name }}</p>
+        <p class="my-auto hidden text-600 mr-3 md:block">{{ $page.props.user.name }} {{ $page.props.user.apellido_paterno }} {{ $page.props.user.apellido_materno }}</p>
         <Avatar 
             class="p-avatar-circle cursor-pointer p-avatar"
             :image="`${$page.props.user.profile_photo_path ? '/storage/'+$page.props.user.profile_photo_path : $page.props.user.profile_photo_url}`"
