@@ -15,7 +15,7 @@ class HorariosApi extends Controller
         $data = Grupo::with(['aula', 'carrera', 'tutor', 'grupoMateria' => function($query) {
                 $query->with(['profesor', 'materia', 'grupo'])->select(['id', 'profesor_id', 'materia_id', 'grupo_id', 'horarios']);
             }])
-            ->where('id', 3)
+            ->where('id', $id_grupo)
             ->first()
             ->grupoMateria->map(function($grupo_materia) {
                 $materia_nombre = isset($grupo_materia->materia->nombre) ? $grupo_materia->materia->nombre : 'Sin materia';
@@ -30,8 +30,6 @@ class HorariosApi extends Controller
 
     public function transformarHorariosConCarbon($materia_nombre, $materia_horario)
     {
-        // $horarios = json_decode($horariosJson, true);
-
         $diasMapa = ['lunes' => 1, 'martes' => 2, 'miercoles' => 3, 'jueves' => 4, 'viernes' => 5, 'sabado' => 6, 'domingo' => 0];
 
         $diasDeLaSemana = [];

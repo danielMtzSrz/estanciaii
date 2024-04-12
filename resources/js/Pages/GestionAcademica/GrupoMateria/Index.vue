@@ -102,6 +102,18 @@ const props = defineProps({
 const items = ref([
     {
         dataField: {
+            field: 'grupo_nombre',
+            header : 'Grupo',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'text',
+        },
+    },
+    {
+        dataField: {
             field: 'profesor_nombre',
             header : 'Profesor',
             sortable: true,
@@ -116,18 +128,6 @@ const items = ref([
         dataField: {
             field: 'materia_nombre',
             header : 'Materia',
-            sortable: true,
-            type: 'text',
-        },
-        filters: {
-            active: true,
-            type: 'text',
-        },
-    },
-    {
-        dataField: {
-            field: 'grupo_nombre',
-            header : 'Grupo',
             sortable: true,
             type: 'text',
         },

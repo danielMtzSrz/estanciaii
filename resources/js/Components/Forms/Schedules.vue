@@ -5,15 +5,12 @@
             <b>Horarios</b>
         </div>
     </Divider>
-    <small class="p-error mb-2" v-if="errors">
-        {{ errors }}
-    </small>
-    <div v-for="(dia, index) in dias_semana" :key="index" class="row mb-5">
+    <div v-for="(dia, index) in dias_semana" :key="index" class="row">
         <div :class="horarios[dia.key] ? 'col-md-4' : 'col-sm-12'">
-            <div class="field-checkbox">
+            <div class="field-checkbox" :class="horarios[dia.key] || !errorsParse ? 'my-3' : ''">
                 <div class="flex align-items-end">
                     <Checkbox
-                        :class="{ 'p-invalid': errors }"
+                        :class="{ 'p-invalid': errorsParse && errorsParse[dia.key] }"
                         v-model="horarios[dia.key]"
                         :binary="true"
                     />
@@ -22,14 +19,14 @@
             </div>
         </div>
 
-        <div class="col-sm-12 col-md-4" v-if="horarios[dia.key]">
+        <div class="col-sm-12 col-md-4 my-3" v-if="horarios[dia.key]">
             <div class="p-inputgroup">
                 <span class="p-inputgroup-addon">
                     <i class="pi pi-clock"/>
                 </span>
                 <span class="p-float-label">
                     <Calendar
-                        :class="{ 'p-invalid': errors }"
+                        :class="{ 'p-invalid': errorsParse && errorsParse[dia.key] }"
                         icon="pi pi-clock"
                         hourFormat="24"
                         timeOnly
@@ -40,14 +37,14 @@
             </div>
         </div>
 
-        <div class="col-sm-12 col-md-4" v-if="horarios[dia.key]">
+        <div class="col-sm-12 col-md-4 my-3" v-if="horarios[dia.key]">
             <div class="p-inputgroup">
                 <span class="p-inputgroup-addon">
                     <i class="pi pi-clock"/>
                 </span>
                 <span class="p-float-label">
                     <Calendar
-                        :class="{ 'p-invalid': errors }"
+                        :class="{ 'p-invalid': errorsParse && errorsParse[dia.key] }"
                         icon="pi pi-clock"
                         hourFormat="24"
                         timeOnly
@@ -57,6 +54,7 @@
                 </span>
             </div>
         </div>
+        <div class="col-sm-12 p-error mb-5" v-if="errorsParse" v-html="errorsParse[dia.key]"></div>
     </div>
 </template>
 
@@ -82,6 +80,7 @@ const emit = defineEmits(["update:modelValue"]);
 
 // Reactive state
 const horarios = ref({...props.modelValue});
+const errorsParse = ref(null)
 
 const dias_semana = ref([
     { key: "lunes", nombre: "Lunes" },
@@ -99,4 +98,13 @@ watch(horarios, (newValue) => {
     },
     { deep: true }
 );
+
+watch(() => props.errors, (newVal) => {
+    if (newVal && typeof newVal === 'string') {
+        // Asumiendo que props.errors es una string JSON como producida por Laravel
+        errorsParse.value = JSON.parse(newVal);
+    } else {
+        errorsParse.value = newVal; // Si ya es un objeto, úsalo directamente
+    }
+}, { immediate: true, deep: true });
 </script>
