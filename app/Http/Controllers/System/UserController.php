@@ -3,20 +3,21 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
+
+use App\Models\User;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
 use Spatie\Permission\Models\Role;
 
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-
     public function index(Request $request)
     {
-
         $generos = config('staticdata.informacion_personal.generos');
         $tipos_sangre = config('staticdata.informacion_personal.tipos_sangre');
         $estados_civiles = config('staticdata.informacion_personal.estados_civiles');
@@ -61,7 +62,7 @@ class UserController extends Controller
             $user->save();
         }
 
-        // $user->roles()->sync($request->roles);
+        $user->roles()->sync($request->roles);
 
         return back()->with(config('messages.mensaje_exito'));
         
@@ -69,7 +70,7 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        // $user->roles()->sync($request->roles);
+        $user->roles()->sync($request->roles);
 
         if($request->file('profile_photo_path')){
             \Storage::disk('public')->delete($user->profile_photo_path);

@@ -230,6 +230,41 @@
                             :errors="form.errors.profile_photo_path"
                         />
                     </div>
+
+                    <div class="col-sm-12">
+                        <Divider align="left">
+                            <div class="inline-flex align-items-center">
+                                <i class="pi pi-globe mr-2"></i>
+                                Seleccionar roles
+                            </div>
+                        </Divider>
+                        <div class="flex flex-row-reverse flex-wrap card-container yellow-container mb-4">
+                            <div class="flex align-items-center justify-content-center w-20rem">
+                                <InputText
+                                    label="Buscador"
+                                    v-model="buscador"
+                                />
+                            </div>
+                        </div>
+
+                        <DataView :value="data_roles_all" layout="grid" :paginator="true" :rows="24" :rowsPerPageOptions="[8, 12, 20, 24, 40]">
+                            <template #grid="slotProps">
+                                <div class="col-12 md:col-3">
+                                    <div class="field-checkbox d-flex mb-5 mx-3">
+                                        <Checkbox
+                                            name="roles[]"
+                                            :value="slotProps.data.id"
+                                            v-model="form.roles"
+                                            class="mr-2"
+                                            :checked="true"
+                                        />
+                                        <label>{{ slotProps.data.name}}</label>
+                                    </div>
+                                </div>
+                            </template>
+                        </DataView>
+                    </div>
+
                 </div>
 
                 <div class="float-end space-x-2 py-4">
@@ -254,14 +289,16 @@
 <script setup>
 
 // Vue
-import { ref, watch } from "vue";
+import { ref, watch, computed, toRaw } from "vue";
 
 // Inertia
 import { useForm } from "@inertiajs/inertia-vue3";
 
 // Primevue
 import Button from "primevue/button";
-import Divider from 'primevue/divider'
+import Divider from 'primevue/divider';
+import Checkbox from 'primevue/checkbox';
+import DataView from 'primevue/dataview';
 
 // Layouts
 import GenericModal from "@/Components/GenericModal.vue";
@@ -279,7 +316,9 @@ const data_paises = ref(null), pais_seleccionado = ref(null),
       data_municipios = ref(null), municipio_seleccionado = ref(null),
       data_colonias = ref(null), colonia_seleccionada = ref(null),
       estado_civil_seleccionado = ref(null), genero_seleccionado = ref(null), tipo_sangre_seleccionado = ref(null),
-      nacionalidad_seleccionada = ref(null)
+      nacionalidad_seleccionada = ref(null),
+      data_roles = ref(null),
+      data_usuarios_roles = ref(null)
 
 const imagenActual = ref(null)
 
@@ -306,11 +345,19 @@ const form = useForm({
     calle: null,
     numero_exterior: null,
     numero_interior: null,
-    profile_photo_path: null
+    profile_photo_path: null,
+
+    roles: []
 });
 
-const ruta = ref(null),
-      titulo = ref(null);
+const ruta = ref(null), titulo = ref(null);
+const buscador = ref(null)
+
+const data_roles_all = computed(() => {
+    return buscador.value 
+        ? data_roles.value.filter(el => el.name.toLowerCase().indexOf(buscador.value.toLowerCase()) >= 0)
+        : data_roles.value
+})
 
 // Props
 const props = defineProps({
@@ -370,11 +417,18 @@ watch(() => props.dataModal, async (newVal) => {
     const { data } = await axios.get(`/api/domicilio/paises`);
     data_paises.value = data
 
+    const dataRolesAxios = await axios.get(`/api/roles`);
+    data_roles.value = dataRolesAxios.data
+
     nacionalidad_seleccionada.value = data_paises.value.find(el => el.id == newVal?.dataRegistro?.nacionalidad_id)
 })
 
-watch(() => props.dataModal.dataRegistro, (newVal) => {
+watch(() => props.dataModal.dataRegistro, async (newVal) => {
+    const dataUsuariosRolesAxios = await axios.get(`/api/user_roles/${newVal?.id}`)
+
     form.reset()
+
+    form.roles = toRaw(dataUsuariosRolesAxios.data)
 
     form._method = newVal ? "put" : null
 

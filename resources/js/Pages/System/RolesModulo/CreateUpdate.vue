@@ -16,37 +16,42 @@
                             v-model="form.name"
                         />
                     </div>
-                    <Divider align="left">
-                        <div class="inline-flex align-items-center">
-                            <i class="pi pi-globe mr-2"></i>
-                            Seleccionar permisos
-                        </div>
-                    </Divider>
-                    <div class="flex flex-row-reverse flex-wrap card-container yellow-container mb-4">
-                        <div class="flex align-items-center justify-content-center w-20rem">
-                            <InputText
-                                label="Buscador"
-                                v-model="buscador"
-                            />
-                        </div>
-                    </div>
-                </div>
-                <DataView :value="data_permisosAll" layout="grid" :paginator="true" :rows="24" :rowsPerPageOptions="[8, 12, 20, 24, 40]">
-                    <template #grid="slotProps">
-                        <div class="col-12 md:col-3">
-                            <div class="field-checkbox d-flex mb-5 mx-3">
-                                <Checkbox
-                                    name="permissions[]"
-                                    :value="slotProps.data.id"
-                                    v-model="form.permissions"
-                                    class="mr-2"
-                                    :checked="true"
+
+                    <div class="col-sm-12">
+                        <Divider align="left">
+                            <div class="inline-flex align-items-center">
+                                <i class="pi pi-globe mr-2"></i>
+                                Seleccionar permisos
+                            </div>
+                        </Divider>
+                        <div class="flex flex-row-reverse flex-wrap card-container yellow-container mb-4">
+                            <div class="flex align-items-center justify-content-center w-20rem">
+                                <InputText
+                                    label="Buscador"
+                                    v-model="buscador"
                                 />
-                                <label>{{ slotProps.data.description}}</label>
                             </div>
                         </div>
-                    </template>
-                </DataView>
+
+                        <DataView :value="data_permisosAll" layout="grid" :paginator="true" :rows="24" :rowsPerPageOptions="[8, 12, 20, 24, 40]">
+                            <template #grid="slotProps">
+                                <div class="col-12 md:col-3">
+                                    <div class="field-checkbox d-flex mb-5 mx-3">
+                                        <Checkbox
+                                            name="permissions[]"
+                                            :value="slotProps.data.id"
+                                            v-model="form.permissions"
+                                            class="mr-2"
+                                            :checked="true"
+                                        />
+                                        <label>{{ slotProps.data.description}}</label>
+                                    </div>
+                                </div>
+                            </template>
+                        </DataView>
+                    </div>
+                </div>
+                
                 <div class="float-end space-x-2 mt-3">
                     <Button
                         type="button"
@@ -81,7 +86,6 @@ import DataView from 'primevue/dataview'
 
 // Inputs
 import InputText from "@/Components/Forms/InputText.vue";
-import Textarea from "@/Components/Forms/Textarea.vue";
 
 import GenericModal from '@/Components/GenericModal.vue';
 
@@ -140,9 +144,6 @@ watch(() => props.dataModal, (newVal) => {
 })
 
 watch(() => props.dataModal.dataRegistro, (newVal) => {
-
-    console.log(props.dataModal.data_permisos)
-
     form.reset();
 
     form.id = newVal?.id ?? null
