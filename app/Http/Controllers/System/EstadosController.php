@@ -23,16 +23,26 @@ class EstadosController extends Controller
 
     public function store(Request $request)
     {
-        $estado = Estado::create($request->all());
+        $validated_data = $request->validate([
+            'pais_id' => 'required',
+            'nombre' => 'required'
+        ]);
+
+        $estado = Estado::create($validated_data);
 
         return back()->with(config('messages.mensaje_exito'));
     }
 
     public function update(Request $request, $id)
     {
+        $validated_data = $request->validate([
+            'pais_id' => 'required',
+            'nombre' => 'required'
+        ]);
+
         $estado = Estado::find($id);
 
-        $estado->update($request->all());
+        $estado->update($validated_data);
 
         return back()->with(config('messages.mensaje_actualizar'));
     }

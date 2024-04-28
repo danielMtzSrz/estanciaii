@@ -31,7 +31,7 @@
                         <InputText 
                             label="Título del anuncio"
                             v-model="form.titulo"
-                            :errors="form.errors.nombre"
+                            :errors="form.errors.titulo"
                         />
                     </div>
                     <div class="col-sm-12">

@@ -23,16 +23,26 @@ class MunicipiosController extends Controller
 
     public function store(Request $request)
     {
-        $municipio = Municipio::create($request->all());
+        $validated_data = $request->validate([
+            'estado_id' => 'required',
+            'nombre' => 'required'
+        ]);
+
+        $municipio = Municipio::create($validated_data);
 
         return back()->with(config('messages.mensaje_exito'));
     }
 
     public function update(Request $request, $id)
     {
+        $validated_data = $request->validate([
+            'estado_id' => 'required',
+            'nombre' => 'required'
+        ]);
+        
         $municipio = Municipio::find($id);
 
-        $municipio->update($request->all());
+        $municipio->update($validated_data);
 
         return back()->with(config('messages.mensaje_actualizar'));
     }

@@ -24,7 +24,13 @@ class TiposAnunciosController extends Controller
 
     public function store(Request $request)
     {
-        $tipo_anuncio = TipoAnuncio::create($request->all());
+        $validated_data = $request->validate([
+            "nombre" => 'required',
+            "contenido" => 'required',
+            "imagen" => 'required'
+        ]);
+
+        $tipo_anuncio = TipoAnuncio::create($validated_data);
 
         // Cargar imagen
         if($request->file('imagen')){
@@ -37,13 +43,19 @@ class TiposAnunciosController extends Controller
 
     public function update(Request $request, $id)
     {
+        $validated_data = $request->validate([
+            "nombre" => 'required',
+            "contenido" => 'required',
+            "imagen" => 'required'
+        ]);
+
         $tipo_anuncio = TipoAnuncio::find($id);
         
         if($request->file('imagen')){
             Storage::disk('public')->delete($tipo_anuncio->imagen);
         }
 
-        $tipo_anuncio->update($request->all());
+        $tipo_anuncio->update($validated_data);
 
         if($request->file('imagen')) {
             $tipo_anuncio->imagen = $request->file('imagen')->store('System/TiposAnuncios', 'public');

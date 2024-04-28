@@ -33,17 +33,9 @@ class TipoAnuncio extends Model
     {
         return [
             'id' => $this->id,
-            'empresa' => $this->empresa,
-            'empresa_nombre' => $this->empresa->nombre_empresa,
             'nombre' => $this->nombre,
             'contenido' => $this->contenido,
             'imagen' => $this->imagen
         ];
-    }
-
-    // Relations
-    public function empresa()
-    {
-        return $this->belongsTo("App\Models\Empresas");
     }
 }

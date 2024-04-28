@@ -7,16 +7,6 @@
         <template #content>
             <form @submit.prevent="submit()">
                 <div class="row p-fluid pt-4">
-                    
-                    <div class="col-sm-12">
-                        <Dropdown 
-                            label="Empresas"
-                            :data="dataEmpresas"
-                            imageDropdown="imagen"
-                            textDropdown="nombre_empresa"
-                            v-model="empresaSeleccionada"
-                        />
-                    </div>
 
                     <div class="col-sm-12">
                         <InputText 
@@ -79,9 +69,6 @@ import FileUpload from "@/Components/Forms/FileUpload.vue";
 
 import GenericModal from '@/Components/GenericModal.vue';
 
-// Variables
-const dataEmpresas = ref(null), empresaSeleccionada = ref(null)
-
 const imagenActual = ref(null)
 
 const form = useForm({
@@ -112,19 +99,13 @@ const closeModal = () => {
 // Métodos
 const submit = () => {
     if(!props.dataModal.dataRegistro){
-        form.transform((data) => ({
-            ...data,
-            empresa_id: empresaSeleccionada.value?.id
-        })).post(route(ruta.value), {
+        form.post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
             },
         });
     }else{
-        form.transform((data) => ({
-            ...data,
-            empresa_id: empresaSeleccionada.value?.id
-        })).post(route(ruta.value, props.dataModal.dataRegistro), {
+        form.post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();
             },
@@ -135,9 +116,6 @@ const submit = () => {
 watch(() => props.dataModal, async (newVal) => {
     ruta.value = !newVal.dataRegistro ? 'tiposanuncios.store' : 'tiposanuncios.update'
     titulo.value = !newVal.dataRegistro ? 'Nuevo tipo de anuncio' : 'Actualizar tipo de anuncio'
-
-    const { data } = await axios.get(`/api/empresas`);
-    dataEmpresas.value = data;
 })
 
 watch(() => props.dataModal.dataRegistro, (newVal) => {
@@ -145,7 +123,6 @@ watch(() => props.dataModal.dataRegistro, (newVal) => {
 
     form._method = newVal ? "put" : null
 
-    form.empresa_id = newVal?.empresa_id ?? null
     form.nombre = newVal?.nombre ?? null
     form.contenido = newVal?.contenido ?? null
     form.imagen = newVal?.imagen ?? null

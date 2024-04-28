@@ -21,16 +21,26 @@ class PaisesController extends Controller
 
     public function store(Request $request)
     {
-        $pais = Pais::create($request->all());
+        $validated_data = $request->validate([
+            'nombre' => "required",
+            'nacionalidad' => "required"
+        ]);
+
+        $pais = Pais::create($validated_data);
 
         return back()->with(config('messages.mensaje_exito'));
     }
 
     public function update(Request $request, $id)
     {
+        $validated_data = $request->validate([
+            'nombre' => "required",
+            'nacionalidad' => "required"
+        ]);
+
         $pais = Pais::find($id);
 
-        $pais->update($request->all());
+        $pais->update($validated_data);
 
         return back()->with(config('messages.mensaje_actualizar'));
     }

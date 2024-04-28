@@ -25,7 +25,15 @@ class AnunciosController extends Controller
 
     public function store(Request $request)
     {
-        $anuncio = Anuncio::create($request->all());
+        $validated_data = $request->validate([
+            "tipo_anuncio_id" => 'required',
+            "empresa_id" => 'required',
+            "titulo" => 'required',
+            "contenido" => 'required',
+            "imagen" => 'required'
+        ]);
+
+        $anuncio = Anuncio::create($validated_data);
 
         // Cargar imagen
         if($request->file('imagen')){
@@ -38,13 +46,21 @@ class AnunciosController extends Controller
 
     public function update(Request $request, $id)
     {
+        $validated_data = $request->validate([
+            "tipo_anuncio_id" => 'required',
+            "empresa_id" => 'required',
+            "titulo" => 'required',
+            "contenido" => 'required',
+            "imagen" => 'required'
+        ]);
+
         $anuncio = Anuncio::find($id);
         
         if($request->file('imagen')){
             Storage::disk('public')->delete($anuncio->imagen);
         }
 
-        $anuncio->update($request->all());
+        $anuncio->update($validated_data);
 
         if($request->file('imagen')) {
             $anuncio->imagen = $request->file('imagen')->store('System/Anuncios', 'public');
