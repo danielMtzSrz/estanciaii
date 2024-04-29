@@ -311,6 +311,8 @@ import FileUpload from "@/Components/Forms/FileUpload.vue";
 import Calendar from "@/Components/Forms/Calendar.vue";
 
 // Variables
+const dataUsuariosRolesAxios = ref(null)
+
 const data_paises = ref(null), pais_seleccionado = ref(null),
       data_estados = ref(null), estado_seleccionado = ref(null),
       data_municipios = ref(null), municipio_seleccionado = ref(null),
@@ -424,7 +426,9 @@ watch(() => props.dataModal, async (newVal) => {
 })
 
 watch(() => props.dataModal.dataRegistro, async (newVal) => {
-    const dataUsuariosRolesAxios = await axios.get(`/api/user_roles/${newVal?.id}`)
+    if(newVal){
+        dataUsuariosRolesAxios.value = await axios.get(`/api/user_roles/${newVal?.id}`)
+    }
 
     form.reset()
 

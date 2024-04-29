@@ -33,7 +33,7 @@
                             display: true, 
                             proceso: {
                                 'proceso': 'delete',
-                                'ruta': 'permission.destroy',
+                                'ruta': 'user.destroy',
                             }
                         })"
                     />

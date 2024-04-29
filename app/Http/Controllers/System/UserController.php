@@ -29,9 +29,31 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
-
         $input = $request->all();
+
+        $validated_data = $request->validate([
+            'colonia_id' => '',
+            'tipo_sangre_id' => '',
+            'estado_civil_id' => '',
+            'generos_id' => '',
+            'nacionalidad_id' => '',
+            
+            'apellido_paterno' => 'required',
+            'apellido_materno' => 'required',
+            'fecha_nacimiento' => 'required',
+            'curp' => 'required',
+            'rfc' => '',
+            'nss' => 'required',
+            'telefono_local' => 'required',
+            'telefono_celular' => 'required',
+            'name' => 'required',
+            'email' => 'required',
+            
+            'calle' => '',
+            'numero_exterior' => '',
+            'numero_interior' => '',
+            'profile_photo_path' => '',
+        ]);
 
         $user = User::create([
             'tipo_sangre_id' => $input['tipo_sangre_id'],
@@ -70,6 +92,30 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
+        $validated_data = $request->validate([
+            'colonia_id' => '',
+            'tipo_sangre_id' => '',
+            'estado_civil_id' => '',
+            'generos_id' => '',
+            'nacionalidad_id' => '',
+            
+            'apellido_paterno' => 'required',
+            'apellido_materno' => 'required',
+            'fecha_nacimiento' => 'required',
+            'curp' => 'required',
+            'rfc' => '',
+            'nss' => 'required',
+            'telefono_local' => 'required',
+            'telefono_celular' => 'required',
+            'name' => 'required',
+            'email' => 'required',
+            
+            'calle' => '',
+            'numero_exterior' => '',
+            'numero_interior' => '',
+            'profile_photo_path' => '',
+        ]);
+        
         $user->roles()->sync($request->roles);
 
         if($request->file('profile_photo_path')){
