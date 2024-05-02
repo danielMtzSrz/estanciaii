@@ -141,10 +141,10 @@ const submit = () => {
     if (!props.dataModal.dataRegistro) {
         form.transform((data) => ({
             ...data,
-            carrera_id : carreraSeleccionada.value?.id,
-            aula_id : aulaSeleccionada.value?.id,
-            tutor_id : usuarioSeleccionado.value?.id,
-            turno : turnoSeleccionado.value?.id
+            carrera_id : carreraSeleccionada.value?.id ?? null,
+            aula_id : aulaSeleccionada.value?.id ?? null,
+            tutor_id : usuarioSeleccionado.value?.id ?? null,
+            turno : turnoSeleccionado.value?.id ?? null
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
@@ -154,10 +154,10 @@ const submit = () => {
     } else {
         form.transform((data) => ({
             ...data,
-            carrera_id : carreraSeleccionada.value?.id,
-            aula_id : aulaSeleccionada.value?.id,
-            tutor_id : usuarioSeleccionado.value?.id,
-            turno : turnoSeleccionado.value?.id
+            carrera_id : carreraSeleccionada.value?.id ?? null,
+            aula_id : aulaSeleccionada.value?.id ?? null,
+            tutor_id : usuarioSeleccionado.value?.id ?? null,
+            turno : turnoSeleccionado.value?.id ?? null
         })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();

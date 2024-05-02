@@ -23,8 +23,14 @@ class ConvocatoriasController extends Controller {
     }
 
     public function store(Request $request)
-    {        
-        Convocatoria::create($request->all());
+    {
+        $validated_data = $request->validate([
+            'periodo_id' => 'required',
+            'tipo_convocatoria_id' => 'required',
+            'contenido' => 'required'
+        ]);
+
+        Convocatoria::create($validated_data);
 
         return back()->with(config('messages.mensaje_exito'));
         
@@ -32,9 +38,15 @@ class ConvocatoriasController extends Controller {
 
     public function update(Request $request, $id)
     {
+        $validated_data = $request->validate([
+            'periodo_id' => 'required',
+            'tipo_convocatoria_id' => 'required',
+            'contenido' => 'required'
+        ]);
+
         $tipoPeriodo = Convocatoria::find($id);
  
-        $tipoPeriodo->update($request->all());
+        $tipoPeriodo->update($validated_data);
 
         return back()->with(config('messages.mensaje_actualizar'));
     }

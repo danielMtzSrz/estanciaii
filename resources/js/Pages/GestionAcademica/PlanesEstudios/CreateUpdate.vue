@@ -109,22 +109,22 @@
   
   const submit = () => {
   
-    if (!props.dataModal.dataRegistro) {
+    if(!props.dataModal.dataRegistro){
         form.transform((data) => ({
             ...data,
-            carrera_id : carreraSeleccionada.value?.id,
-            mapa_curricular_id : mapaCurricularSeleccionado.value?.id
+            carrera_id : carreraSeleccionada.value?.id ?? null,
+            mapa_curricular_id : mapaCurricularSeleccionado.value?.id ?? null
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
             },
         });
   
-    } else {
+    }else{
         form.transform((data) => ({
             ...data,
-            carrera_id : carreraSeleccionada.value?.id,
-            mapa_curricular_id : mapaCurricularSeleccionado.value?.id
+            carrera_id : carreraSeleccionada.value?.id ?? null,
+            mapa_curricular_id : mapaCurricularSeleccionado.value?.id ?? null
         })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();

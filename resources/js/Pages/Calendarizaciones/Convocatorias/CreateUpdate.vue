@@ -14,6 +14,7 @@
                             :data="dataPeriodos"
                             textDropdown="titulo"
                             v-model="periodoSeleccionado"
+                            :errors="form.errors.periodo_id"
                         />
                     </div>
 
@@ -23,6 +24,7 @@
                             :data="dataTiposConvocatoria"
                             textDropdown="nombre"
                             v-model="tipoConvocatoriaSeleccionado"
+                            :errors="form.errors.tipo_convocatoria_id"
                         />
                     </div>
                     
@@ -112,8 +114,8 @@ const submit = () => {
     if (!props.dataModal.dataRegistro) {
         form.transform((data) => ({
             ...data,
-            periodo_id: periodoSeleccionado.value?.id,
-            tipo_convocatoria_id: tipoConvocatoriaSeleccionado.value?.id,
+            periodo_id: periodoSeleccionado.value?.id ?? null,
+            tipo_convocatoria_id: tipoConvocatoriaSeleccionado.value?.id ?? null,
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
@@ -123,8 +125,8 @@ const submit = () => {
     } else {
         form.transform((data) => ({
             ...data,
-            periodo_id: periodoSeleccionado.value?.id,
-            tipo_convocatoria_id: tipoConvocatoriaSeleccionado.value?.id,
+            periodo_id: periodoSeleccionado.value?.id ?? null,
+            tipo_convocatoria_id: tipoConvocatoriaSeleccionado.value?.id ?? null,
         })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();

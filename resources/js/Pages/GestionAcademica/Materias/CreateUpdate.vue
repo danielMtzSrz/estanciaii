@@ -105,22 +105,22 @@ const closeModal = () => {
 
 const submit = () => {
 
-    if (!props.dataModal.dataRegistro) {
+    if(!props.dataModal.dataRegistro){
         form.transform((data) => ({
             ...data,
-            plan_estudios_id : planEstudioSeleccionado.value?.id,
-            cuatrimestre_id : cuatrimestreSeleccionado.value?.id
+            plan_estudios_id : planEstudioSeleccionado.value?.id ?? null,
+            cuatrimestre_id : cuatrimestreSeleccionado.value?.id ?? null
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
             },
         });
 
-    } else {
+    }else{
         form.transform((data) => ({
             ...data,
-            plan_estudios_id : planEstudioSeleccionado.value?.id,
-            cuatrimestre_id : cuatrimestreSeleccionado.value?.id
+            plan_estudios_id : planEstudioSeleccionado.value?.id ?? null,
+            cuatrimestre_id : cuatrimestreSeleccionado.value?.id ?? null
         })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();

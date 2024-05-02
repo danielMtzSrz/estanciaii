@@ -145,8 +145,8 @@ const submit = () => {
     if (!props.dataModal.dataRegistro) {
         form.transform((data) => ({
             ...data,
-            materia_id : materiaSeleccionada.value?.id,
-            user_id : usuarioSeleccionado.value?.id
+            materia_id : materiaSeleccionada.value?.id ?? null,
+            user_id : usuarioSeleccionado.value?.id ?? null
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
@@ -156,8 +156,8 @@ const submit = () => {
     } else {
         form.transform((data) => ({
             ...data,
-            materia_id : materiaSeleccionada.value?.id,
-            user_id : usuarioSeleccionado.value?.id
+            materia_id : materiaSeleccionada.value?.id ?? null,
+            user_id : usuarioSeleccionado.value?.id ?? null
         })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();

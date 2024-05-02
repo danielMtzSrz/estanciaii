@@ -115,7 +115,7 @@ const submit = () => {
     if (!props.dataModal.dataRegistro) {
         form.transform((data) => ({
             ...data,
-            estado_id: estadoSeleccionado?.value.id
+            estado_id: estadoSeleccionado?.value.id ?? null
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
@@ -124,7 +124,7 @@ const submit = () => {
     } else {
         form.transform((data) => ({
             ...data,
-            estado_id: estadoSeleccionado.value?.id
+            estado_id: estadoSeleccionado.value?.id ?? null
         })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();

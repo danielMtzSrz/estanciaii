@@ -215,7 +215,7 @@ const submit = () => {
     if (!props.dataModal.dataRegistro) {
         form.transform((data) => ({
             ...data,
-            colonia_id: colonia_seleccionada.value?.id
+            colonia_id: colonia_seleccionada.value?.id ?? null
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
@@ -225,7 +225,7 @@ const submit = () => {
     } else {
         form.transform((data) => ({
             ...data,
-            colonia_id: colonia_seleccionada.value?.id
+            colonia_id: colonia_seleccionada.value?.id ?? null
         })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();

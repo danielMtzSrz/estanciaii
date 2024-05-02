@@ -125,8 +125,8 @@ const submit = () => {
     if(!props.dataModal.dataRegistro){
         form.transform((data) => ({
             ...data,
-            empresa_id: empresaSeleccionada.value?.id,
-            tipo_anuncio_id: tipoAnuncioSeleccionado.value?.id
+            empresa_id: empresaSeleccionada.value?.id ?? null,
+            tipo_anuncio_id: tipoAnuncioSeleccionado.value?.id ?? null
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
@@ -135,8 +135,8 @@ const submit = () => {
     }else{
         form.transform((data) => ({
             ...data,
-            empresa_id: empresaSeleccionada.value?.id,
-            tipo_anuncio_id: tipoAnuncioSeleccionado.value?.id
+            empresa_id: empresaSeleccionada.value?.id ?? null,
+            tipo_anuncio_id: tipoAnuncioSeleccionado.value?.id ?? null
         })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();

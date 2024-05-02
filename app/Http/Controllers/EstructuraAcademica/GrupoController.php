@@ -65,7 +65,7 @@ class GrupoController extends Controller{
 
         $grupo = Grupo::find($id);
 
-        $grupo->update($request->all());
+        $grupo->update($validated_data);
 
         return back()->with(config('messages.mensaje_actualizar'));
     }

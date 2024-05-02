@@ -104,7 +104,7 @@ const submit = () => {
     if (!props.dataModal.dataRegistro) {
         form.transform((data) => ({
             ...data,
-            pais_id: paisSeleccionado?.value.id
+            pais_id: paisSeleccionado?.value.id ?? null
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
@@ -113,7 +113,7 @@ const submit = () => {
     } else {
         form.transform((data) => ({
             ...data,
-            pais_id: paisSeleccionado.value?.id
+            pais_id: paisSeleccionado.value?.id ?? null
         })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();

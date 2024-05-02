@@ -137,8 +137,8 @@ const submit = () => {
     if (!props.dataModal.dataRegistro) {
         form.transform((data) => ({
             ...data,
-            edificio_id     : edificioSeleccionado.value?.id,
-            tipo_aula_id    : tipoAulaSeleccionado.value?.id,
+            edificio_id : edificioSeleccionado.value?.id ?? null,
+            tipo_aula_id : tipoAulaSeleccionado.value?.id ?? null,
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
@@ -148,8 +148,8 @@ const submit = () => {
     } else {
         form.transform((data) => ({
             ...data,
-            edificio_id      : edificioSeleccionado.value?.id,
-            tipo_aula_id    : tipoAulaSeleccionado.value?.id,
+            edificio_id : edificioSeleccionado.value?.id ?? null,
+            tipo_aula_id : tipoAulaSeleccionado.value?.id ?? null,
         })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();

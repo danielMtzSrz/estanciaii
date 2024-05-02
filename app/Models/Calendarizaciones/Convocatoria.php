@@ -16,13 +16,10 @@ class Convocatoria extends Model{
     protected $fillable = [
         'periodo_id',
         'tipo_convocatoria_id',
-        'servicio_id',
-        'contenido',
-        'log_id'
+        'contenido'
     ];
 
     // Maps
-
     public function indexMap()
     {
         return [
@@ -36,12 +33,14 @@ class Convocatoria extends Model{
     }
 
     // Relación con la tabla Calendarizaciones/Periodos
-    public function periodo(){
+    public function periodo()
+    {
         return $this->belongsTo('App\Models\Calendarizaciones\Periodo');
     }
 
     // Relación con la tabla Calendarizaciones/TiposConvocatorias
-    public function tipo_convocatoria(){
+    public function tipo_convocatoria()
+    {
         return $this->belongsTo('App\Models\Calendarizaciones\TipoConvocatoria');
     }
 }

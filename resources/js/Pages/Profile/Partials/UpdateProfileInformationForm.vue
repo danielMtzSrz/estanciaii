@@ -435,10 +435,10 @@ const updateProfileInformation = () => {
 
     form.transform((data) => ({
         ...data,
-        colonia_id      : colonia_seleccionada.value?.id,
-        tipo_sangre_id  : tipo_sangre_seleccionado.value?.id,
-        estado_civil_id : estado_civil_seleccionado.value?.id,
-        generos_id      : genero_seleccionado.value?.id,
+        colonia_id      : colonia_seleccionada.value?.id ?? null,
+        tipo_sangre_id  : tipo_sangre_seleccionado.value?.id ?? null,
+        estado_civil_id : estado_civil_seleccionado.value?.id ?? null,
+        generos_id      : genero_seleccionado.value?.id ?? null
     })).post(route('user-profile-information.update'), {
         errorBag: 'updateProfileInformation',
         preserveScroll: true,

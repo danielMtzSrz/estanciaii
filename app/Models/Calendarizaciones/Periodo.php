@@ -22,8 +22,7 @@ class Periodo extends Model{
         'descripcion',
         'fecha_inicio',
         'fecha_fin',
-        'periodo_activo',        
-        'log_id'
+        'periodo_activo'
     ];
 
     // Métodos

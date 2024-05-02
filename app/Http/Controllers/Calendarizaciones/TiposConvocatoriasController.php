@@ -22,16 +22,26 @@ class TiposConvocatoriasController extends Controller{
 
     public function store(Request $request)
     {
-        TipoConvocatoria::create($request->all());
+        $validated_data = $request->validate([
+            'nombre' => 'required',
+            'contenido' => 'required'
+        ]);
+
+        TipoConvocatoria::create($validated_data);
 
         return back()->with(config('messages.mensaje_exito'));
     }
 
     public function update(Request $request, $id)
     {
+        $validated_data = $request->validate([
+            'nombre' => 'required',
+            'contenido' => 'required'
+        ]);
+
         $tipoConvocatoria = TipoConvocatoria::find($id);
 
-        $tipoConvocatoria->update($request->all());
+        $tipoConvocatoria->update($validated_data);
 
         return back()->with(config('messages.mensaje_actualizar'));
     }

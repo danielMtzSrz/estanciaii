@@ -22,16 +22,26 @@ class TiposPeriodosController extends Controller{
 
     public function store(Request $request)
     {
-        TipoPeriodo::create($request->all());
+        $validated_data = $request->validate([
+            'nombre' => 'required',
+            'descripcion' => 'required'
+        ]);
+
+        TipoPeriodo::create($validated_data);
 
         return back()->with(config('messages.mensaje_exito'));
     }
 
     public function update(Request $request, $id)
     {
+        $validated_data = $request->validate([
+            'nombre' => 'required',
+            'descripcion' => 'required'
+        ]);
+
         $tipo_periodo = TipoPeriodo::find($id);
 
-        $tipo_periodo->update($request->all());
+        $tipo_periodo->update($validated_data);
 
         return back()->with(config('messages.mensaje_actualizar'));
     }

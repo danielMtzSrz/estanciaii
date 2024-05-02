@@ -27,16 +27,34 @@ class PeriodosController extends Controller{
 
     public function store(Request $request)
     {
-        Periodo::create($request->all());
+        $validated_data = $request->validate([
+            'tipo_periodo_id' => 'required',
+            'titulo' => 'required',
+            'descripcion' => 'required',
+            'fecha_inicio' => 'required',
+            'fecha_fin' => 'required',
+            'periodo_activo' => 'required'
+        ]);
+
+        Periodo::create($validated_data);
 
         return back()->with(config('messages.mensaje_exito'));
     }
 
     public function update(Request $request, $id)
-    {    
+    {
+        $validated_data = $request->validate([
+            'tipo_periodo_id' => 'required',
+            'titulo' => 'required',
+            'descripcion' => 'required',
+            'fecha_inicio' => 'required',
+            'fecha_fin' => 'required',
+            'periodo_activo' => 'required'
+        ]);
+
         $periodo = Periodo::find($id);
  
-        $periodo->update($request->all());
+        $periodo->update($validated_data);
 
         return back()->with(config('messages.mensaje_actualizar'));
     }

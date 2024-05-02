@@ -40,6 +40,15 @@ class AulaReservacionController extends Controller{
 
     public function store(Request $request)
     {
+        $validated_data = $request->validate([
+            'aula_id' => 'required',
+            'solicitante_id' => 'required',
+            'horario_inicio' => 'required',
+            'horario_final' => 'required',
+            'asunto' => 'required',
+            'descripcion' => 'required'
+        ]);
+
         AulaReservacion::create($request->all());
 
         return back()->with(config('messages.mensaje_exito'));
@@ -47,6 +56,15 @@ class AulaReservacionController extends Controller{
 
     public function update(Request $request, $id)
     {
+        $validated_data = $request->validate([
+            'aula_id' => 'required',
+            'solicitante_id' => 'required',
+            'horario_inicio' => 'required',
+            'horario_final' => 'required',
+            'asunto' => 'required',
+            'descripcion' => 'required'
+        ]);
+
         $aula_reservacion = AulaReservacion::find($id);
 
         $aula_reservacion->update($request->all());

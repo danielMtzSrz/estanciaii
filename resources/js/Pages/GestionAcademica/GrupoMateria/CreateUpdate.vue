@@ -127,10 +127,10 @@ const submit = () => {
     if (!props.dataModal.dataRegistro) {
         form.transform((data) => ({
             ...data,
-            profesor_id : usuarioSeleccionado.value?.id,
-            materia_id : materiaSeleccionada.value?.id,
-            grupo_id : grupoSeleccionado.value?.id,
-            periodo_id : periodoSeleccionado.value?.id
+            profesor_id : usuarioSeleccionado.value?.id ?? null,
+            materia_id : materiaSeleccionada.value?.id ?? null,
+            grupo_id : grupoSeleccionado.value?.id ?? null,
+            periodo_id : periodoSeleccionado.value?.id ?? null
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
@@ -140,10 +140,10 @@ const submit = () => {
     } else {
         form.transform((data) => ({
             ...data,
-            profesor_id : usuarioSeleccionado.value?.id,
-            materia_id : materiaSeleccionada.value?.id,
-            grupo_id : grupoSeleccionado.value?.id,
-            periodo_id : periodoSeleccionado.value?.id
+            profesor_id : usuarioSeleccionado.value?.id ?? null,
+            materia_id : materiaSeleccionada.value?.id ?? null,
+            grupo_id : grupoSeleccionado.value?.id ?? null,
+            periodo_id : periodoSeleccionado.value?.id ?? null
         })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();

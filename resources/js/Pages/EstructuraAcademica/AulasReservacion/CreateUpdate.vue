@@ -15,6 +15,7 @@
                             textDropdown="nombre"
                             imageDropdown="profile_photo_path"
                             v-model="usuarioSeleccionado"
+                            :errors="form.errors.aula_id"
                         />
                     </div>
 
@@ -24,6 +25,7 @@
                             :data="dataAulas"
                             textDropdown="nombre"
                             v-model="aulaSeleccionada"
+                            :errors="form.errors.solicitante_id"
                         />
                     </div>
 
@@ -145,8 +147,8 @@ const submit = () => {
     if (!props.dataModal.dataRegistro) {
         form.transform((data) => ({
             ...data,
-            solicitante_id :  usuarioSeleccionado.value?.id,
-            aula_id : aulaSeleccionada.value?.id,
+            solicitante_id :  usuarioSeleccionado.value?.id ?? null,
+            aula_id : aulaSeleccionada.value?.id ?? null,
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
@@ -156,8 +158,8 @@ const submit = () => {
     } else {
         form.transform((data) => ({
             ...data,
-            solicitante_id : usuarioSeleccionado.value?.id,
-            aula_id : aulaSeleccionada.value?.id,
+            solicitante_id : usuarioSeleccionado.value?.id ?? null,
+            aula_id : aulaSeleccionada.value?.id ?? null,
         })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();

@@ -129,8 +129,8 @@ const submit = () => {
     if (!props.dataModal.dataRegistro) {
         form.transform((data) => ({
             ...data,
-            aula_id: aulaSeleccionada.value?.id,
-            dia_semana_id: diaSemanaSeleccionado.value?.id,
+            aula_id: aulaSeleccionada.value?.id ?? null,
+            dia_semana_id: diaSemanaSeleccionado.value?.id ?? null,
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
@@ -140,8 +140,8 @@ const submit = () => {
     } else {
         form.transform((data) => ({
             ...data,
-            aula_id: aulaSeleccionada.value?.id,
-            dia_semana_id: diaSemanaSeleccionado.value?.id,
+            aula_id: aulaSeleccionada.value?.id ?? null,
+            dia_semana_id: diaSemanaSeleccionado.value?.id ?? null,
         })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();

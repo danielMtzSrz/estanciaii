@@ -384,25 +384,25 @@ const submit = () => {
     if (!props.dataModal.dataRegistro) {
         form.transform((data) => ({
             ...data,
-            colonia_id      : colonia_seleccionada.value?.id,
-            tipo_sangre_id  : tipo_sangre_seleccionado?.id,
-            estado_civil_id : estado_civil_seleccionado?.id,
-            generos_id      : genero_seleccionado?.id,
-            nacionalidad_id : nacionalidad_seleccionada?.id,
+            colonia_id      : colonia_seleccionada.value?.id ?? null,
+            tipo_sangre_id  : tipo_sangre_seleccionado?.id ?? null,
+            estado_civil_id : estado_civil_seleccionado?.id ?? null,
+            generos_id      : genero_seleccionado?.id ?? null,
+            nacionalidad_id : nacionalidad_seleccionada?.id ?? null
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
             },
         });
 
-    } else {
+    }else{
         form.transform((data) => ({
             ...data,
-            colonia_id      : colonia_seleccionada.value?.id,
-            tipo_sangre_id  : tipo_sangre_seleccionado?.id,
-            estado_civil_id : estado_civil_seleccionado?.id,
-            generos_id      : genero_seleccionado?.id,
-            nacionalidad_id : nacionalidad_seleccionada?.id,
+            colonia_id      : colonia_seleccionada.value?.id ?? null,
+            tipo_sangre_id  : tipo_sangre_seleccionado?.id ?? null,
+            estado_civil_id : estado_civil_seleccionado?.id ?? null,
+            generos_id      : genero_seleccionado?.id ?? null,
+            nacionalidad_id : nacionalidad_seleccionada?.id ?? null
         })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();

@@ -5,6 +5,9 @@
             <b>Horarios</b>
         </div>
     </Divider>
+    <small class="p-error" v-if="errorsNormal">
+        {{ errorsNormal }}
+    </small>
     <div v-for="(dia, index) in dias_semana" :key="index" class="row">
         <div :class="horarios[dia.key] ? 'col-md-4' : 'col-sm-12'">
             <div class="field-checkbox" :class="horarios[dia.key] || !errorsParse ? 'my-3' : ''">
@@ -81,6 +84,7 @@ const emit = defineEmits(["update:modelValue"]);
 // Reactive state
 const horarios = ref({...props.modelValue});
 const errorsParse = ref(null)
+const errorsNormal = ref(null)
 
 const dias_semana = ref([
     { key: "lunes", nombre: "Lunes" },
@@ -92,6 +96,15 @@ const dias_semana = ref([
     { key: "domingo", nombre: "Domingo" },
 ]);
 
+const isValidJSON = (text) => {
+    try {
+        JSON.parse(text);
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
 // Watcher para horarios
 watch(horarios, (newValue) => {
         emit("update:modelValue", newValue);
@@ -100,11 +113,14 @@ watch(horarios, (newValue) => {
 );
 
 watch(() => props.errors, (newVal) => {
-    if (newVal && typeof newVal === 'string') {
-        // Asumiendo que props.errors es una string JSON como producida por Laravel
-        errorsParse.value = JSON.parse(newVal);
-    } else {
-        errorsParse.value = newVal; // Si ya es un objeto, úsalo directamente
+    if(newVal && isValidJSON(newVal)){
+        if(newVal && typeof newVal === 'string') {
+            errorsParse.value = JSON.parse(newVal);
+        }else{
+            errorsParse.value = newVal;
+        }
+    }else{
+        errorsNormal.value = newVal;
     }
 }, { immediate: true, deep: true });
 </script>

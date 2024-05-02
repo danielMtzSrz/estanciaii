@@ -14,6 +14,7 @@
                             :data="dataTiposPeriodo"
                             textDropdown="nombre"
                             v-model="tipoPeriodoSeleccionado"
+                            :errors="form.errors.tipo_periodo_id"
                         />
                     </div>
 
@@ -147,7 +148,7 @@ const submit = () => {
     if (!props.dataModal.dataRegistro) {
         form.transform((data) => ({
             ...data,
-            tipo_periodo_id: tipoPeriodoSeleccionado.value?.id,
+            tipo_periodo_id: tipoPeriodoSeleccionado.value?.id ?? null,
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
@@ -157,7 +158,7 @@ const submit = () => {
     } else {
         form.transform((data) => ({
             ...data,
-            tipo_periodo_id: tipoPeriodoSeleccionado.value?.id,
+            tipo_periodo_id: tipoPeriodoSeleccionado.value?.id ?? null,
         })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();
