@@ -130,51 +130,22 @@ const items = ref([
             {
                 label: "Periodos",
                 icon: "bi bi-calendar3",
-                command: () => {
-                    this.$inertia.visit(
-                        route("Calendarizaciones.Periodos.index")
-                    );
-                },
+                command: () => Inertia.visit(route("Calendarizaciones.Periodos.index"))
             },
             {
                 label: "Tipos de periodos",
                 icon: "bi bi-calendar2-check",
-                command: () => {
-                    this.$inertia.visit(
-                        route(
-                            "Calendarizaciones.TiposPeriodo.index"
-                        )
-                    );
-                },
+                command: () => Inertia.visit(route("Calendarizaciones.TiposPeriodo.index")),
             },
             {
                 label: "Tipos de convocatorias",
                 icon: "bi bi-pencil-square",
-                command: () => {
-                    this.$inertia.visit(
-                        route("Calendarizaciones.TiposConvocatoria.index")
-                    );
-                },
+                command: () => Inertia.visit(route("Calendarizaciones.TiposConvocatoria.index")),
             },
             {
                 label: "Convocatorias",
                 icon: "bi bi-files-alt",
-                command: () => {
-                    this.$inertia.visit(
-                        route(
-                            "Calendarizaciones.Convocatorias.index"
-                        )
-                    );
-                },
-            },
-            {
-                label: "Horarios",
-                icon: "bi bi-clock",
-                command: () => {
-                    this.$inertia.visit(
-                        route("Calendarizaciones.Horarios.index")
-                    );
-                },
+                command: () => Inertia.visit(route("Calendarizaciones.Convocatorias.index")),
             },
         ],
     },
@@ -185,29 +156,17 @@ const items = ref([
             {
                 label: "Aulas",
                 icon: "bi bi-easel2",
-                command: () => {
-                    this.$inertia.visit(
-                        route("EstructuraAcademica.Aulas.index")
-                    );
-                },
+                command: () => Inertia.visit(route("EstructuraAcademica.Aulas.index"))
             },
             {
                 label: "Aulas Reservación",
                 icon: "bi bi-calendar-check",
-                command: () => {
-                    this.$inertia.visit(
-                        route("EstructuraAcademica.AulasReservacion.index")
-                    );
-                },
+                command: () => Inertia.visit(route("EstructuraAcademica.AulasReservacion.index"))
             },
             {
                 label: "Grupos",
                 icon: "bi bi-people",
-                command: () => {
-                    this.$inertia.visit(
-                        route("EstructuraAcademica.Grupos.index")
-                    );
-                },
+                command: () => Inertia.visit(route("EstructuraAcademica.Grupos.index"))
             },
         ],
     },
@@ -218,92 +177,44 @@ const items = ref([
             {
                 label: "Carreras",
                 icon: "bi bi-mortarboard-fill",
-                command: () => {
-                    this.$inertia.visit(
-                        route("GestionAcademica.Carreras.index")
-                    );
-                },
-            },
-            {
-                label: "Cuatrimestres",
-                icon: "bi bi-collection",
-                command: () => {
-                    this.$inertia.visit(
-                        route(
-                            "GestionAcademica.Cuatrimestres.index"
-                        )
-                    );
-                },
+                command: () => Inertia.visit(route("GestionAcademica.Carreras.index"))
             },
             {
                 label: "Mapas Curriculares",
                 icon: "bi bi-calendar2-range",
-                command: () => {
-                    this.$inertia.visit(
-                        route(
-                            "GestionAcademica.MapasCurriculares.index"
-                        )
-                    );
-                },
+                command: () => Inertia.visit(route("GestionAcademica.MapasCurriculares.index"))
             },
-            
             {
                 label: "Materias",
                 icon: "pi pi-book",
-                command: () => {
-                    this.$inertia.visit(
-                        route("GestionAcademica.Materias.index")
-                    );
-                },
+                command: () => Inertia.visit(route("GestionAcademica.Materias.index"))
             },
             {
                 label: "Planes de estudio",
                 icon: "bi bi-journal-bookmark",
-                command: () => {
-                    this.$inertia.visit(
-                        route(
-                            "GestionAcademica.PlanesEstudios.index"
-                        )
-                    );
-                },
+                command: () => Inertia.visit(route("GestionAcademica.PlanesEstudios.index"))
             },
             {
                 label: "Asesorías",
                 icon: "bi bi-journal-bookmark",
-                command: () => {
-                    this.$inertia.visit(
-                        route(
-                            "GestionAcademica.Asesorias.index"
-                        )
-                    );
-                },
+                command: () => Inertia.visit(route("GestionAcademica.Asesorias.index"))
             },
             {
                 label: "Asignar materias",
                 icon: "bi bi-journal-bookmark",
-                command: () => {
-                    this.$inertia.visit(
-                        route(
-                            "GestionAcademica.GrupoMateria.index"
-                        )
-                    );
-                },
+                command: () => Inertia.visit(route("GestionAcademica.GrupoMateria.index"))
             }
         ]
     },
     // {
     //     label: "Anuncios",
     //     icon: "pi pi-bell",
-    //     command: () => {
-    //         Inertia.visit(route("anuncios.index"));
-    //     },
+    //     command: () => Inertia.visit(route("anuncios.index"));
     // },
     // {
     //     label: "Vacantes",
     //     icon: "pi pi-inbox",
-    //     command: () => {
-    //         Inertia.visit(route("vacantes.index"));
-    //     },
+    //     command: () => Inertia.visit(route("vacantes.index"));
     // },
 ]);
 </script>
