@@ -6,6 +6,13 @@
         :style="{ width: '75vw' }"
     >
         <template #content>
+            <a 
+                class="p-button-raised p-button-rounded p-button-success w-100 sm:w-auto mt-2 sm:mt-0"
+                :href="generateRoute('GestionAcademica.generar_horario_export', id_grupo_materia)"
+            >
+                <i class="pi pi-calendar"></i>
+                <span class="ms-2">Generar horario</span>
+            </a>
             <FullCalendar :options="calendarOptions">
                 <template v-slot:eventContent='arg'>
                     <b class="text-xs">{{ arg.event.title }}</b>
@@ -34,7 +41,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import esLocale from '@fullcalendar/core/locales/es';
 
 // Variables
-const titulo = ref(null);
+const titulo = ref(null), id_grupo_materia = ref(1);
 
 const calendarOptions = ref({
     plugins : [timeGridPlugin],
@@ -70,12 +77,17 @@ const closeModal = () => {
     emits("closeModal");
 };
 
+const generateRoute = (routeName, id) => {
+    return route(routeName, { id: id });
+};
+
 watch(() => props.dataModal.dataRegistro, async (newVal) => {
     if(newVal?.id){
         const dataHorarioGrupoMateria = await axios.get(`/api/horario/grupo_materia/${newVal?.id}`)
         calendarOptions.value.events = dataHorarioGrupoMateria.data.map($materia_horario => {
             return {...$materia_horario.horario_materia}
         })
+        id_grupo_materia.value = newVal?.id
     }
 
     titulo.value = `${ newVal?.nombre ?? null } - ${ newVal?.edificio_nombre ?? null }${ newVal?.aula_nombre ?? null }`

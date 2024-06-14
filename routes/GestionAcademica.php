@@ -6,8 +6,11 @@ use App\Http\Controllers\GestionAcademica\GradoAcademicoController;
 use App\Http\Controllers\GestionAcademica\CuatrimestreController;
 use App\Http\Controllers\GestionAcademica\MapaCurricularController;
 use App\Http\Controllers\GestionAcademica\{CarreraController, GrupoMateriaController, MateriaController, PlanEstudioController, AsesoriasController};
+
 use Inertia\Inertia;
 
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Excel as ExcelExcel;
 
 Route::middleware([
     'auth:sanctum',
@@ -39,6 +42,8 @@ Route::middleware([
         Route::post('restablecer/{grupoMateria}', [GrupoMateriaController::class, 'restore'])->name('restore');
         Route::delete('forzarEliminado/{grupoMateria}', [GrupoMateriaController::class, 'forceDestroy'])->name('forceDelete');
     });
+
+    Route::get('/export/{id}', [GrupoMateriaController::class, 'generarHorarioMateria'])->name('generar_horario_export');
 
     //Mapas curriculares
     Route::resource("MapasCurriculares", MapaCurricularController::class)->except(['show', 'create', 'edit']);

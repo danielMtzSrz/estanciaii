@@ -55,7 +55,7 @@
                     </div>
                 </div>
 
-                <pre>{{ form }}</pre>
+                <!-- <pre>{{ form }}</pre> -->
 
                 <div class="float-end space-x-2 py-4">
                     <Button

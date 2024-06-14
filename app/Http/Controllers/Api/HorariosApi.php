@@ -12,6 +12,20 @@ class HorariosApi extends Controller
 {
     public function MateriaHorario($id_grupo)
     {
+        // dd(
+        //     Grupo::with(['aula', 'carrera', 'tutor', 'grupoMateria' => function($query) {
+        //         $query->with(['profesor', 'materia', 'grupo'])->select(['id', 'profesor_id', 'materia_id', 'grupo_id', 'horarios']);
+        //     }])
+        //     ->where('id', 3)
+        //     ->first()
+        //     ->grupoMateria->map(function($grupo_materia) {
+        //         $materia_nombre = isset($grupo_materia->materia->nombre) ? $grupo_materia->materia->nombre : 'Sin materia';
+        //         $materia_horario = isset($grupo_materia->horarios) ? $grupo_materia->horarios : null;
+        //         return [
+        //             'horario_materia' => $this->transformarHorariosConCarbon($materia_nombre, $materia_horario)
+        //         ];
+        //     })
+        // );
         $data = Grupo::with(['aula', 'carrera', 'tutor', 'grupoMateria' => function($query) {
                 $query->with(['profesor', 'materia', 'grupo'])->select(['id', 'profesor_id', 'materia_id', 'grupo_id', 'horarios']);
             }])

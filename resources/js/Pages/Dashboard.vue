@@ -2,7 +2,6 @@
     <GenericLayout titleModule="Menú principal">
         <template #content>
             <div class="grid">
-
                 <div class="col-12 md:col-6 lg:col-4 flex justify-content-center" v-for="grupo in grupos" :key="grupo.id">
                     <div class="card mb-3">
                         <img :src="`${grupo.carrera.imagen == 'http' ? '' : '/storage/'}${grupo.carrera.imagen}`" class="card-img-top" style="height: 200px; width: 100%; object-fit: cover;" alt="...">
@@ -34,7 +33,7 @@
                 </div>
             </div>
 
-            <pre>{{grupos}}</pre>
+            <!-- <pre>{{grupos}}</pre> -->
         </template>
 
         <template #footer>
