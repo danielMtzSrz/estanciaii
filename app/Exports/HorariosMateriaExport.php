@@ -38,6 +38,14 @@ class HorariosMateriaExport implements FromArray, WithStyles, ShouldAutoSize, Wi
             '11:10-12:00',
             '12:00-12:50',
             '12:50-13:40',
+            '14:00-14:50',
+            '14:50-15:40',
+            '15:40-16:30',
+            '16:30-17:20',
+            '17:20-18:10',
+            '18:10-19:00',
+            '19:00-19:50',
+            '19:50-20:40',
         ];
 
         // Agregar encabezado personalizado
@@ -46,11 +54,11 @@ class HorariosMateriaExport implements FromArray, WithStyles, ShouldAutoSize, Wi
         // Agregar fila vacía
         $this->data[] = [];
         // Agregar encabezados de columnas
-        $this->data[] = ['Hora', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+        $this->data[] = ['Hora', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 
         foreach ($time_slots as $slot) {
             $row = [$slot];
-            for ($day = 1; $day <= 5; $day++) {
+            for ($day = 1; $day <= 6; $day++) {
                 $found = false;
                 foreach ($this->horarios as $horario) {
                     $startTime = substr($horario['horario_materia']['startTime'], 0, 5);
@@ -82,23 +90,23 @@ class HorariosMateriaExport implements FromArray, WithStyles, ShouldAutoSize, Wi
     public function styles(Worksheet $sheet)
     {
         // Estilos para el encabezado general y las filas de datos
-        $sheet->mergeCells('A1:F1');
+        $sheet->mergeCells('A1:G1');
         $sheet->setCellValue('A1', $this->encabezado['carrera'].' - '.$this->encabezado['periodo'].' | '.$this->encabezado['turno']);
-        $sheet->mergeCells('A2:F2');
+        $sheet->mergeCells('A2:G2');
         $sheet->setCellValue('A2', 'AULA: '.$this->encabezado['aula'].' GRUPO: '.$this->encabezado['grupo']);
 
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
         $sheet->getStyle('A2')->getFont()->setBold(true)->setSize(12);
-        $sheet->getStyle('A3:F3')->getFont()->setBold(true);
+        $sheet->getStyle('A3:G3')->getFont()->setBold(true);
 
         // Centrar los textos
-        $sheet->getStyle('A1:F1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-        $sheet->getStyle('A2:F2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-        $sheet->getStyle('A3:F3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-        $sheet->getStyle('A4:F4')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:G1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A2:G2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A3:G3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A4:G4')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
         // Centrar todos los datos
-        $sheet->getStyle('A5:F' . $sheet->getHighestRow())->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A5:G' . $sheet->getHighestRow())->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
         // // Aplicar colores a las celdas
         // $rowIndex = 4;

@@ -141,7 +141,8 @@ class HorariosAula implements FromArray, WithStyles, ShouldAutoSize
 
         $sheet->getStyle('A5:O5')->getFont()->setBold(true);
         
-        $sheet->getStyle('A1:O100')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        // Centrar todos los datos
+        $sheet->getStyle('A5:O' . $sheet->getHighestRow())->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
         return [];
     }

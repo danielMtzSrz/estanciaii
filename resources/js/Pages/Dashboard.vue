@@ -2,6 +2,16 @@
     <GenericLayout titleModule="Menú principal">
         <template #content>
             <div class="grid">
+                <div class="col-sm-12">
+                    <div class="col-sm-12 col-md-4">
+                        <Dropdown 
+                            label="Periodo"
+                            :data="dataPeriodos"
+                            textDropdown="titulo"
+                            v-model="periodoSeleccionado"
+                        />
+                    </div>
+                </div>
                 <div class="col-12 md:col-6 lg:col-4 flex justify-content-center" v-for="grupo in grupos" :key="grupo.id">
                     <div class="card mb-3">
                         <img :src="`${grupo.carrera.imagen == 'http' ? '' : '/storage/'}${grupo.carrera.imagen}`" class="card-img-top" style="height: 200px; width: 100%; object-fit: cover;" alt="...">
@@ -50,7 +60,7 @@
 
 <script setup>
 // Vue
-import { ref } from 'vue'
+import { ref, onBeforeMount, watch } from 'vue'
 
 // Layout padre
 import GenericLayout from "@/Layouts/GenericLayout.vue";
@@ -59,21 +69,30 @@ import ShowSchedule from "./ShowSchedule.vue"
 // Primevue
 import Avatar from 'primevue/avatar'
 
+import Dropdown from "@/Components/Forms/Dropdown.vue";
+
 // Variables
+const periodo_id = ref(null), dataPeriodos = ref(null), periodoSeleccionado = ref(null)
+
 const displayShowSchedule = ref(null)
 const dataRegistro = ref(null)
-
-// Props
-const props = defineProps({
-    grupos: {
-        type: Object,
-        default: {}
-    }
-})
+const grupos = ref(null)
 
 // Métodos
 const modalShowSchedule = (event) => {
     displayShowSchedule.value = event.display;
     dataRegistro.value = event?.data ?? null;
 }
+
+onBeforeMount(async () => {    
+    const data = await axios.get(`/api/panel_principal/`+null);
+    grupos.value = data.data;
+    const dataPeriodosAxios = await axios.get(`/api/periodos`);
+    dataPeriodos.value = dataPeriodosAxios.data;
+});
+
+watch(() => periodoSeleccionado.value, async (newVal) => {
+    const data = await axios.get(`/api/panel_principal/`+newVal?.id);
+    grupos.value = data.data;
+})
 </script>

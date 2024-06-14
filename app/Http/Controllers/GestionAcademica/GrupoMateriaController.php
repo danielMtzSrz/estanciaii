@@ -119,13 +119,16 @@ class GrupoMateriaController extends Controller
         }])
         ->where('id', $id)
         ->first();
-        
+
+        $edificio_nombre = ($grupo->first() && $grupo->first()->aula) ? $grupo->first()->aula->edificio()['nombre'] : null;
+        $aula_nombre = ($grupo->first() && $grupo->first()->aula) ? $grupo->first()->aula->nombre : null;
+
         $encabezado = [
-            'carrera' => $grupo->carrera->nombre ?? null,
-            'periodo' => $grupo->periodo->titulo ?? null,
-            'aula' => $grupo->aula->edificio()['nombre'].''.$grupo->aula->nombre ?? null,
-            'grupo' => $grupo->nombre ?? null,
-            'turno' => $grupo->turno()["nombre"] ?? null
+            'carrera' => optional($grupo->first())->carrera->nombre ?? null,
+            'periodo' => optional($grupo->first())->periodo->titulo ?? null,
+            'aula' => $edificio_nombre.' '.$aula_nombre,
+            'grupo' => optional($grupo->first())->nombre ?? null,
+            'turno' => optional($grupo->first()?->turno())["nombre"] ?? null
         ];
 
         $horarios_grupo = $grupo->grupoMateria->map(function($grupo_materia) {

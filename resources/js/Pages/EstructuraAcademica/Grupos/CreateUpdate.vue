@@ -112,7 +112,7 @@ import Dropdown from "@/Components/Forms/Dropdown.vue";
 import Schedules from "@/Components/Forms/Schedules.vue";
 
 // Variables
-const dataUsuarios = ref(null), dataAulas = ref(null), dataCarreras = ref(null), dataTurnos = ref(null),  dataPeriodos = ref(null)
+const dataUsuarios = ref(null), dataAulas = ref(null), dataCarreras = ref(null), dataTurnos = ref(null), dataPeriodos = ref(null)
 const usuarioSeleccionado = ref(null), aulaSeleccionada = ref(null), carreraSeleccionada = ref(null), turnoSeleccionado = ref(null), periodoSeleccionado = ref(null)
 
 const form = useForm({

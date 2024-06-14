@@ -81,6 +81,7 @@ Route::get('planes_estudio', [PlanesEstudioApi::class, 'PlanesEstudio'])->name('
 Route::get('materias', [MateriasApi::class, 'Materias'])->name('materias');
 
 // Grupos
+Route::get('panel_principal/{id}', [GruposApi::class, 'PanelPrincipal'])->name('panel_principal');
 Route::get('grupos', [GruposApi::class, 'Grupos'])->name('grupos');
 
 // Horarios

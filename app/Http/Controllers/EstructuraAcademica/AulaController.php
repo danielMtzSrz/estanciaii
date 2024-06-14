@@ -127,20 +127,26 @@ class AulaController extends Controller
             ];
         })->toArray() : [] ;
 
+        $edificio_nombre = ($grupo_turno_matutino->first() && $grupo_turno_matutino->first()->aula) ? $grupo_turno_matutino->first()->aula->edificio()['nombre'] : null;
+        $aula_nombre = ($grupo_turno_matutino->first() && $grupo_turno_matutino->first()->aula) ? $grupo_turno_matutino->first()->aula->nombre : null;
+
         $encabezado_matutino = [
-            'carrera' => $grupo_turno_matutino->first()->carrera->nombre ?? null,
-            'periodo' => $grupo_turno_matutino->first()->periodo->titulo ?? null,
-            'aula' => $grupo_turno_matutino->first()->aula->edificio()['nombre'].''.$grupo_turno_matutino->first()->aula->nombre ?? null,
-            'grupo' => $grupo_turno_matutino->first()->nombre ?? null,
-            'turno' => $grupo_turno_matutino->first()->turno()["nombre"] ?? null
+            'carrera' => optional($grupo_turno_matutino->first())->carrera->nombre ?? null,
+            'periodo' => optional($grupo_turno_matutino->first())->periodo->titulo ?? null,
+            'aula' => $edificio_nombre.' '.$aula_nombre,
+            'grupo' => optional($grupo_turno_matutino->first())->nombre ?? null,
+            'turno' => optional($grupo_turno_matutino->first()?->turno())["nombre"] ?? null
         ];
 
+        $edificio_nombre = ($grupo_turno_vespertino->first() && $grupo_turno_vespertino->first()->aula) ? $grupo_turno_vespertino->first()->aula->edificio()['nombre'] : null;
+        $aula_nombre = ($grupo_turno_vespertino->first() && $grupo_turno_vespertino->first()->aula) ? $grupo_turno_vespertino->first()->aula->nombre : null;
+
         $encabezado_vespertino = [
-            'carrera' => $grupo_turno_vespertino->first()->carrera->nombre ?? null,
-            'periodo' => $grupo_turno_vespertino->first()->periodo->titulo ?? null,
-            'aula' => $grupo_turno_vespertino->first()->aula->edificio()['nombre'].''.$grupo_turno_vespertino->first()->aula->nombre ?? null,
-            'grupo' => $grupo_turno_vespertino->first()->nombre ?? null,
-            'turno' => $grupo_turno_vespertino->first()->turno()["nombre"] ?? null
+            'carrera' => optional($grupo_turno_vespertino->first())->carrera->nombre ?? null,
+            'periodo' => optional($grupo_turno_vespertino->first())->periodo->titulo ?? null,
+            'aula' => $edificio_nombre.' '.$aula_nombre,
+            'grupo' => optional($grupo_turno_vespertino->first())->nombre ?? null,
+            'turno' => optional($grupo_turno_vespertino->first()?->turno())["nombre"] ?? null
         ];
 
         return Excel::download(new HorariosAula($horariosMatutino, $horariosVespertino, $encabezado_matutino, $encabezado_vespertino), 'horarios.xlsx');
