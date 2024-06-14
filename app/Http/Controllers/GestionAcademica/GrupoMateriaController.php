@@ -20,7 +20,7 @@ class GrupoMateriaController extends Controller
 {
     public function index()
     {
-        $grupo_materias = GrupoMateria::with(['profesor', 'materia', 'grupo', 'periodo'])->get()->map(function($grupo_materia){
+        $grupo_materias = GrupoMateria::with(['profesor', 'materia', 'grupo'])->get()->map(function($grupo_materia){
             return [
                 'id' => $grupo_materia->id,
                 'profesor' => [
@@ -33,8 +33,6 @@ class GrupoMateriaController extends Controller
                 'materia_nombre' => $grupo_materia->materia->nombre,
                 'grupo' => $grupo_materia->grupo,
                 'grupo_nombre' => $grupo_materia->grupo->nombre,
-                'periodo' => $grupo_materia->periodo,
-                'periodo_nombre' => $grupo_materia->periodo->titulo,
                 'horarios' => $grupo_materia->horarios,
             ];
         })
@@ -48,12 +46,13 @@ class GrupoMateriaController extends Controller
     {
         $input = $request->all();
 
+        $grupo = Grupo::find($input['grupo_id']);
+
         $validated_data = $request->validate([
             'profesor_id' => 'required',
             'materia_id' => 'required',
             'grupo_id' => 'required',
-            'periodo_id' => 'required',
-            'horarios' => 'array|horarios_no_duplicados:'.$input['grupo_id'].','.null,
+            'horarios' => 'array|horarios_no_duplicados:'.$input['grupo_id'].','.null.','.$grupo->periodo_id,
         ]);
      
         $validated_data['horarios'] = $this->horariosMap($validated_data['horarios']);
@@ -67,14 +66,14 @@ class GrupoMateriaController extends Controller
     {
         $input = $request->all();
         
+        $grupo = Grupo::find($input['grupo_id']);
         $grupo_materia = GrupoMateria::find($id);
 
         $validated_data = $request->validate([
             'profesor_id' => 'required',
             'materia_id' => 'required',
             'grupo_id' => 'required',
-            'periodo_id' => 'required',
-            'horarios' => 'array|horarios_no_duplicados:'.$input['grupo_id'].','.$grupo_materia['materia_id']
+            'horarios' => 'array|horarios_no_duplicados:'.$input['grupo_id'].','.$grupo_materia['materia_id'].','.$grupo->periodo_id
         ]);
 
         $validated_data['horarios'] = $this->horariosMap($validated_data['horarios']);
@@ -115,15 +114,15 @@ class GrupoMateriaController extends Controller
 
     public function generarHorarioMateria($id)
     {
-        $grupo = Grupo::with(['aula', 'carrera', 'tutor', 'grupoMateria' => function($query) {
-            $query->with(['profesor', 'materia', 'grupo', 'periodo']);
+        $grupo = Grupo::with(['aula', 'carrera', 'tutor', 'periodo', 'grupoMateria' => function($query) {
+            $query->with(['profesor', 'materia', 'grupo']);
         }])
         ->where('id', $id)
         ->first();
         
         $encabezado = [
             'carrera' => $grupo->carrera->nombre ?? null,
-            'periodo' => $grupo->grupoMateria->first()->periodo->titulo ?? null,
+            'periodo' => $grupo->periodo->titulo ?? null,
             'aula' => $grupo->aula->edificio()['nombre'].''.$grupo->aula->nombre ?? null,
             'grupo' => $grupo->nombre ?? null,
             'turno' => $grupo->turno()["nombre"] ?? null

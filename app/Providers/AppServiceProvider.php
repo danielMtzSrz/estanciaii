@@ -21,11 +21,14 @@ class AppServiceProvider extends ServiceProvider
             $horarios_map = $this->horariosMap($value);
             $horarios_agrupados = $this->agruparHorarios($horarios_map, '');
             
-            $horarios_grupo = GrupoMateria::with('materia')
+            $horarios_grupo = GrupoMateria::with('grupo', 'materia')
                 ->where([
                     ['grupo_id', $parameters[0]],
                     ['materia_id', '!=', $parameters[1]]
                 ])
+                ->whereHas('grupo', function ($query) use ($parameters) {
+                    $query->where('periodo_id', $parameters[2]);
+                })
                 ->get()
                 ->map(function($grupoMateria) {
                     return $this->agruparHorarios($grupoMateria->horarios, $grupoMateria->materia->nombre);

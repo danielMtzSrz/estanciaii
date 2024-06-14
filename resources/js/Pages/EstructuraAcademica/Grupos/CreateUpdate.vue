@@ -20,6 +20,15 @@
 
                     <div class="col-sm-12 col-md-4">
                         <Dropdown 
+                            label="Periodo"
+                            :data="dataPeriodos"
+                            textDropdown="titulo"
+                            v-model="periodoSeleccionado"
+                        />
+                    </div>
+
+                    <div class="col-sm-12 col-md-4">
+                        <Dropdown 
                             label="Aula"
                             :data="dataAulas"
                             textDropdown="nombre"
@@ -28,18 +37,7 @@
                         />
                     </div>
 
-                    <div class="col-sm-12 col-md-6">
-                        <Dropdown 
-                            label="Tutor"
-                            :data="dataUsuarios"
-                            textDropdown="nombre"
-                            imageDropdown="profile_photo_path"
-                            v-model="usuarioSeleccionado"
-                            :errors="form.errors.tutor_id"
-                        />
-                    </div>
-
-                    <div class="col-sm-12 col-md-3">
+                    <div class="col-sm-12 col-md-4">
                         <InputText
                             label="Nombre"
                             v-model="form.nombre"
@@ -47,13 +45,24 @@
                         />
                     </div>
 
-                    <div class="col-sm-12 col-md-3">
+                    <div class="col-sm-12 col-md-4">
                         <Dropdown 
                             label="Turno"
                             :data="dataTurnos"
                             textDropdown="nombre"
                             v-model="turnoSeleccionado"
                             :errors="form.errors.turno"
+                        />
+                    </div>
+
+                    <div class="col-sm-12 col-md-12">
+                        <Dropdown 
+                            label="Tutor"
+                            :data="dataUsuarios"
+                            textDropdown="nombre"
+                            imageDropdown="profile_photo_path"
+                            v-model="usuarioSeleccionado"
+                            :errors="form.errors.tutor_id"
                         />
                     </div>
 
@@ -103,8 +112,8 @@ import Dropdown from "@/Components/Forms/Dropdown.vue";
 import Schedules from "@/Components/Forms/Schedules.vue";
 
 // Variables
-const dataUsuarios = ref(null), dataAulas = ref(null), dataCarreras = ref(null), dataTurnos = ref(null)
-const usuarioSeleccionado = ref(null), aulaSeleccionada = ref(null), carreraSeleccionada = ref(null), turnoSeleccionado = ref(null)
+const dataUsuarios = ref(null), dataAulas = ref(null), dataCarreras = ref(null), dataTurnos = ref(null),  dataPeriodos = ref(null)
+const usuarioSeleccionado = ref(null), aulaSeleccionada = ref(null), carreraSeleccionada = ref(null), turnoSeleccionado = ref(null), periodoSeleccionado = ref(null)
 
 const form = useForm({
     _method : null,
@@ -144,7 +153,8 @@ const submit = () => {
             carrera_id : carreraSeleccionada.value?.id ?? null,
             aula_id : aulaSeleccionada.value?.id ?? null,
             tutor_id : usuarioSeleccionado.value?.id ?? null,
-            turno : turnoSeleccionado.value?.id ?? null
+            turno : turnoSeleccionado.value?.id ?? null,
+            periodo_id : periodoSeleccionado.value?.id ?? null
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
@@ -157,7 +167,8 @@ const submit = () => {
             carrera_id : carreraSeleccionada.value?.id ?? null,
             aula_id : aulaSeleccionada.value?.id ?? null,
             tutor_id : usuarioSeleccionado.value?.id ?? null,
-            turno : turnoSeleccionado.value?.id ?? null
+            turno : turnoSeleccionado.value?.id ?? null,
+            periodo_id : periodoSeleccionado.value?.id ?? null
         })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();
@@ -182,6 +193,9 @@ watch(() => props.dataModal, async (newVal) => {
 
     const dataTurnosAxios = await axios.get(`/api/turnos`);
     dataTurnos.value = dataTurnosAxios.data;
+
+    const dataPeriodosAxios = await axios.get(`/api/periodos`);
+    dataPeriodos.value = dataPeriodosAxios.data;
 })
 
 watch(() => props.dataModal.dataRegistro, (newVal) => {
@@ -192,6 +206,7 @@ watch(() => props.dataModal.dataRegistro, (newVal) => {
     form.carrera_id = newVal?.carrera.id ?? null
     form.aula_id = newVal?.aula.id ?? null
     form.tutor_id = newVal?.tutor.id ?? null
+    form.periodo_id = newVal?.periodo.id ?? null
     form.nombre = newVal?.nombre ?? null
     form.turno = newVal?.turno.id ?? null
 
@@ -201,5 +216,6 @@ watch(() => props.dataModal.dataRegistro, (newVal) => {
     carreraSeleccionada.value = newVal?.carrera
     aulaSeleccionada.value = newVal?.aula
     turnoSeleccionado.value = newVal?.turno
+    periodoSeleccionado.value = newVal?.periodo ?? null
 })
 </script>

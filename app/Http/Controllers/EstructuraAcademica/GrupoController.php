@@ -29,7 +29,9 @@ class GrupoController extends Controller{
                 'tutor_nombre' => $grupo->tutor->name." ".$grupo->tutor->apellido_paterno." ".$grupo->tutor->apellido_materno,
                 'nombre' => $grupo->nombre,
                 'turno' => $grupo->turno(),
-                'turno_nombre' => $grupo->turno()["nombre"]
+                'turno_nombre' => $grupo->turno()["nombre"],
+                'periodo' => $grupo->periodo,
+                'periodo_nombre' => $grupo->periodo->titulo,
             ];
         });
 
@@ -42,6 +44,7 @@ class GrupoController extends Controller{
             'carrera_id' => 'required',
             'aula_id' => 'required',
             'tutor_id' => 'required',
+            'periodo_id' => 'required',
             'nombre' => 'required',
             'turno' => 'required',
             'horarios' => 'required'
@@ -58,6 +61,7 @@ class GrupoController extends Controller{
             'carrera_id' => 'required',
             'aula_id' => 'required',
             'tutor_id' => 'required',
+            'periodo_id' => 'required',
             'nombre' => 'required',
             'turno' => 'required',
             'horarios' => 'required'

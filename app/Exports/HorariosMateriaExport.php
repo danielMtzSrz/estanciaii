@@ -2,7 +2,6 @@
 
 namespace App\Exports;
 
-
 use App\Models\GestionAcademica\GrupoMateria;
 
 use Maatwebsite\Excel\Concerns\FromArray;

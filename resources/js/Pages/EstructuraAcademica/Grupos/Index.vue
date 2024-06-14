@@ -75,7 +75,7 @@ import GenericAlert from "@/Components/GenericAlert.vue";
 import CreateUpdate from "@/Pages/EstructuraAcademica/Grupos/CreateUpdate.vue";
 
 // Variables para los modales
-const displayCreateUpdate = ref(false), displayGenericAlert = ref(false);
+const displayCreateUpdate = ref(false), displayGenerarExcel = ref(false), displayGenericAlert = ref(false);
 const dataRegistro = ref(null), dataProceso = ref(null)
 
 // Métodos
@@ -114,8 +114,20 @@ const items = ref([
     },
     {
         dataField: {
+            field: 'periodo_nombre',
+            header : 'Periodo',
+            sortable: true,
+            type: 'text',
+        },
+        filters: {
+            active: true,
+            type: 'text',
+        },
+    },
+    {
+        dataField: {
             field: 'aula_nombre',
-            header : 'Carrera',
+            header : 'Aula',
             sortable: true,
             type: 'text',
         },

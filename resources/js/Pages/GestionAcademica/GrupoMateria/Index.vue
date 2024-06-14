@@ -135,18 +135,6 @@ const items = ref([
             active: true,
             type: 'text',
         },
-    },
-    {
-        dataField: {
-            field: 'periodo_nombre',
-            header : 'Periodo',
-            sortable: true,
-            type: 'text',
-        },
-        filters: {
-            active: true,
-            type: 'text',
-        },
     }
 ])
 </script>

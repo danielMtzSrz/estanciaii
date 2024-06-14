@@ -36,15 +36,6 @@
                         />
                     </div>
 
-                    <div class="col-sm-12 col-md-6">
-                        <Dropdown 
-                            label="Periodo"
-                            :data="dataPeriodos"
-                            textDropdown="titulo"
-                            v-model="periodoSeleccionado"
-                        />
-                    </div>
-
                     <Schedules
                         v-model="form.horarios"
                         :errors="form.errors.horarios"
@@ -90,15 +81,14 @@ import Dropdown from "@/Components/Forms/Dropdown.vue";
 import Schedules from "@/Components/Forms/Schedules.vue";
 
 // Variables
-const dataUsuarios = ref(null), dataMaterias = ref(null), dataPeriodos = ref(null), dataGrupos = ref(null)
-const usuarioSeleccionado = ref(null), materiaSeleccionada = ref(null), periodoSeleccionado = ref(null), grupoSeleccionado = ref(null)
+const dataUsuarios = ref(null), dataMaterias = ref(null), dataGrupos = ref(null)
+const usuarioSeleccionado = ref(null), materiaSeleccionada = ref(null), grupoSeleccionado = ref(null)
 
 const form = useForm({
     _method : null,
     profesor_id : null,
     materia_id : null,
     grupo_id : null,
-    periodo_id : null,
     horarios : null
 });
 
@@ -130,7 +120,6 @@ const submit = () => {
             profesor_id : usuarioSeleccionado.value?.id ?? null,
             materia_id : materiaSeleccionada.value?.id ?? null,
             grupo_id : grupoSeleccionado.value?.id ?? null,
-            periodo_id : periodoSeleccionado.value?.id ?? null
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
@@ -143,7 +132,6 @@ const submit = () => {
             profesor_id : usuarioSeleccionado.value?.id ?? null,
             materia_id : materiaSeleccionada.value?.id ?? null,
             grupo_id : grupoSeleccionado.value?.id ?? null,
-            periodo_id : periodoSeleccionado.value?.id ?? null
         })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();
@@ -163,9 +151,6 @@ watch(() => props.dataModal, async (newVal) => {
     const dataMateriasAxios = await axios.get(`/api/materias`);
     dataMaterias.value = dataMateriasAxios.data;
 
-    const dataPeriodosAxios = await axios.get(`/api/periodos`);
-    dataPeriodos.value = dataPeriodosAxios.data;
-
     const dataGruposAxios = await axios.get(`/api/grupos`);
     dataGrupos.value = dataGruposAxios.data;
 })
@@ -178,12 +163,10 @@ watch(() => props.dataModal.dataRegistro, (newVal) => {
     form.profesor_id = newVal?.profesor.id ?? null
     form.materia_id = newVal?.materia.id ?? null
     form.grupo_id = newVal?.grupo.id ?? null
-    form.periodo_id = newVal?.periodo.id ?? null
     form.horarios = newVal?.horarios ?? null
 
     usuarioSeleccionado.value = newVal?.profesor ?? null
     materiaSeleccionada.value = newVal?.materia ?? null
     grupoSeleccionado.value = newVal?.grupo ?? null
-    periodoSeleccionado.value = newVal?.periodo ?? null
 })
 </script>

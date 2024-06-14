@@ -20,6 +20,7 @@ class Grupo extends Model
         'carrera_id',
         'aula_id',
         'tutor_id',
+        'periodo_id',
         'nombre',
         'turno',
         'horarios'
@@ -56,4 +57,8 @@ class Grupo extends Model
         return $this->hasMany(GrupoMateria::class);
     }
 
+    public function periodo()
+    {
+        return $this->belongsTo("App\Models\Calendarizaciones\Periodo");
+    }
 }

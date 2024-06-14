@@ -7,10 +7,10 @@
     >
         <template #content>
             <a 
-                class="p-button-raised p-button-rounded p-button-success w-100 sm:w-auto mt-2 sm:mt-0"
+                class="p-button p-component p-button-icon-only p-button-success p-button-text p-button-raised w-auto px-2"
                 :href="generateRoute('GestionAcademica.generar_horario_export', id_grupo_materia)"
             >
-                <i class="pi pi-calendar"></i>
+                <i class="bi bi-file-earmark-excel"></i>
                 <span class="ms-2">Generar horario</span>
             </a>
             <FullCalendar :options="calendarOptions">

@@ -36,7 +36,7 @@
 
                     <div class="col-sm-12 col-md-4">
                         <Calendar 
-                            label="Horario inicio"
+                            label="Fecha inicio"
                             icon="pi pi-calendar"
                             :value="fechaInicio"
                             @input="form.fecha_inicio = $event.valueFormat, fechaInicio = $event.valueShow"
@@ -47,7 +47,7 @@
 
                     <div class="col-sm-12 col-md-4">
                         <Calendar 
-                            label="Horario inicio"
+                            label="Fecha fin"
                             icon="pi pi-calendar"
                             :value="fechaFin"
                             @input="form.fecha_fin = $event.valueFormat, fechaFin = $event.valueShow"

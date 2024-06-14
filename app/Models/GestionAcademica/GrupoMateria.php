@@ -37,9 +37,4 @@ class GrupoMateria extends Model
     {
         return $this->belongsTo("App\Models\EstructuraAcademica\Grupo");
     }
-
-    public function periodo()
-    {
-        return $this->belongsTo("App\Models\Calendarizaciones\Periodo");
-    }
 }

@@ -37,6 +37,12 @@
                             }
                         })"
                     />
+                    <Button
+                        type="button"
+                        icon="pi pi-trash"
+                        class="p-button-success p-button-text p-button-raised p-button-rounded"
+                        @click="modalGenerarExcel({display: true, data: data})"
+                    />
                 </template>
             </DynamicTable>
         </template>
@@ -59,6 +65,14 @@
                 }"
                 @closeModal="modalGenericAlert({display: false, data: null, dataProceso: null})"
             />
+            <GenerarExcel
+                :dataModal="{
+                    display: displayGenerarExcel,
+                    dataRegistro: dataRegistro,
+                }"
+                @closeModal="modalGenerarExcel({display: false, data: null})"
+            />
+            
         </template>
     </GenericLayout>
 </template>
@@ -75,14 +89,20 @@ import GenericAlert from "@/Components/GenericAlert.vue";
 
 // Componentes de los modales
 import CreateUpdate from "@/Pages/EstructuraAcademica/Aulas/CreateUpdate.vue";
+import GenerarExcel from "@/Pages/EstructuraAcademica/Aulas/GenerarExcel.vue";
 
 // Variables para los modales
-const displayCreateUpdate = ref(false), displayGenericAlert = ref(false);
+const displayCreateUpdate = ref(false), displayGenerarExcel = ref(false), displayGenericAlert = ref(false);
 const dataRegistro = ref(null), dataProceso = ref(null)
 
 // Métodos
 const modalCreateUpdate = (event) => {
     displayCreateUpdate.value = event.display;
+    dataRegistro.value = event?.data ?? null;
+}
+
+const modalGenerarExcel = (event) => {
+    displayGenerarExcel.value = event.display;
     dataRegistro.value = event?.data ?? null;
 }
 
