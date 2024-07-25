@@ -28,25 +28,11 @@ class HorariosMateriaExport implements FromArray, WithStyles, ShouldAutoSize, Wi
 
     protected function prepareData()
     {
-        $daysOfWeek = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
-        $time_slots = [
-            '07:00-07:50',
-            '07:50-08:40',
-            '08:40-09:30',
-            '09:30-10:20',
-            '10:20-11:10',
-            '11:10-12:00',
-            '12:00-12:50',
-            '12:50-13:40',
-            '14:00-14:50',
-            '14:50-15:40',
-            '15:40-16:30',
-            '16:30-17:20',
-            '17:20-18:10',
-            '18:10-19:00',
-            '19:00-19:50',
-            '19:50-20:40',
-        ];
+        $daysOfWeek = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+        $time_slots = array_merge(
+            config('staticdata.dates.horario_matutino'),
+            config('staticdata.dates.horario_vespertino')
+        );
 
         // Agregar encabezado personalizado
         $this->data[] = [$this->encabezado['carrera'].' - '.$this->encabezado['periodo'].' | '.$this->encabezado['turno']];

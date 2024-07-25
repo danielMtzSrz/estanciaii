@@ -11,15 +11,15 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class HorariosAula implements FromArray, WithStyles, ShouldAutoSize
 {
-    protected $horariosMatutino;
-    protected $horariosVespertino;
+    protected $horarios_matutino;
+    protected $horarios_vespertino;
     protected $data = [];
     protected $colors = [];
 
-    public function __construct(array $horariosMatutino, array $horariosVespertino, array $encabezado_matutino, array $encabezado_vespertino)
+    public function __construct(array $horarios_matutino, array $horarios_vespertino, array $encabezado_matutino, array $encabezado_vespertino)
     {
-        $this->horariosMatutino = $horariosMatutino;
-        $this->horariosVespertino = $horariosVespertino;
+        $this->horarios_matutino = $horarios_matutino;
+        $this->horarios_vespertino = $horarios_vespertino;
         $this->encabezado_matutino = $encabezado_matutino;
         $this->encabezado_vespertino = $encabezado_vespertino;
         $this->prepareData();
@@ -27,27 +27,8 @@ class HorariosAula implements FromArray, WithStyles, ShouldAutoSize
 
     protected function prepareData()
     {
-        $time_slots_matutino = [
-            '07:00-07:50',
-            '07:50-08:40',
-            '08:40-09:30',
-            '09:30-10:20',
-            '10:20-11:10',
-            '11:10-12:00',
-            '12:00-12:50',
-            '12:50-13:40',
-        ];
-
-        $time_slots_vespertino = [
-            '14:00-14:50',
-            '14:50-15:40',
-            '15:40-16:30',
-            '16:30-17:20',
-            '17:20-18:10',
-            '18:10-19:00',
-            '19:00-19:50',
-            '19:50-20:40',
-        ];
+        $time_slots_matutino = config('staticdata.dates.horario_matutino');
+        $time_slots_vespertino = config('staticdata.dates.horario_vespertino');
 
         // Encabezado para los horarios matutino y vespertino
         $this->data[] = [$this->encabezado_matutino['carrera'].' - '.$this->encabezado_matutino['periodo'].' | '.$this->encabezado_matutino['turno'], '', '', '', '', '', '', '', $this->encabezado_vespertino['carrera'].' - '.$this->encabezado_vespertino['periodo'].' | '.$this->encabezado_vespertino['turno'], '', '', '', '', '', ''];
@@ -56,11 +37,12 @@ class HorariosAula implements FromArray, WithStyles, ShouldAutoSize
         $this->data[] = ['AULA: '.$this->encabezado_matutino['aula'].' GRUPO: '.$this->encabezado_matutino['grupo'], '', '', '', '', '', '', '', 'AULA: '.$this->encabezado_vespertino['aula'].' GRUPO: '.$this->encabezado_vespertino['grupo'], '', '', '', '', '', ''];
 
         $this->data[] = ['Hora', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', '', 'Hora', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-        $this->addHorario($this->horariosMatutino, $time_slots_matutino, 0);
-        $this->addHorario($this->horariosVespertino, $time_slots_vespertino, 8, true);
+
+        $this->addHorario($this->horarios_matutino, $time_slots_matutino, 0);
+        $this->addHorario($this->horarios_vespertino, $time_slots_vespertino, 8, true);
     }
 
-    protected function addHorario(array $horarios, array $time_slots, int $startColumn, bool $merge = false)
+    protected function addHorario(array $horarios, array $time_slots, int $start_column, bool $merge = false)
     {
         foreach ($time_slots as $slotIndex => $slot) {
             if ($merge && isset($this->data[$slotIndex + 5])) {
@@ -68,11 +50,11 @@ class HorariosAula implements FromArray, WithStyles, ShouldAutoSize
             } else {
                 $row = array_fill(0, 13, '');
                 if (!$merge) {
-                    $row[$startColumn] = $slot;
+                    $row[$start_column] = $slot;
                 }
             }
             if ($merge) {
-                $row[$startColumn] = $slot;
+                $row[$start_column] = $slot;
             }
             for ($day = 1; $day <= 6; $day++) {
                 $found = false;
@@ -83,14 +65,14 @@ class HorariosAula implements FromArray, WithStyles, ShouldAutoSize
 
                     if (in_array($day, $horario['horario_materia']['daysOfWeek']) &&
                         $startTime <= $slotTimes[0] && $endTime > $slotTimes[0]) {
-                        $row[$startColumn + $day] = $horario['horario_materia']['title'];
-                        // $this->colors[] = [$startColumn + $day, $slotIndex + 2, $horario['horario_materia']['color']];
+                        $row[$start_column + $day] = $horario['horario_materia']['title'];
+                        // $this->colors[] = [$start_column + $day, $slotIndex + 2, $horario['horario_materia']['color']];
                         $found = true;
                         break;
                     }
                 }
                 if (!$found) {
-                    $row[$startColumn + $day] = '';
+                    $row[$start_column + $day] = '';
                 }
             }
             if (!$merge) {
