@@ -34,6 +34,8 @@ class HorariosMateriaExport implements FromArray, WithStyles, ShouldAutoSize, Wi
             config('staticdata.dates.horario_vespertino')
         );
 
+        dd($this->horarios);
+
         // Agregar encabezado personalizado
         $this->data[] = [$this->encabezado['carrera'].' - '.$this->encabezado['periodo'].' | '.$this->encabezado['turno']];
         $this->data[] = ['AULA: '.$this->encabezado['aula'].' GRUPO: '.$this->encabezado['grupo']];
@@ -47,21 +49,23 @@ class HorariosMateriaExport implements FromArray, WithStyles, ShouldAutoSize, Wi
             for ($day = 1; $day <= 6; $day++) {
                 $found = false;
                 foreach ($this->horarios as $horario) {
-                    $startTime = substr($horario['horario_materia']['startTime'], 0, 5);
-                    $endTime = substr($horario['horario_materia']['endTime'], 0, 5);
-                    $slotTimes = explode('-', $slot);
+                    foreach ($horario['horario_materia'] as $horario_materia) {
+                        $startTime = substr($horario_materia['startTime'], 0, 5);
+                        $endTime = substr($horario_materia['endTime'], 0, 5);
+                        $slotTimes = explode('-', $slot);
 
-                    if (in_array($day, $horario['horario_materia']['daysOfWeek']) &&
-                        $startTime <= $slotTimes[0] && $endTime > $slotTimes[0]) {
-                        $row[] = $horario['horario_materia']['title'];
-                        // $this->colors[] = $horario['horario_materia']['color'];
-                        $found = true;
-                        break;
+                        if (in_array($day, $horario_materia['daysOfWeek']) &&
+                            $startTime <= $slotTimes[0] && $endTime > $slotTimes[0]) {
+                            $row[] = $horario_materia['title'];
+                            // $this->colors[] = $horario_materia['color']; // Descomentar si usas colores
+                            $found = true;
+                            break 2; // Salir de ambos bucles
+                        }
                     }
                 }
                 if (!$found) {
                     $row[] = '';
-                    // $this->colors[] = null;
+                    // $this->colors[] = null; // Descomentar si usas colores
                 }
             }
             $this->data[] = $row;

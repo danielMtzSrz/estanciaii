@@ -155,31 +155,42 @@ class AulaController extends Controller
     public function transformarHorariosConCarbon($materia_nombre, $materia_horario)
     {
         $diasMapa = ['lunes' => 1, 'martes' => 2, 'miercoles' => 3, 'jueves' => 4, 'viernes' => 5, 'sabado' => 6, 'domingo' => 0];
-
-        $diasDeLaSemana = [];
-        $horasInicio = [];
-        $horasFin = [];
-
-        foreach($materia_horario as $clave => $valor){
-            if(is_bool($valor) && $valor === true){
-                $diasDeLaSemana[] = $diasMapa[$clave];
-            }
-
-            if(strpos($clave, '_hora_inicio') !== false && $valor !== null){
-                $horasInicio[] = Carbon::parse($valor)->setTimezone('America/Mexico_City')->format('H:i:s');
-            }elseif(strpos($clave, '_hora_fin') !== false && $valor !== null){
-                $horasFin[] = Carbon::parse($valor)->setTimezone('America/Mexico_City')->format('H:i:s');
+    
+        $horarios = [];
+    
+        foreach ($diasMapa as $dia => $numeroDia) {
+            if (isset($materia_horario[$dia]) && $materia_horario[$dia] === true) {
+                $startTimeKey = $dia . '_hora_inicio';
+                $endTimeKey = $dia . '_hora_fin';
+    
+                $startTime = isset($materia_horario[$startTimeKey]) ? Carbon::parse($materia_horario[$startTimeKey])->setTimezone('America/Mexico_City')->format('H:i:s') : null;
+                $endTime = isset($materia_horario[$endTimeKey]) ? Carbon::parse($materia_horario[$endTimeKey])->setTimezone('America/Mexico_City')->format('H:i:s') : null;
+    
+                if ($startTime && $endTime) {
+                    $horarios[] = [
+                        'day' => $numeroDia,
+                        'startTime' => $startTime,
+                        'endTime' => $endTime,
+                    ];
+                }
             }
         }
-
-        $startTime = !empty($horasInicio) ? min($horasInicio) : null;
-        $endTime = !empty($horasFin) ? max($horasFin) : null;
-
-        return [
-            'title' => $materia_nombre,
-            'startTime' => $startTime,
-            'endTime' => $endTime,
-            'daysOfWeek' => $diasDeLaSemana,
-        ];
+    
+        $horariosAgrupados = [];
+    
+        foreach ($horarios as $horario) {
+            $key = $horario['startTime'] . '_' . $horario['endTime'];
+            if (!isset($horariosAgrupados[$key])) {
+                $horariosAgrupados[$key] = [
+                    'title' => $materia_nombre,
+                    'startTime' => $horario['startTime'],
+                    'endTime' => $horario['endTime'],
+                    'daysOfWeek' => [],
+                ];
+            }
+            $horariosAgrupados[$key]['daysOfWeek'][] = $horario['day'];
+        }
+    
+        return array_values($horariosAgrupados);
     }
 }

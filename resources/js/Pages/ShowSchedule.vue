@@ -83,10 +83,13 @@ const generateRoute = (routeName, id) => {
 
 watch(() => props.dataModal.dataRegistro, async (newVal) => {
     if(newVal?.id){
-        const dataHorarioGrupoMateria = await axios.get(`/api/horario/grupo_materia/${newVal?.id}`)
-        calendarOptions.value.events = dataHorarioGrupoMateria.data.map($materia_horario => {
-            return {...$materia_horario.horario_materia}
-        })
+        const dataHorarioGrupoMateria = await axios.get(`/api/horario/grupo_materia/${newVal?.id}`);
+        calendarOptions.value.events = dataHorarioGrupoMateria?.data.flatMap(horarios_materia => {
+            return horarios_materia.horario_materia.map(a => {
+                console.log(a);
+                return { ...a };
+            });
+        }) ?? null;
         id_grupo_materia.value = newVal?.id
     }
 

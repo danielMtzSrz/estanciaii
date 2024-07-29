@@ -40,42 +40,45 @@ class HorariosAula implements FromArray, WithStyles, ShouldAutoSize
 
         $this->addHorario($this->horarios_matutino, $time_slots_matutino, 0);
         $this->addHorario($this->horarios_vespertino, $time_slots_vespertino, 8, true);
+
+        dd($this->horarios_matutino);
     }
 
     protected function addHorario(array $horarios, array $time_slots, int $start_column, bool $merge = false)
     {
-        foreach ($time_slots as $slotIndex => $slot) {
-            if ($merge && isset($this->data[$slotIndex + 5])) {
+        foreach($time_slots as $slotIndex => $slot){
+            if($merge && isset($this->data[$slotIndex + 5])){
                 $row = &$this->data[$slotIndex + 5];
-            } else {
-                $row = array_fill(0, 13, '');
-                if (!$merge) {
+            }else{
+                $row = array_fill(0, 15, '');
+                if(!$merge){
                     $row[$start_column] = $slot;
                 }
             }
-            if ($merge) {
+            if($merge){
                 $row[$start_column] = $slot;
             }
-            for ($day = 1; $day <= 6; $day++) {
+            for($day=1; $day<=6; $day++){
                 $found = false;
-                foreach ($horarios as $horario) {
-                    $startTime = substr($horario['horario_materia']['startTime'], 0, 5);
-                    $endTime = substr($horario['horario_materia']['endTime'], 0, 5);
-                    $slotTimes = explode('-', $slot);
+                foreach($horarios as $horario){
+                    foreach($horario['horario_materia'] as $horario_materia){
+                        $startTime = substr($horario_materia['startTime'], 0, 5);
+                        $endTime = substr($horario_materia['endTime'], 0, 5);
+                        $slotTimes = explode('-', $slot);
 
-                    if (in_array($day, $horario['horario_materia']['daysOfWeek']) &&
-                        $startTime <= $slotTimes[0] && $endTime > $slotTimes[0]) {
-                        $row[$start_column + $day] = $horario['horario_materia']['title'];
-                        // $this->colors[] = [$start_column + $day, $slotIndex + 2, $horario['horario_materia']['color']];
-                        $found = true;
-                        break;
+                        if (in_array($day, $horario_materia['daysOfWeek']) && $startTime <= $slotTimes[0] && $endTime > $slotTimes[0]) {
+                            $row[$start_column + $day] = $horario_materia['title'];
+                            // $this->colors[] = [$start_column + $day, $slotIndex + 5, $horario_materia['color']];
+                            $found = true;
+                            break 2; // Salir de ambos bucles
+                        }
                     }
                 }
-                if (!$found) {
+                if(!$found){
                     $row[$start_column + $day] = '';
                 }
             }
-            if (!$merge) {
+            if(!$merge){
                 $this->data[] = $row;
             }
         }
