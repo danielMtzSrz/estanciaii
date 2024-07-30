@@ -72,7 +72,7 @@ import Avatar from 'primevue/avatar'
 import Dropdown from "@/Components/Forms/Dropdown.vue";
 
 // Variables
-const periodo_id = ref(null), dataPeriodos = ref(null), periodoSeleccionado = ref(null)
+const dataPeriodos = ref(null), periodoSeleccionado = ref(null)
 
 const displayShowSchedule = ref(null)
 const dataRegistro = ref(null)

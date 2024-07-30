@@ -47,6 +47,8 @@ class AulaController extends Controller
             'horarios' => 'required'
         ]);
 
+        $validated_data['horarios'] = $this->horariosMap($validated_data['horarios']);
+
         Aula::create($validated_data);
 
         return back()->with(config('messages.mensaje_exito'));
@@ -61,6 +63,8 @@ class AulaController extends Controller
             'capacidad' => 'required',
             'horarios' => 'required'
         ]);
+
+        $validated_data['horarios'] = $this->horariosMap($validated_data['horarios']);
 
         $aula = Aula::find($id);
 
@@ -78,14 +82,24 @@ class AulaController extends Controller
         return back()->with(config('messages.mensaje_eliminar'));
     }
 
-    function agruparPorTurno(Collection $grupos)
+    public function horariosMap($horarios)
     {
-        ;
+        $dias = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
+        $horarios_mapeados = [];
 
-        return [
-            'turno_1' => $turno_1,
-            'turno_2' => $turno_2,
-        ];
+        foreach($dias as $dia){
+            if(isset($horarios[$dia]) && $horarios[$dia]){
+                $horarios_mapeados[$dia] = true;
+                $horarios_mapeados[$dia.'_hora_inicio'] = (preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/', $horarios[$dia.'_hora_inicio'])) 
+                    ? Carbon::now()->isDST() ? Carbon::parse($horarios[$dia.'_hora_inicio'])->timezone('America/Monterrey')->subHour()->format('H:i') : Carbon::parse($horarios[$dia.'_hora_inicio'])->timezone('America/Monterrey')->format('H:i')
+                    : $horarios[$dia.'_hora_inicio'];
+                $horarios_mapeados[$dia.'_hora_fin'] = (preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/', $horarios[$dia.'_hora_fin'])) 
+                    ? Carbon::now()->isDST() ? Carbon::parse($horarios[$dia.'_hora_fin'])->timezone('America/Monterrey')->subHour()->format('H:i') : Carbon::parse($horarios[$dia.'_hora_fin'])->timezone('America/Monterrey')->format('H:i')
+                    : $horarios[$dia.'_hora_fin'];
+            }
+        }
+        
+        return $horarios_mapeados;
     }
 
     public function generarHorarios($aula_id, $periodo_id)

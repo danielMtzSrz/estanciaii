@@ -7,7 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Models\EstructuraAcademica\Grupo;
 
 use Illuminate\Http\Request;
+
 use Inertia\Inertia;
+
+use Carbon\Carbon;
 
 class GrupoController extends Controller{
 
@@ -50,6 +53,8 @@ class GrupoController extends Controller{
             'horarios' => 'required'
         ]);
         
+        $validated_data['horarios'] = $this->horariosMap($validated_data['horarios']);
+
         Grupo::create($validated_data);
 
         return back()->with(config('messages.mensaje_exito'));
@@ -67,7 +72,10 @@ class GrupoController extends Controller{
             'horarios' => 'required'
         ]);
 
+        $validated_data['horarios'] = $this->horariosMap($validated_data['horarios']);
+
         $grupo = Grupo::find($id);
+
 
         $grupo->update($validated_data);
 
@@ -81,5 +89,25 @@ class GrupoController extends Controller{
         $grupo->delete();
 
         return back()->with(config('messages.mensaje_eliminar'));
+    }
+
+    public function horariosMap($horarios)
+    {
+        $dias = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
+        $horarios_mapeados = [];
+
+        foreach($dias as $dia){
+            if(isset($horarios[$dia]) && $horarios[$dia]){
+                $horarios_mapeados[$dia] = true;
+                $horarios_mapeados[$dia.'_hora_inicio'] = (preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/', $horarios[$dia.'_hora_inicio'])) 
+                    ? Carbon::now()->isDST() ? Carbon::parse($horarios[$dia.'_hora_inicio'])->timezone('America/Monterrey')->subHour()->format('H:i') : Carbon::parse($horarios[$dia.'_hora_inicio'])->timezone('America/Monterrey')->format('H:i')
+                    : $horarios[$dia.'_hora_inicio'];
+                $horarios_mapeados[$dia.'_hora_fin'] = (preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/', $horarios[$dia.'_hora_fin'])) 
+                    ? Carbon::now()->isDST() ? Carbon::parse($horarios[$dia.'_hora_fin'])->timezone('America/Monterrey')->subHour()->format('H:i') : Carbon::parse($horarios[$dia.'_hora_fin'])->timezone('America/Monterrey')->format('H:i')
+                    : $horarios[$dia.'_hora_fin'];
+            }
+        }
+        
+        return $horarios_mapeados;
     }
 }
