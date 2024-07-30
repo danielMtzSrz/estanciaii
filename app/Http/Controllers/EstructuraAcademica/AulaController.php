@@ -126,20 +126,26 @@ class AulaController extends Controller
 
         $horariosMatutino = ($grupo_turno_matutino->first() && $grupo_turno_matutino->first()->grupoMateria) ? $grupo_turno_matutino->first()->grupoMateria->map(function($grupo_materia) {
             $materia_nombre = isset($grupo_materia->materia->nombre) ? $grupo_materia->materia->nombre : 'Sin materia';
+            $materia_color = isset($grupo_materia->materia->color) ? $grupo_materia->materia->color : '#FFFFFF';
             $materia_horario = isset($grupo_materia->horarios) ? $grupo_materia->horarios : null;
         
             return [
-                'horario_materia' => $this->transformarHorariosConCarbon($materia_nombre, $materia_horario)
+                'horario_materia' => $this->transformarHorariosConCarbon($materia_nombre, $materia_color, $materia_horario)
             ];
         })->toArray() : [];
 
-        $horariosVespertino = ($grupo_turno_vespertino->first() && $grupo_turno_vespertino->first()->grupoMateria) ? $grupo_turno_vespertino->first()->grupoMateria->map(function($grupo_materia) {
-            $materia_nombre = isset($grupo_materia->materia->nombre) ? $grupo_materia->materia->nombre : 'Sin materia';
-            $materia_horario = isset($grupo_materia->horarios) ? $grupo_materia->horarios : null;
-            return [
-                'horario_materia' => $this->transformarHorariosConCarbon($materia_nombre, $materia_horario)
-            ];
-        })->toArray() : [] ;
+        $horariosVespertino = ($grupo_turno_vespertino->first() && $grupo_turno_vespertino->first()->grupoMateria) 
+            ? $grupo_turno_vespertino
+                ->first()->grupoMateria
+                ->map(function($grupo_materia) {
+                    $materia_nombre = isset($grupo_materia->materia->nombre) ? $grupo_materia->materia->nombre : 'Sin materia';
+                    $materia_color = isset($grupo_materia->materia->color) ? $grupo_materia->materia->color : '#FFFFFF';
+                    $materia_horario = isset($grupo_materia->horarios) ? $grupo_materia->horarios : null;
+                    return [
+                        'horario_materia' => $this->transformarHorariosConCarbon($materia_nombre, $materia_color, $materia_horario)
+                    ];
+                })->toArray() 
+            : [];
 
         $edificio_nombre = ($grupo_turno_matutino->first() && $grupo_turno_matutino->first()->aula) ? $grupo_turno_matutino->first()->aula->edificio()['nombre'] : null;
         $aula_nombre = ($grupo_turno_matutino->first() && $grupo_turno_matutino->first()->aula) ? $grupo_turno_matutino->first()->aula->nombre : null;
@@ -166,7 +172,7 @@ class AulaController extends Controller
         return Excel::download(new HorariosAula($horariosMatutino, $horariosVespertino, $encabezado_matutino, $encabezado_vespertino), 'horarios.xlsx');
     }
 
-    public function transformarHorariosConCarbon($materia_nombre, $materia_horario)
+    public function transformarHorariosConCarbon($materia_nombre, $materia_color, $materia_horario)
     {
         $diasMapa = ['lunes' => 1, 'martes' => 2, 'miercoles' => 3, 'jueves' => 4, 'viernes' => 5, 'sabado' => 6, 'domingo' => 0];
     
@@ -197,6 +203,7 @@ class AulaController extends Controller
             if (!isset($horariosAgrupados[$key])) {
                 $horariosAgrupados[$key] = [
                     'title' => $materia_nombre,
+                    'color' => $materia_color,
                     'startTime' => $horario['startTime'],
                     'endTime' => $horario['endTime'],
                     'daysOfWeek' => [],

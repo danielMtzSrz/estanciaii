@@ -23,7 +23,8 @@ class MateriaController extends Controller
                 'plan_estudios_clave' => $materia->planEstudios->mapaCurricular->clave_mapa_curricular,
                 'cuatrimestre' => $materia->cuatrimestre(),
                 'cuatrimestre_nombre' => $materia->cuatrimestre()['nombre'],
-                'nombre' => $materia->nombre
+                'nombre' => $materia->nombre,
+                'color' => $materia->color,
             ];
         });
 

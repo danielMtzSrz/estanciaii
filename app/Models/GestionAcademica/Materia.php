@@ -19,8 +19,9 @@ class Materia extends Model
 
     protected $fillable = [
         "cuatrimestre_id",
+        "plan_estudios_id",
         "nombre",
-        "plan_estudios_id"
+        "color"
     ];
 
     public function grupoMateria()

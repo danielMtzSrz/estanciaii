@@ -40,8 +40,6 @@ class HorariosAula implements FromArray, WithStyles, ShouldAutoSize
 
         $this->addHorario($this->horarios_matutino, $time_slots_matutino, 0);
         $this->addHorario($this->horarios_vespertino, $time_slots_vespertino, 8, true);
-
-        dd($this->horarios_matutino);
     }
 
     protected function addHorario(array $horarios, array $time_slots, int $start_column, bool $merge = false)
@@ -68,7 +66,7 @@ class HorariosAula implements FromArray, WithStyles, ShouldAutoSize
 
                         if (in_array($day, $horario_materia['daysOfWeek']) && $startTime <= $slotTimes[0] && $endTime > $slotTimes[0]) {
                             $row[$start_column + $day] = $horario_materia['title'];
-                            // $this->colors[] = [$start_column + $day, $slotIndex + 5, $horario_materia['color']];
+                            $this->colors[] = [$start_column + $day, $slotIndex + 6, $horario_materia['color']];
                             $found = true;
                             break 2; // Salir de ambos bucles
                         }
@@ -94,11 +92,11 @@ class HorariosAula implements FromArray, WithStyles, ShouldAutoSize
         // Centrar los textos
         $sheet->getStyle('A1:M' . $sheet->getHighestRow())->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-        // // Aplicar colores a las celdas
-        // foreach ($this->colors as $color) {
-        //     $column = chr(65 + $color[0]); // Convertir el índice de columna a letra
-        //     $sheet->getStyle($column . $color[1])->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB(str_replace('#', '', $color[2]));
-        // }
+        // Aplicar colores a las celdas
+        foreach($this->colors as $color) {
+            $column = chr(65 + $color[0]); // Convertir el índice de columna a letra
+            $sheet->getStyle($column . $color[1])->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB(str_replace('#', '', $color[2]));
+        }
 
         // Agregar encabezados
         $sheet->mergeCells('A1:G1');

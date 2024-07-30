@@ -34,17 +34,16 @@ class HorariosMateriaExport implements FromArray, WithStyles, ShouldAutoSize, Wi
             config('staticdata.dates.horario_vespertino')
         );
 
-        dd($this->horarios);
-
         // Agregar encabezado personalizado
-        $this->data[] = [$this->encabezado['carrera'].' - '.$this->encabezado['periodo'].' | '.$this->encabezado['turno']];
-        $this->data[] = ['AULA: '.$this->encabezado['aula'].' GRUPO: '.$this->encabezado['grupo']];
-        // Agregar fila vacía
-        $this->data[] = [];
+        $this->data[] = [''];
+        $this->data[] = [''];
+        $this->data[] = [''];
+        $this->data[] = [''];
+        
         // Agregar encabezados de columnas
         $this->data[] = ['Hora', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 
-        foreach ($time_slots as $slot) {
+        foreach ($time_slots as $slotIndex => $slot) {
             $row = [$slot];
             for ($day = 1; $day <= 6; $day++) {
                 $found = false;
@@ -57,15 +56,15 @@ class HorariosMateriaExport implements FromArray, WithStyles, ShouldAutoSize, Wi
                         if (in_array($day, $horario_materia['daysOfWeek']) &&
                             $startTime <= $slotTimes[0] && $endTime > $slotTimes[0]) {
                             $row[] = $horario_materia['title'];
-                            // $this->colors[] = $horario_materia['color']; // Descomentar si usas colores
+                            $this->colors[] = ['column' => $day, 'index' => $slotIndex + 6, 'color' => $horario_materia['color']];
                             $found = true;
                             break 2; // Salir de ambos bucles
                         }
                     }
                 }
-                if (!$found) {
+                if(!$found) {
                     $row[] = '';
-                    // $this->colors[] = null; // Descomentar si usas colores
+                    $this->colors[] = null; // Descomentar si usas colores
                 }
             }
             $this->data[] = $row;
@@ -81,34 +80,30 @@ class HorariosMateriaExport implements FromArray, WithStyles, ShouldAutoSize, Wi
     {
         // Estilos para el encabezado general y las filas de datos
         $sheet->mergeCells('A1:G1');
-        $sheet->setCellValue('A1', $this->encabezado['carrera'].' - '.$this->encabezado['periodo'].' | '.$this->encabezado['turno']);
         $sheet->mergeCells('A2:G2');
-        $sheet->setCellValue('A2', 'AULA: '.$this->encabezado['aula'].' GRUPO: '.$this->encabezado['grupo']);
+        $sheet->mergeCells('A3:G3');
+        $sheet->mergeCells('A4:G4');
+        $sheet->setCellValue('A1', $this->encabezado['carrera']);
+        $sheet->setCellValue('A2', $this->encabezado['periodo']);
+        $sheet->setCellValue('A3', $this->encabezado['turno']);
+        $sheet->setCellValue('A4', 'AULA: '.$this->encabezado['aula'].' GRUPO: '.$this->encabezado['grupo']);
+        
+        $sheet->getStyle('A1:G3')->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('A4:G4')->getFont()->setBold(true)->setSize(12);
 
-        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
-        $sheet->getStyle('A2')->getFont()->setBold(true)->setSize(12);
-        $sheet->getStyle('A3:G3')->getFont()->setBold(true);
-
-        // Centrar los textos
-        $sheet->getStyle('A1:G1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-        $sheet->getStyle('A2:G2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-        $sheet->getStyle('A3:G3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-        $sheet->getStyle('A4:G4')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A5:G5')->getFont()->setBold(true);
 
         // Centrar todos los datos
-        $sheet->getStyle('A5:G' . $sheet->getHighestRow())->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:G' . $sheet->getHighestRow())->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-        // // Aplicar colores a las celdas
-        // $rowIndex = 4;
-        // foreach($this->colors as $index => $color){
-        //     if ($color) {
-        //         $column = chr(66 + ($index % 5)); // 66 = 'B' en ASCII
-        //         $sheet->getStyle($column.$rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB(str_replace('#', '', $color));
-        //     }
-        //     if (($index + 1) % 5 == 0) {
-        //         $rowIndex++;
-        //     }
-        // }
+        // Aplicar colores a las celdas
+        foreach($this->colors as $color) {
+            if($color){
+                $column = chr(65 + $color['column']); // Convertir el índice de columna a letra
+                $cell = $column . $color['index'];
+                $sheet->getStyle($cell)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB(str_replace('#', '', $color['color']));
+            }
+        }
 
         return [];
     }

@@ -133,16 +133,17 @@ class GrupoMateriaController extends Controller
 
         $horarios_grupo = $grupo->grupoMateria->map(function($grupo_materia) {
             $materia_nombre = isset($grupo_materia->materia->nombre) ? $grupo_materia->materia->nombre : 'Sin materia';
+            $materia_color = isset($grupo_materia->materia->color) ? $grupo_materia->materia->color : '#FFFFFF';
             $materia_horario = isset($grupo_materia->horarios) ? $grupo_materia->horarios : null;
             return [
-                'horario_materia' => $this->transformarHorariosConCarbon($materia_nombre, $materia_horario)
+                'horario_materia' => $this->transformarHorariosConCarbon($materia_nombre, $materia_color, $materia_horario)
             ];
         });
 
         return Excel::download(new HorariosMateriaExport($horarios_grupo->toArray(), $encabezado), 'horario_'.$encabezado['grupo'].'_'.$encabezado['periodo'].'.xlsx');
     }
 
-    public function transformarHorariosConCarbon($materia_nombre, $materia_horario)
+    public function transformarHorariosConCarbon($materia_nombre, $materia_color, $materia_horario)
     {
         $diasMapa = ['lunes' => 1, 'martes' => 2, 'miercoles' => 3, 'jueves' => 4, 'viernes' => 5, 'sabado' => 6, 'domingo' => 0];
     
@@ -173,6 +174,7 @@ class GrupoMateriaController extends Controller
             if (!isset($horariosAgrupados[$key])) {
                 $horariosAgrupados[$key] = [
                     'title' => $materia_nombre,
+                    'color' => $materia_color,
                     'startTime' => $horario['startTime'],
                     'endTime' => $horario['endTime'],
                     'daysOfWeek' => [],

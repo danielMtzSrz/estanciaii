@@ -26,12 +26,17 @@
                         />
                     </div>
 
-                    <div class="col-sm-12 col-md-12">
+                    <div class="col-sm-12 col-md-8">
                         <InputText
                             label="Nombre"
                             v-model="form.nombre"
                             :errors="form.errors.nombre"
                         />
+                    </div>
+
+                    <div class="col-sm-12 col-md-4 d-flex flex-col mb-5">
+                        <small>Color: <span :style='{color : "#"+form.color}'>#{{ form.color }}</span></small>
+                        <ColorPicker v-model="form.color"/>
                     </div>
                 </div>
 
@@ -64,6 +69,7 @@ import { useForm } from "@inertiajs/inertia-vue3";
 
 // Primevue
 import Button from "primevue/button";
+import ColorPicker from "primevue/colorpicker";
 
 // Layouts
 import GenericModal from "@/Components/GenericModal.vue";
@@ -80,7 +86,8 @@ const form = useForm({
     _method : null,
     plan_estudios_id : null,
     cuatrimestre_id : null,
-    nombre : null
+    nombre : null,
+    color : '6466f1',
 });
 
 const ruta = ref(null), titulo = ref(null);
@@ -149,6 +156,7 @@ watch(() => props.dataModal.dataRegistro, (newVal) => {
     form.plan_estudios_id = newVal?.plan_estudios.id ?? null
     form.cuatrimestre_id = newVal?.cuatrimestre.id ?? null
     form.nombre = newVal?.nombre ?? null
+    form.color = newVal?.color ?? null
 
     planEstudioSeleccionado.value = newVal?.plan_estudios
     cuatrimestreSeleccionado.value = newVal?.cuatrimestre
