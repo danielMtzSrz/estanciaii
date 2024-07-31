@@ -11,12 +11,12 @@ import InputText from "@/Assets/Components/Forms/InputText.vue";
 
  <template>
     <div class="mb-5">
+        <small :for="name">{{ label }}</small>
         <div class="p-inputgroup">
             <span v-if="icon" class="p-inputgroup-addon">
                 <i :class="icon"></i>
             </span>
             <div class="flex flex-column gap-2 w-100">
-                <small :for="name">{{ label }}</small>
                 <InputText
                     class="w-100"
                     :class="{ 'p-invalid': errors }"
