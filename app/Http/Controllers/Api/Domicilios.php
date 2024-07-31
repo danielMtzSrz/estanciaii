@@ -37,6 +37,13 @@ class Domicilios extends Controller
         return response()->json($colonias);
     }
 
+    public function ObtenerColonia($id_colonia)
+    {
+        $colonia = Colonia::with('municipio.estado.pais')->where("id", $id_colonia)->orderBy('nombre', 'asc')->get();
+
+        return response()->json($colonia);
+    }
+
     public function cp($cp)
     {
 

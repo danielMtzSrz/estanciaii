@@ -19,18 +19,14 @@
             </div>
         </div>
         <small class="p-error" v-if="errors">
-            {{errors}}
+            {{ errors }}
         </small>
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-
-// Primevue
+import { ref, watch } from 'vue';
 import Calendar from 'primevue/calendar';
-
-const inputValue = ref(props.value ? new Date(props.value) : null)
 
 const props = defineProps({
     icon: String,
@@ -38,7 +34,7 @@ const props = defineProps({
         type: [Object, String],
         default: null
     },
-    value: {
+    modelValue: {
         type: [Object, String],
         default: null
     },
@@ -50,34 +46,35 @@ const props = defineProps({
         type: String,
         default: null
     },
-    icon: {
-        type: String,
-        default: null
-    },
     showTime: {
         type: Boolean,
         default: true
-    },
-    modelValue: null
-})
+    }
+});
 
-const emits = defineEmits(["update:modelValue", "input"]);
+const emits = defineEmits(['update:modelValue', 'input']);
+
+const inputValue = ref(props.modelValue ? new Date(props.modelValue) : null);
+
+watch(() => props.modelValue, (newValue) => {
+    inputValue.value = new Date(newValue);
+});
 
 const selected = (event) => {
-    inputValue.value = event
-    let valorFormateado = null
-    if(props.showTime){
+    inputValue.value = event;
+    let valorFormateado = null;
+    if (props.showTime) {
         let month = ("0" + (event.getMonth() + 1)).slice(-2);
         let day  = ("0" + (event.getDate())).slice(-2);
         let year = event.getFullYear();
-        let hour =  ("0" + (event.getHours())).slice(-2);
-        let min =  ("0" + (event.getMinutes())).slice(-2);
+        let hour = ("0" + (event.getHours())).slice(-2);
+        let min = ("0" + (event.getMinutes())).slice(-2);
         let seg = "59";
-        valorFormateado = year + "-" + month + "-" + day + " " + hour + ":" +  min + ":" + seg;
-    }else{
-        valorFormateado = event.toLocaleDateString("en-CA")
+        valorFormateado = `${year}-${month}-${day} ${hour}:${min}:${seg}`;
+    } else {
+        valorFormateado = event.toLocaleDateString("en-CA");
     }
-    emits('update:modelValue', valorFormateado)
-    emits('input', {valueFormat: valorFormateado, valueShow: event});
-}
-</script> 
+    emits('update:modelValue', valorFormateado);
+    emits('input', { valueFormat: valorFormateado, valueShow: event });
+};
+</script>

@@ -104,6 +104,8 @@ Route::prefix('domicilio')->name('domicilio.')->group(function () {
     Route::get('municipios/{id_estado}', [Domicilios::class, 'Municipios'])->name('municipios');
     
     Route::get('colonias/{id_municipio}', [Domicilios::class, 'Colonias'])->name('colonias');
+
+    Route::get('obtener_colonia/{id_colonia}', [Domicilios::class, 'ObtenerColonia'])->name('obtener_colonia');
     
     Route::get('cp/{cp}',[Domicilios::class, 'cp'])->name('cp');
 });

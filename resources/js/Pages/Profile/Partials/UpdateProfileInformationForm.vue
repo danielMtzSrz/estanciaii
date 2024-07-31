@@ -237,7 +237,7 @@
 
                 <div class="col-sm-12">
                     <Dropdown 
-                        label="Estados"
+                        label="Municipios"
                         :data="data_municipios"
                         textDropdown="nombre"
                         v-model="municipio_seleccionado"
@@ -288,9 +288,13 @@
         </template>
 
         <template #actions>
-            <JetActionMessage :on="form.recentlySuccessful" class="mr-3">
-                Información actualizada.
-            </JetActionMessage>
+            <Message
+                v-if="form.recentlySuccessful" 
+                severity="success"
+                class="mr-2"
+            >
+            Información actualizada.
+            </Message>
 
             <Button
                 type="submit"
@@ -305,18 +309,21 @@
 
 <script setup>
 import { onBeforeMount, onMounted, ref, watch } from 'vue';
+
 import { Inertia } from '@inertiajs/inertia';
 import { Link, useForm } from '@inertiajs/inertia-vue3';
+
 import JetFormSection from '@/Jetstream/FormSection.vue';
 import JetInputError from '@/Jetstream/InputError.vue';
-import JetActionMessage from '@/Jetstream/ActionMessage.vue';
 
 import Button from 'primevue/button';
+import Divider from 'primevue/divider';
+import Message from 'primevue/message';
+
 import InputText from "@/Components/Forms/InputText.vue";
 import Dropdown from "@/Components/Forms/Dropdown.vue";
 import InputNumber from "@/Components/Forms/InputNumber.vue";
 import Calendar from "@/Components/Forms/Calendar.vue";
-import Divider from 'primevue/divider';
 
 // Variables
 const data_paises = ref(null), pais_seleccionado = ref(null),
@@ -325,7 +332,8 @@ const data_paises = ref(null), pais_seleccionado = ref(null),
       data_colonias = ref(null), colonia_seleccionada = ref(null),
       dataEstadosCiviles = ref(null), estado_civil_seleccionado = ref(null), 
       dataGeneros = ref(null), genero_seleccionado = ref(null), 
-      dataTiposSangre = ref(null), tipo_sangre_seleccionado = ref(null)
+      dataTiposSangre = ref(null), tipo_sangre_seleccionado = ref(null),
+      fecha_nacimiento = ref(null)
 
 onBeforeMount(async () => {
     const dataPaisesAxios = await axios.get(`/api/domicilio/paises`);
@@ -341,7 +349,21 @@ onBeforeMount(async () => {
     dataTiposSangre.value = dataTiposSangreApi.data
 })
 
-onMounted(() => {
+onMounted(async () => {
+
+    if(props.user.colonia_id){
+        try{
+            const obtener_colonia = await axios.get(`/api/domicilio/obtener_colonia/${props.user.colonia_id}`)
+            const colonia = obtener_colonia.data[0];
+            pais_seleccionado.value = colonia.municipio.estado?.pais ?? null
+            estado_seleccionado.value = colonia.municipio?.estado ?? null
+            municipio_seleccionado.value = colonia?.municipio ?? null
+            colonia_seleccionada.value = colonia ?? null
+        }catch(e){
+            console.error("Actualiza para obtener los datos", e)
+        }
+    }
+
     form.colonia_id = props.user?.colonia_id ?? null
     
     form.tipo_sangre_id = props.user?.tipo_sangre_id ?? null

@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 
+use Carbon\Carbon;
+
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
     public function update($user, array $input)
@@ -47,6 +49,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 'tipo_sangre_id' => (int) $input['tipo_sangre_id'],
                 'estado_civil_id' => $input['estado_civil_id'],
                 'generos_id' => $input['generos_id'],
+                'colonia_id' => (int) $input['colonia_id'],
                 'apellido_paterno' => $input['apellido_paterno'],
                 'apellido_materno' => $input['apellido_materno'],
                 'fecha_nacimiento' => $input['fecha_nacimiento'],

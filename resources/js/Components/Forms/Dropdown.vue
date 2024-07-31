@@ -95,6 +95,10 @@ const props = defineProps({
         type: [Object, Promise],
         default: null
     },
+    name: {
+        type: String,
+        default: null
+    },
     value: {
         type: [Object, String],
         default: null
