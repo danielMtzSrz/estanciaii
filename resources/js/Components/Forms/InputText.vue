@@ -15,8 +15,10 @@ import InputText from "@/Assets/Components/Forms/InputText.vue";
             <span v-if="icon" class="p-inputgroup-addon">
                 <i :class="icon"></i>
             </span>
-            <span class="p-float-label">
+            <div class="flex flex-column gap-2 w-100">
+                <small :for="name">{{ label }}</small>
                 <InputText
+                    class="w-100"
                     :class="{ 'p-invalid': errors }"
                     :name="name"
                     :id="id"
@@ -25,8 +27,20 @@ import InputText from "@/Assets/Components/Forms/InputText.vue";
                     v-tooltip.top="tooltip"
                     :disabled="disabled"
                 />
+            </div>          
+            <!-- <span class="p-float-label">
+                <InputText
+                    :class="{ 'p-invalid': errors }"
+                    :name="name"
+                    :id="id"
+                    type="text"
+                    v-model="inputValue"
+                    v-tooltip.top="tooltip"
+                    :disabled="disabled"
+                    variant="filled"
+                />
                 <label>{{ label }}</label>
-            </span>
+            </span> -->
         </div>
         <small class="p-error mb-2" v-if="errors">
             {{ errors }}
@@ -40,6 +54,7 @@ import { computed } from "vue";
 
 // Primevue
 import InputText from "primevue/inputtext";
+
 
 const props = defineProps({
     icon: String,

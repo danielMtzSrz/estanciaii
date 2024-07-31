@@ -4,8 +4,10 @@
             <span v-if="icon" class="p-inputgroup-addon">
                 <i :class="icon"></i>
             </span>
-            <span class="p-float-label">
+            <div class="flex flex-column gap-2 w-100">
+                <small :for="name">{{ label }}</small>
                 <Calendar
+                    class="w-100"
                     :class="{'p-invalid': errors}"
                     :name="name"
                     @date-select="selected($event)"
@@ -13,11 +15,10 @@
                     :timeOnly="true"
                     v-model="inputValue"
                 />
-                <label class="mb-2"> {{ label }}</label>
-            </span>
+            </div>
         </div>
         <small class="p-error" v-if="errors">
-            {{errors}}
+            {{ errors }}
         </small>
     </div>
 </template>

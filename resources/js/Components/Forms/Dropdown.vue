@@ -26,46 +26,50 @@ Ejemplo:
                 <i :class="icon"></i>
             </span>
         
-            <Dropdown
-                :class="{'p-invalid': errors}"
-                :options="data"
-                :optionLabel="textDropdown"
-                :placeholder="placeholder"
-                :filter="true"
-                filterPlaceholder="Buscar..."
-                v-model="inputValue"
-                :disabled="disabled"
-            >
-                <template #value="slotProps">
-                    <div class="p-dropdown-car-value" v-if="slotProps.value">
+            <div class="flex flex-column gap-2 w-100">
+                <small :for="name">{{ label }}</small>
+                <Dropdown
+                    class="w-100"
+                    :class="{'p-invalid': errors}"
+                    :options="data"
+                    :optionLabel="textDropdown"
+                    :placeholder="placeholder"
+                    :filter="true"
+                    filterPlaceholder="Buscar..."
+                    v-model="inputValue"
+                    :disabled="disabled"
+                >
+                    <template #value="slotProps">
+                        <div class="p-dropdown-car-value" v-if="slotProps.value">
+                            <div class="flex p-dropdown-car-option align-items-center">
+                                <Image
+                                    v-if="slotProps.value[imageDropdown] && imageDropdown" 
+                                    :alt="slotProps.value[textDropdown]"
+                                    :src="'/storage/'+slotProps.value[imageDropdown]"
+                                    width="30"
+                                    class="p-avatar-image p-avatar-circle"
+                                />
+                                <span class="ms-2">{{ slotProps.value[textDropdown] }}</span>
+                            </div>
+                        </div>
+                        <span v-else>
+                            {{ slotProps.placeholder }}
+                        </span>
+                    </template>
+                    <template #option="slotProps">
                         <div class="flex p-dropdown-car-option align-items-center">
-                            <Image
-                                v-if="slotProps.value[imageDropdown] && imageDropdown" 
-                                :alt="slotProps.value[textDropdown]"
-                                :src="'/storage/'+slotProps.value[imageDropdown]"
+                            <Image 
+                                v-if="slotProps.option[imageDropdown]"
+                                :alt="slotProps.option[textDropdown]"
+                                :src="'/storage/'+slotProps.option[imageDropdown]"
                                 width="30"
                                 class="p-avatar-image p-avatar-circle"
                             />
-                            <span class="ms-2">{{ slotProps.value[textDropdown] }}</span>
+                            <span class="ms-2">{{ slotProps.option[textDropdown] }}</span>
                         </div>
-                    </div>
-                    <span v-else>
-                        {{ slotProps.placeholder }}
-                    </span>
-                </template>
-                <template #option="slotProps">
-                    <div class="flex p-dropdown-car-option align-items-center">
-                        <Image 
-                            v-if="slotProps.option[imageDropdown]"
-                            :alt="slotProps.option[textDropdown]"
-                            :src="'/storage/'+slotProps.option[imageDropdown]"
-                            width="30"
-                            class="p-avatar-image p-avatar-circle"
-                        />
-                        <span class="ms-2">{{ slotProps.option[textDropdown] }}</span>
-                    </div>
-                </template>
-            </Dropdown>
+                    </template>
+                </Dropdown>
+            </div>
         </div>
         <small class="p-error" v-if="errors">
             {{ errors }}

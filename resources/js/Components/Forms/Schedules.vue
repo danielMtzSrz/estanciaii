@@ -23,38 +23,40 @@
         </div>
 
         <div class="col-sm-12 col-md-4 my-3" v-if="horarios[dia.key]">
+            <small>Hora de inicio</small>
             <div class="p-inputgroup">
                 <span class="p-inputgroup-addon">
                     <i class="pi pi-clock"/>
                 </span>
-                <span class="p-float-label">
+                <div class="flex flex-column w-100">
                     <Calendar
+                        class="w-100"
                         :class="{ 'p-invalid': errorsParse && errorsParse[dia.key] }"
                         icon="pi pi-clock"
                         hourFormat="24"
                         timeOnly
                         v-model="horarios[dia.key+'_hora_inicio']"
                     />
-                    <label class="mb-2">Hora de inicio</label>
-                </span>
+                </div>
             </div>
         </div>
 
         <div class="col-sm-12 col-md-4 my-3" v-if="horarios[dia.key]">
+            <small>Hora de fin</small>
             <div class="p-inputgroup">
                 <span class="p-inputgroup-addon">
                     <i class="pi pi-clock"/>
                 </span>
-                <span class="p-float-label">
+                <div class="flex flex-column w-100">
                     <Calendar
+                        class="w-100"
                         :class="{ 'p-invalid': errorsParse && errorsParse[dia.key] }"
                         icon="pi pi-clock"
                         hourFormat="24"
                         timeOnly
                         v-model="horarios[dia.key+'_hora_fin']"
                     />
-                    <label class="mb-2">Hora de fin</label>
-                </span>
+                </div>
             </div>
         </div>
         <div class="col-sm-12 p-error mb-5" v-if="errorsParse" v-html="errorsParse[dia.key]"></div>

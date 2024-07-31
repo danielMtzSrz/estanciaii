@@ -34,7 +34,7 @@
                         />
                     </div>
 
-                    <div class="col-sm-12 col-md-4 d-flex flex-col mb-5">
+                    <div class="col-sm-12 col-md-4 d-flex flex-col mb-5 gap-2">
                         <small>Color: <span :style='{color : "#"+form.color}'>#{{ form.color }}</span></small>
                         <ColorPicker v-model="form.color"/>
                     </div>

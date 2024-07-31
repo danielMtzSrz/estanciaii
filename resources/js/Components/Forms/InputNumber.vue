@@ -4,8 +4,10 @@
             <span v-if="icon" class="p-inputgroup-addon">
                 <i :class="icon"></i>
             </span>
-            <span class="p-float-label">
+            <div class="flex flex-column gap-2 w-100">
+                <small :for="name">{{ label }}</small>
                 <InputNumber
+                    class="w-100"
                     :class="{'p-invalid': errors}"
                     :name="name"
                     :id="id"
@@ -15,8 +17,7 @@
                     :disabled="disabled"
                     :useGrouping="useGrouping"
                 />
-                <label>{{ label }}</label>
-            </span>
+            </div>
         </div>
         <small class="p-error mb-2" v-if="errors">
             {{errors}}
