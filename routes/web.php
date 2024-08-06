@@ -23,7 +23,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     // Rutas de system
     Route::resource('user', UserController::class);
-    Route::put('user/update/cv/{id_usr}', [UserController::class, 'updateCv'])->name('user.update_cv');
+    Route::put('user/update/cv/{id_user}', [UserController::class, 'updateCv'])->name('user.update_cv');
+    Route::get('user/generar/cv/{id_user}', [UserController::class, 'generarCv'])->name('user.generar_cv');
     Route::resource('role', RoleController::class);
     Route::resource('permission', PermissionController::class);
     

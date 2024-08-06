@@ -198,6 +198,7 @@ return [
         App\Providers\JetstreamServiceProvider::class,
 
         Jenssegers\Mongodb\MongodbServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*

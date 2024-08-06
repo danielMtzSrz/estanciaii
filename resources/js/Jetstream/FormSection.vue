@@ -15,6 +15,7 @@ const hasActions = computed(() => !! useSlots().actions);
                 <Divider align="left" type="dashed"><slot name="title" /></Divider>
         </template>
         <template #content>
+            <slot name="content"></slot>
             <div class="row col-sm-12">
                 <div class="mt-3 md:mt-0 md:col-span-2">
                     <form @submit.prevent="$emit('submitted')">

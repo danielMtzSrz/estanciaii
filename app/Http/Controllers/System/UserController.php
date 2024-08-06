@@ -14,6 +14,8 @@ use Spatie\Permission\Models\Role;
 
 use Inertia\Inertia;
 
+use PDF;
+
 class UserController extends Controller
 {
     public function index(Request $request)
@@ -143,6 +145,15 @@ class UserController extends Controller
         ]);
 
         return back()->with(config('messages.mensaje_actualizar'));
+    }
+
+    public function generarCv($id_user)
+    {
+        $data = ['title' => 'Bienvenido a Laravel 9', 'content' => 'Este es un ejemplo de generación de PDF.'];
+        
+        $pdf = PDF::loadView('pdf/cv', $data);
+
+        return $pdf->download('archivo.pdf');
     }
 
     public function destroy(Request $request, User $user)

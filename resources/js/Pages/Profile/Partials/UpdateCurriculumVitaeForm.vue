@@ -6,7 +6,17 @@
                 <b class="text-lg">Curriculum vitae</b>
             </div>
         </template>
-        <template #form>
+        <template #content>
+            <div class="d-flex justify-end">
+                <a :href="route('user.generar_cv', user.id)" target="_blank" style="text-decoration: none;">
+                    <Button
+                        type="button"
+                        icon="bi bi-file-earmark-pdf"
+                        label="Generar PDF"
+                        class="p-button-rounded p-button-text p-button-danger"
+                    />
+                </a>
+            </div>
             <form @submit.prevent="submit" enctype="multipart/form-data">
                 <div class="row col-12 pt-4">
                     <!-- Información de contacto -->
