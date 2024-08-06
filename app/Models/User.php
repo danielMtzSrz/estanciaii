@@ -49,6 +49,8 @@ class User extends Authenticatable
         'numero_interior',
         'profile_photo_path',
         'password',
+
+        'cv'
     ];
 
     /**

@@ -1,11 +1,13 @@
 <template>
     <div class="mb-5">
+        <small :for="name">{{ label }}</small>
         <div class="p-inputgroup">
             <span v-if="icon" class="p-inputgroup-addon">
                 <i :class="icon"></i>
             </span>
-            <span class="p-float-label">
+            <div class="flex flex-column gap-2 w-100">
                 <Textarea
+                    class="w-100"
                     :id="id"
                     :name="name"
                     :class="{ 'p-invalid': errors }"
@@ -15,8 +17,7 @@
                     cols="30"
                     v-tooltip.top="tooltip"
                 />
-                <label>{{ label }}</label>
-            </span>
+            </div>
         </div>
         <small class="p-error" v-if="errors">
             {{ errors }}

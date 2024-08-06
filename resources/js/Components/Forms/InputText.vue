@@ -27,20 +27,7 @@ import InputText from "@/Assets/Components/Forms/InputText.vue";
                     v-tooltip.top="tooltip"
                     :disabled="disabled"
                 />
-            </div>          
-            <!-- <span class="p-float-label">
-                <InputText
-                    :class="{ 'p-invalid': errors }"
-                    :name="name"
-                    :id="id"
-                    type="text"
-                    v-model="inputValue"
-                    v-tooltip.top="tooltip"
-                    :disabled="disabled"
-                    variant="filled"
-                />
-                <label>{{ label }}</label>
-            </span> -->
+            </div>
         </div>
         <small class="p-error mb-2" v-if="errors">
             {{ errors }}

@@ -132,6 +132,19 @@ class UserController extends Controller
         return back()->with(config('messages.mensaje_actualizar'));
     }
 
+    public function updateCv(Request $request, $id_user)
+    {
+        $user = User::find($id_user);
+
+        $input = $request->all();
+
+        $user->update([
+            'cv' => $input['cv']
+        ]);
+
+        return back()->with(config('messages.mensaje_actualizar'));
+    }
+
     public function destroy(Request $request, User $user)
     {
         $user->delete();
