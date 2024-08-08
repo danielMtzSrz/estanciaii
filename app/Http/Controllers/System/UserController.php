@@ -14,6 +14,8 @@ use Spatie\Permission\Models\Role;
 
 use Inertia\Inertia;
 
+use Carbon\Carbon;
+
 use PDF;
 
 class UserController extends Controller
@@ -149,9 +151,19 @@ class UserController extends Controller
 
     public function generarCv($id_user)
     {
-        $data = ['title' => 'Bienvenido a Laravel 9', 'content' => 'Este es un ejemplo de generación de PDF.'];
-        
-        $pdf = PDF::loadView('pdf/cv', $data);
+        $fecha_actual = Carbon::now()->toDateTimeString();
+
+        $user = User::find($id_user);
+
+        $user_map = [
+            'nombre_completo' => $user->name." ".$user->apellido_paterno." ".$user->apellido_materno,
+            'telefono' => $user->telefono_celular,
+            'cv' => json_decode($user->cv, true)
+        ];
+
+        // dd($user_map);
+
+        $pdf = PDF::loadView('pdf.cv', compact('user_map', 'fecha_actual'));
 
         return $pdf->download('archivo.pdf');
     }

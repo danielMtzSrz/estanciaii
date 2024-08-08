@@ -352,7 +352,7 @@
                         </div>
                     </div>
 
-                    <!-- Proyectos -->
+                    <!-- Proyectos
                     <Divider align="left" type="dashed">
                         <div class="d-flex align-items-center justify-content-center">
                             <Button
@@ -383,7 +383,7 @@
                         </div>
                     </div>
 
-                    <!-- Información adicional -->
+                    Información adicional
                     <Divider align="left" type="dashed">
                         <div class="d-flex align-items-center justify-content-center">
                             <Button
@@ -412,7 +412,7 @@
                                 @click="eliminarInformacion('informacion_adicional', index)"
                             />
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="float-end space-x-2 py-4">
