@@ -138,7 +138,7 @@
                             textDropdown="nacionalidad"
                             v-model="nacionalidad_seleccionada"
                         />
-                    </div>                    
+                    </div>
 
                     <Divider align="left" type="solid" class="mb-4">
                         <b>Domicilio</b>
@@ -385,10 +385,10 @@ const submit = () => {
         form.transform((data) => ({
             ...data,
             colonia_id      : colonia_seleccionada.value?.id ?? null,
-            tipo_sangre_id  : tipo_sangre_seleccionado?.id ?? null,
-            estado_civil_id : estado_civil_seleccionado?.id ?? null,
-            generos_id      : genero_seleccionado?.id ?? null,
-            nacionalidad_id : nacionalidad_seleccionada?.id ?? null
+            tipo_sangre_id  : tipo_sangre_seleccionado.value?.id ?? null,
+            estado_civil_id : estado_civil_seleccionado.value?.id ?? null,
+            generos_id      : genero_seleccionado.value?.id ?? null,
+            nacionalidad_id : nacionalidad_seleccionada.value?.id ?? null
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();
@@ -399,10 +399,10 @@ const submit = () => {
         form.transform((data) => ({
             ...data,
             colonia_id      : colonia_seleccionada.value?.id ?? null,
-            tipo_sangre_id  : tipo_sangre_seleccionado?.id ?? null,
-            estado_civil_id : estado_civil_seleccionado?.id ?? null,
-            generos_id      : genero_seleccionado?.id ?? null,
-            nacionalidad_id : nacionalidad_seleccionada?.id ?? null
+            tipo_sangre_id  : tipo_sangre_seleccionado.value?.id ?? null,
+            estado_civil_id : estado_civil_seleccionado.value?.id ?? null,
+            generos_id      : genero_seleccionado.value?.id ?? null,
+            nacionalidad_id : nacionalidad_seleccionada.value?.id ?? null
         })).post(route(ruta.value, props.dataModal.dataRegistro), {
             onSuccess: () => {
                 closeModal();
@@ -421,12 +421,22 @@ watch(() => props.dataModal, async (newVal) => {
 
     const dataRolesAxios = await axios.get(`/api/roles`);
     data_roles.value = dataRolesAxios.data
-
-    nacionalidad_seleccionada.value = data_paises.value.find(el => el.id == newVal?.dataRegistro?.nacionalidad_id)
 })
 
 watch(() => props.dataModal.dataRegistro, async (newVal) => {
     if(newVal){
+        try{
+            const obtener_colonia = await axios.get(`/api/domicilio/obtener_colonia/${newVal.colonia_id}`)
+            const colonia = obtener_colonia.data[0];
+            pais_seleccionado.value = colonia.municipio.estado?.pais ?? null
+            estado_seleccionado.value = colonia.municipio?.estado ?? null
+            municipio_seleccionado.value = colonia?.municipio ?? null
+            colonia_seleccionada.value = colonia ?? null
+            nacionalidad_seleccionada.value = data_paises.value.find(el => el.id == newVal?.nacionalidad_id)
+        }catch(e){
+            console.error("Actualiza para obtener los datos", e)
+        }
+    
         dataUsuariosRolesAxios.value = await axios.get(`/api/user_roles/${newVal?.id}`)
     }
 
@@ -463,11 +473,6 @@ watch(() => props.dataModal.dataRegistro, async (newVal) => {
     tipo_sangre_seleccionado.value = props.dataModal.data_tipos_sangre.find(el => el.id == newVal?.tipo_sangre_id)
     estado_civil_seleccionado.value = props.dataModal.data_estados_civiles.find(el => el.id == newVal?.estado_civil_id)
     genero_seleccionado.value = props.dataModal.data_generos.find(el => el.id == newVal?.generos_id)
-
-    pais_seleccionado.value = newVal?.colonia?.municipio?.estado?.pais
-    estado_seleccionado.value = newVal?.colonia?.municipio?.estado
-    municipio_seleccionado.value = newVal?.colonia?.municipio
-    colonia_seleccionada.value = newVal?.colonia
 })
 
 watch(() => pais_seleccionado.value, async (newVal) => {

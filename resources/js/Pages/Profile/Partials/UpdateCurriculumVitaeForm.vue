@@ -8,7 +8,7 @@
         </template>
         <template #content>
             <div class="d-flex justify-end">
-                <a :href="route('user.generar_cv', user.id)" target="_blank" style="text-decoration: none;">
+                <a :href="route('user.generar_cv', user.id)" target="_blank" style="text-decoration: none;" v-if="user.cv != null">
                     <Button
                         type="button"
                         icon="bi bi-file-earmark-pdf"
