@@ -15,7 +15,6 @@ class RoleController extends Controller
 
     public function index()
     {
-        
         $roles = Role::orderBy('name', 'asc')
             ->get()
             ->map(function($role){
@@ -23,7 +22,7 @@ class RoleController extends Controller
                 $role_array['permisos'] = $role->permissions;
                 
                 return collect($role_array);
-            });
+            }); 
 
         $data_permisos = Permission::orderBy('description', 'asc')->get();
 

@@ -453,7 +453,7 @@ watch(() => props.dataModal.dataRegistro, async (newVal) => {
         dataUsuariosRolesAxios.value = await axios.get(`/api/user_roles/${newVal?.id}`)
     }
 
-    form.roles = toRaw(dataUsuariosRolesAxios.data)
+    form.roles = toRaw(dataUsuariosRolesAxios.value.data)
 
     form._method = newVal ? "put" : null
 
