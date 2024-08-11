@@ -73,7 +73,7 @@ const items = ref([
                 command: () => {
                     Inertia.visit(route("user.index"));
                 },
-                visible: auth.permissions.includes('user.index')
+                // visible: auth.permissions.includes('user.index')
             },
             {
                 label: "Roles",

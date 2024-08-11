@@ -50,7 +50,8 @@ class User extends Authenticatable
         'profile_photo_path',
         'password',
 
-        'cv'
+        'cv',
+        'horarios'
     ];
 
     /**
@@ -72,6 +73,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'horarios' => 'array'
     ];
 
     /**

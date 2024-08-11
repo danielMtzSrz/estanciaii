@@ -222,6 +222,12 @@
                         />
                     </div>
 
+                    <!-- Horarios -->
+                    <Schedules
+                        v-model="form.horarios"
+                        :errors="form.errors.horarios"
+                    />
+
                     <div class="mt-4 col-md-12">
                         <FileUpload
                             dropText="Arrastre aquí la foto del usuario."
@@ -309,6 +315,7 @@ import Dropdown from "@/Components/Forms/Dropdown.vue";
 import InputNumber from "@/Components/Forms/InputNumber.vue";
 import FileUpload from "@/Components/Forms/FileUpload.vue";
 import Calendar from "@/Components/Forms/Calendar.vue";
+import Schedules from "@/Components/Forms/Schedules.vue";
 
 // Variables
 const dataUsuariosRolesAxios = ref(null)
@@ -348,6 +355,8 @@ const form = useForm({
     numero_exterior: null,
     numero_interior: null,
     profile_photo_path: null,
+
+    horarios : null,
 
     roles: []
 });
@@ -424,6 +433,10 @@ watch(() => props.dataModal, async (newVal) => {
 })
 
 watch(() => props.dataModal.dataRegistro, async (newVal) => {
+    form.reset()
+
+    form.horarios = newVal?.horarios ?? null
+
     if(newVal){
         try{
             const obtener_colonia = await axios.get(`/api/domicilio/obtener_colonia/${newVal.colonia_id}`)
@@ -439,8 +452,6 @@ watch(() => props.dataModal.dataRegistro, async (newVal) => {
     
         dataUsuariosRolesAxios.value = await axios.get(`/api/user_roles/${newVal?.id}`)
     }
-
-    form.reset()
 
     form.roles = toRaw(dataUsuariosRolesAxios.data)
 
@@ -468,6 +479,8 @@ watch(() => props.dataModal.dataRegistro, async (newVal) => {
     form.numero_exterior = newVal?.numero_exterior ?? null
     form.numero_interior = newVal?.numero_interior ?? null
     form.profile_photo_path = newVal?.profile_photo_path ?? null
+    
+
     imagenActual.value = newVal?.profile_photo_path ?? null
 
     tipo_sangre_seleccionado.value = props.dataModal.data_tipos_sangre.find(el => el.id == newVal?.tipo_sangre_id)

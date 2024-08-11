@@ -57,30 +57,14 @@ class UserController extends Controller
             'numero_exterior' => '',
             'numero_interior' => '',
             'profile_photo_path' => '',
+
+            'horarios' => 'array'
         ]);
 
-        $user = User::create([
-            'tipo_sangre_id' => $input['tipo_sangre_id'],
-            'estado_civil_id' => $input['estado_civil_id'],
-            'generos_id' => $input['generos_id'],
-            'nacionalidad_id' => $input['nacionalidad_id'],
-            
-            'apellido_paterno' => $input['apellido_paterno'],
-            'apellido_materno' => $input['apellido_materno'],
-            'fecha_nacimiento' => $input['fecha_nacimiento'],
-            'curp' => $input['curp'],
-            'rfc' => $input['rfc'],
-            'nss' => $input['nss'],
-            'telefono_local' => $input['telefono_local'],
-            'telefono_celular' => $input['telefono_celular'],
-            'name' => $input['name'],
-            'email' => $input['email'],
-            
-            'calle' => $input['calle'],
-            'numero_exterior' => $input['numero_exterior'],
-            'numero_interior' => $input['numero_interior'],
-            'password' => Hash::make('Temp123')
-        ]);
+        $validated_data['horarios'] = $this->horariosMap($validated_data['horarios']);
+        $validated_data['password'] = Hash::make('Temp123');
+
+        $user = User::create($validated_data);
 
         // Cargar imagen
         if($request->file('profile_photo_path')){
@@ -118,15 +102,19 @@ class UserController extends Controller
             'numero_exterior' => '',
             'numero_interior' => '',
             'profile_photo_path' => '',
+
+            'horarios' => 'array'
         ]);
         
+        $validated_data['horarios'] = $this->horariosMap($validated_data['horarios']);
+
         $user->roles()->sync($request->roles);
 
         if($request->file('profile_photo_path')){
             \Storage::disk('public')->delete($user->profile_photo_path);
         }
 
-        $user->update($request->all());
+        $user->update($validated_data);
 
         if($request->file('profile_photo_path')) {
             $user->profile_photo_path = $request->file('profile_photo_path')->store('profile_photo_path', 'public');
@@ -173,5 +161,25 @@ class UserController extends Controller
         $user->delete();
 
         return back()->with(config('messages.mensaje_eliminar'));
+    }
+
+    public function horariosMap($horarios)
+    {
+        $dias = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
+        $horarios_mapeados = [];
+
+        foreach($dias as $dia){
+            if(isset($horarios[$dia]) && $horarios[$dia]){
+                $horarios_mapeados[$dia] = true;
+                $horarios_mapeados[$dia.'_hora_inicio'] = (preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/', $horarios[$dia.'_hora_inicio'])) 
+                    ? Carbon::now()->isDST() ? Carbon::parse($horarios[$dia.'_hora_inicio'])->timezone('America/Monterrey')->subHour()->format('H:i') : Carbon::parse($horarios[$dia.'_hora_inicio'])->timezone('America/Monterrey')->format('H:i')
+                    : $horarios[$dia.'_hora_inicio'];
+                $horarios_mapeados[$dia.'_hora_fin'] = (preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/', $horarios[$dia.'_hora_fin'])) 
+                    ? Carbon::now()->isDST() ? Carbon::parse($horarios[$dia.'_hora_fin'])->timezone('America/Monterrey')->subHour()->format('H:i') : Carbon::parse($horarios[$dia.'_hora_fin'])->timezone('America/Monterrey')->format('H:i')
+                    : $horarios[$dia.'_hora_fin'];
+            }
+        }
+        
+        return $horarios_mapeados;
     }
 }
