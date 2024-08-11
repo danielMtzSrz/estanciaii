@@ -14,7 +14,8 @@ class UsuariosApi extends Controller
             return [
                 'id' => $usuario->id,
                 'nombre' => $usuario->name." ".$usuario->apellido_paterno." ".$usuario->apellido_materno,
-                'profile_photo_path' => $usuario->profile_photo_path
+                'profile_photo_path' => $usuario->profile_photo_path,
+                'horarios' => $usuario->horarios
             ];
         });
 

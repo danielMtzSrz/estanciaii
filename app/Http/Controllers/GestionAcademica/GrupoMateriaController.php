@@ -26,7 +26,8 @@ class GrupoMateriaController extends Controller
                 'profesor' => [
                     'id' => $grupo_materia->profesor->id,
                     'nombre' => $grupo_materia->profesor->name." ".$grupo_materia->profesor->apellido_paterno." ".$grupo_materia->profesor->apellido_materno,
-                    'profile_photo_path' => $grupo_materia->profesor->profile_photo_path
+                    'profile_photo_path' => $grupo_materia->profesor->profile_photo_path,
+                    'horarios' => $grupo_materia->profesor->horarios
                 ],
                 'profesor_nombre' => $grupo_materia->profesor->name." ".$grupo_materia->profesor->apellido_paterno." ".$grupo_materia->profesor->apellido_materno,
                 'materia' => $grupo_materia->materia,
