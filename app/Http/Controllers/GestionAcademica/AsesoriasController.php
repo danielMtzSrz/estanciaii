@@ -39,9 +39,28 @@ class AsesoriasController extends Controller
 
     public function store(Request $request)
     {
+        $validated_data = $request->validate([
+            "materia_id" => 'required',
+            "user_id" => 'required',
+            "descripcion" => "required",
+            "ubicacion" => "required",
+            "hora_inicio" => "required",
+            "hora_fin" => "required"
+        ]);
+
+        $validated_data['hora_inicio'] = $this->horasMap($validated_data['hora_inicio']);
+        $validated_data['hora_fin'] = $this->horasMap($validated_data['hora_fin']);
+
         $asesoria = Asesoria::create($request->all());
 
         return back()->with(config('messages.mensaje_exito'));
+    }
+
+    public function horasMap($hora)
+    {
+        return (preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/', $hora)) 
+                    ? Carbon::now()->isDST() ? Carbon::parse($hora)->timezone('America/Monterrey')->subHour()->format('H:i') : Carbon::parse($hora)->timezone('America/Monterrey')->format('H:i')
+                    : $hora;
     }
 
     public function update(Request $request, $id)

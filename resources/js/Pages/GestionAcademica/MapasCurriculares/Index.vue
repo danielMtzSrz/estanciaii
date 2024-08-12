@@ -6,38 +6,41 @@
               :items="items"
               titleModule="Mapas curriculares"
           >
-              <template #header>
-                  <Button
-                      type="button"
-                      label="Nuevo"
-                      icon="pi pi-plus"
-                      class="p-button-raised p-button-rounded p-button-success p-button-sm p-button-text"
-                      @click="modalCreateUpdate({display: true})"
-                  />
-              </template>
+            <template #header>
+                <Button
+                    v-if="hasPermission('GestionAcademica.MapasCurriculares.store')"
+                    type="button"
+                    label="Nuevo"
+                    icon="pi pi-plus"
+                    class="p-button-raised p-button-rounded p-button-success p-button-sm p-button-text"
+                    @click="modalCreateUpdate({display: true})"
+                />
+            </template>
 
-              <template #buttons="{ data }">
-                  <Button
-                      type="button"
-                      icon="pi pi-pencil"
-                      class="p-button-warning p-button-text p-button-raised p-button-rounded"
-                      v-tooltip.top="'Actualizar'"
-                      @click="modalCreateUpdate({display: true, data: data})"
-                  />
-                  <Button
-                      type="button"
-                      icon="pi pi-trash"
-                      class="p-button-danger p-button-text p-button-raised p-button-rounded"
-                      @click="modalGenericAlert({
-                          data: data, 
-                          display: true, 
-                          proceso: {
-                              'proceso': 'delete',
-                              'ruta': 'GestionAcademica.MapasCurriculares.destroy',
-                          }
-                      })"
-                  />
-              </template>
+            <template #buttons="{ data }">
+                <Button
+                    v-if="hasPermission('GestionAcademica.MapasCurriculares.update')"
+                    type="button"
+                    icon="pi pi-pencil"
+                    class="p-button-warning p-button-text p-button-raised p-button-rounded"
+                    v-tooltip.top="'Actualizar'"
+                    @click="modalCreateUpdate({display: true, data: data})"
+                />
+                <Button
+                    v-if="hasPermission('GestionAcademica.MapasCurriculares.destroy')"
+                    type="button"
+                    icon="pi pi-trash"
+                    class="p-button-danger p-button-text p-button-raised p-button-rounded"
+                    @click="modalGenericAlert({
+                        data: data, 
+                        display: true, 
+                        proceso: {
+                            'proceso': 'delete',
+                            'ruta': 'GestionAcademica.MapasCurriculares.destroy',
+                        }
+                    })"
+                />
+            </template>
           </DynamicTable>
       </template>
 
