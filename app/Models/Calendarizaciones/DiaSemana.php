@@ -17,9 +17,4 @@ class DiaSemana extends Model{
         'nombre',
         'log_id'
     ];
-
-    // Relación con el modelo Calendarizaciones/Horarios
-    public function horario(){
-        return $this->hasMany(Horario::class);
-    }
 }

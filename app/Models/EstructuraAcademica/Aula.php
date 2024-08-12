@@ -65,12 +65,6 @@ class Aula extends Model
         return $this->hasMany(Grupo::class);
     }
 
-    // Relación con la tabla Calendarizaciones/Horarios
-    public function horario()
-    {
-        return $this->hasMany(Horario::class);
-    }
-
     // Relación con los arrays en staticdata
     public function edificio()
     {
