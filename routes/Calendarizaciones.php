@@ -16,6 +16,3 @@ Route::resource("TiposConvocatoria", TiposConvocatoriasController::class)->excep
 
 // Convocatorias
 Route::resource("Convocatorias", ConvocatoriasController::class)->except(['show', 'create', 'edit']);
-
-// Horarios
-Route::resource('Horarios', HorarioController::class, ['parameters' => ['Horarios' => 'horarios']])->except(['show', 'create', 'edit']);
