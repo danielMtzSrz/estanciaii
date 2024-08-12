@@ -45,6 +45,7 @@
             >
                 <template #header>
                     <Button
+                        v-if="hasPermission('municipios.store')"
                         type="button"
                         label="Nuevo"
                         icon="pi pi-plus"
@@ -54,12 +55,14 @@
                 </template>
                 <template #buttons="{ data }">
                     <Button
+                        v-if="hasPermission('municipios.update')"
                         type="button"
                         icon="pi pi-pencil"
                         class="p-button-warning p-button-text p-button-raised p-button-rounded"
                         @click="modalCreateUpdate({display: true, data: data})"
                     />
                     <Button
+                        v-if="hasPermission('municipios.destroy')"
                         type="button"
                         icon="pi pi-trash"
                         class="p-button-danger p-button-text p-button-raised p-button-rounded"

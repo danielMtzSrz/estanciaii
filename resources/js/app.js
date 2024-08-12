@@ -21,44 +21,53 @@ import Tooltip from "primevue/tooltip";
 import { Link } from "@inertiajs/inertia-vue3";
 
 // Componentes usados generalmente
-import Button from 'primevue/button'
+import Button from "primevue/button";
 
 // Roles y permisos
 import VueGates from "vue-gates";
 import Permissions from "./Plugins/Permissions";
 
-// Pinia
-import { createPinia } from 'pinia'
+import { spatieMixin } from "./mixin/spatie-mixin";
 
-const 
-    router = createRouter({
+// Pinia
+import { createPinia } from "pinia";
+
+const router = createRouter({
         history: createWebHistory(import.meta.env.BASE_URL),
         routes: [],
     }),
     pinia = createPinia(),
-    appName = window.document.getElementsByTagName("title")[0]?.innerText || "Laravel";
+    appName =
+        window.document.getElementsByTagName("title")[0]?.innerText ||
+        "Laravel";
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) =>
-        resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob("./Pages/**/*.vue")),
+        resolvePageComponent(
+            `./Pages/${name}.vue`,
+            import.meta.glob("./Pages/**/*.vue")
+        ),
     setup({ el, app, props, plugin }) {
-        return createApp({ render: () => h(app, props) })
-            .use(plugin)
-            .use(ZiggyVue, Ziggy)
-            .use(PrimeVue)
-            .use(ToastService)
-            .use(router)
-            .use(VueGates)
-            .use(Permissions)
-            .use(pinia)
-            // Directives
-            .directive('tooltip', Tooltip)
-            
-            // Components
-            .component("Link", Link)
-            .component("Button", Button)
-            .mount(el);
+        return (
+            createApp({ render: () => h(app, props) })
+                .use(plugin)
+                .use(ZiggyVue, Ziggy)
+                .use(PrimeVue)
+                .use(ToastService)
+                .use(router)
+                .use(VueGates)
+                .use(Permissions)
+                .use(pinia)
+                // Directives
+                .directive("tooltip", Tooltip)
+                // Components
+                .component("Link", Link)
+                .component("Button", Button)
+                // Mixins
+                .mixin(spatieMixin)
+                .mount(el)
+        );
     },
 });
 

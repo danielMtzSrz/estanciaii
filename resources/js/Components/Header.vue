@@ -64,7 +64,7 @@ const { auth } = usePage().props.value;
 
 const superAdmin = ref('Superadmin')
 
-const items = ref([
+const itemsRoutes = ref([
     {
         label: "Sistema",
         icon: "pi pi-cog",
@@ -72,58 +72,49 @@ const items = ref([
             {
                 label: "Usuarios",
                 icon: "pi pi-users",
-                command: () => Inertia.visit(route("user.index")),
-                visible: auth.permissions.includes('user.index') || auth.roles.includes(superAdmin.value)
+                route: 'user.index'
             },
             {
                 label: "Roles",
                 icon: "pi pi-key",
-                command: () => Inertia.visit(route("role.index")),
-                visible: auth.permissions.includes('role.index') || auth.roles.includes(superAdmin.value)
+                route: 'role.index'
             },
             {
                 label: "Permisos",
                 icon: "pi pi-unlock",
-                command: () => Inertia.visit(route("permission.index")),
-                visible: auth.permissions.includes('permission.index') || auth.roles.includes(superAdmin.value)
+                route: 'permission.index'
             },
             {
                 label: "Empresas asociadas",
                 icon: "pi pi-unlock",
-                command: () => Inertia.visit(route("empresas.index")),
-                visible: auth.permissions.includes('empresas.index') || auth.roles.includes(superAdmin.value)
+                route: 'empresas.index'
             },
             {
                 label: "Países",
                 icon: "pi pi-unlock",
-                command: () => Inertia.visit(route("paises.index")),
-                visible: auth.permissions.includes('empresas.index') || auth.roles.includes(superAdmin.value)
+                route: 'paises.index'
             },
             {
                 label: "Estados",
                 icon: "pi pi-unlock",
-                command: () => Inertia.visit(route("estados.index")),
-                visible: auth.permissions.includes('empresas.index') || auth.roles.includes(superAdmin.value)
+                route: 'estados.index'
             },
             {
                 label: "Municipios",
                 icon: "pi pi-unlock",
-                command: () => Inertia.visit(route("municipios.index")),
-                visible: auth.permissions.includes('empresas.index') || auth.roles.includes(superAdmin.value)
+                route: 'municipios.index'
             },
             {
                 label: "Tipos de anuncios",
                 icon: "pi pi-unlock",
-                command: () => Inertia.visit(route("tiposanuncios.index")),
-                visible: auth.permissions.includes('empresas.index') || auth.roles.includes(superAdmin.value)
+                route: 'tiposanuncios.index'
             },
             {
                 label: "Anuncios",
                 icon: "pi pi-unlock",
-                command: () => Inertia.visit(route("anuncios.index")),
-                visible: auth.permissions.includes('empresas.index') || auth.roles.includes(superAdmin.value)
-            },
-        ],
+                route: 'anuncios.index'
+            }
+        ]
     },
     {
         label: "Calendarizaciones",
@@ -132,28 +123,24 @@ const items = ref([
             {
                 label: "Periodos",
                 icon: "bi bi-calendar3",
-                command: () => Inertia.visit(route("Calendarizaciones.Periodos.index")),
-                visible: auth.permissions.includes('empresas.index') || auth.roles.includes(superAdmin.value)
+                route: 'Calendarizaciones.Periodos.index'
             },
             {
                 label: "Tipos de periodos",
                 icon: "bi bi-calendar2-check",
-                command: () => Inertia.visit(route("Calendarizaciones.TiposPeriodo.index")),
-                visible: auth.permissions.includes('empresas.index') || auth.roles.includes(superAdmin.value)
+                route: 'Calendarizaciones.TiposPeriodo.index'
             },
             {
                 label: "Tipos de convocatorias",
                 icon: "bi bi-pencil-square",
-                command: () => Inertia.visit(route("Calendarizaciones.TiposConvocatoria.index")),
-                visible: auth.permissions.includes('empresas.index') || auth.roles.includes(superAdmin.value)
+                route: 'Calendarizaciones.TiposConvocatoria.index'
             },
             {
                 label: "Convocatorias",
                 icon: "bi bi-files-alt",
-                command: () => Inertia.visit(route("Calendarizaciones.Convocatorias.index")),
-                visible: auth.permissions.includes('empresas.index') || auth.roles.includes(superAdmin.value)
-            },
-        ],
+                route: 'Calendarizaciones.Convocatorias.index'
+            }
+        ]
     },
     {
         label: "Estructura Académica",
@@ -162,64 +149,69 @@ const items = ref([
             {
                 label: "Aulas",
                 icon: "bi bi-easel2",
-                command: () => Inertia.visit(route("EstructuraAcademica.Aulas.index")),
-                visible: auth.permissions.includes('empresas.index') || auth.roles.includes(superAdmin.value)
+                route: 'EstructuraAcademica.Aulas.index'
             },
             {
                 label: "Aulas Reservación",
                 icon: "bi bi-calendar-check",
-                command: () => Inertia.visit(route("EstructuraAcademica.AulasReservacion.index")),
-                visible: auth.permissions.includes('empresas.index') || auth.roles.includes(superAdmin.value)
+                route: 'EstructuraAcademica.AulasReservacion.index'
             },
             {
                 label: "Grupos",
                 icon: "bi bi-people",
-                command: () => Inertia.visit(route("EstructuraAcademica.Grupos.index")),
-                visible: auth.permissions.includes('empresas.index') || auth.roles.includes(superAdmin.value)
-            },
-        ],
+                route: 'EstructuraAcademica.Grupos.index'
+            }
+        ]
     },
     {
-        label:"Gestión Académica",
+        label: "Gestión Académica",
         icon: "pi pi-briefcase",
-        items:[
+        items: [
             {
                 label: "Carreras",
                 icon: "bi bi-mortarboard-fill",
-                command: () => Inertia.visit(route("GestionAcademica.Carreras.index")),
-                visible: auth.permissions.includes('empresas.index') || auth.roles.includes(superAdmin.value)
+                route: 'GestionAcademica.Carreras.index'
             },
             {
                 label: "Mapas Curriculares",
                 icon: "bi bi-calendar2-range",
-                command: () => Inertia.visit(route("GestionAcademica.MapasCurriculares.index")),
-                visible: auth.permissions.includes('empresas.index') || auth.roles.includes(superAdmin.value)
+                route: 'GestionAcademica.MapasCurriculares.index'
             },
             {
                 label: "Materias",
                 icon: "pi pi-book",
-                command: () => Inertia.visit(route("GestionAcademica.Materias.index")),
-                visible: auth.permissions.includes('empresas.index') || auth.roles.includes(superAdmin.value)
+                route: 'GestionAcademica.Materias.index'
             },
             {
                 label: "Planes de estudio",
                 icon: "bi bi-journal-bookmark",
-                command: () => Inertia.visit(route("GestionAcademica.PlanesEstudios.index")),
-                visible: auth.permissions.includes('empresas.index') || auth.roles.includes(superAdmin.value)
+                route: 'GestionAcademica.PlanesEstudios.index'
             },
             {
                 label: "Asesorías",
                 icon: "bi bi-journal-bookmark",
-                command: () => Inertia.visit(route("GestionAcademica.Asesorias.index")),
-                visible: auth.permissions.includes('empresas.index') || auth.roles.includes(superAdmin.value)
+                route: 'GestionAcademica.Asesorias.index'
             },
             {
                 label: "Asignar materias",
                 icon: "bi bi-journal-bookmark",
-                command: () => Inertia.visit(route("GestionAcademica.GrupoMateria.index")),
-                visible: auth.permissions.includes('empresas.index') || auth.roles.includes(superAdmin.value)
+                route: 'GestionAcademica.GrupoMateria.index'
             }
         ]
-    },
+    }
 ]);
+
+const items = ref(
+    itemsRoutes.value.map(group => ({
+        label: group.label,
+        icon: group.icon,
+        visible: auth.permissions.some(permiso => group.items.some(item => item.route === permiso)) || auth.roles.includes(superAdmin.value),
+        items: group.items.map(item => ({
+            label: item.label,
+            icon: item.icon,
+            command: () => Inertia.visit(route(item.route)),
+            visible: auth.permissions.includes(item.route) || auth.roles.includes(superAdmin.value)
+        }))
+    }))
+);
 </script>
