@@ -76,32 +76,32 @@ const itemsRoutes = ref([
             },
             {
                 label: "Roles",
-                icon: "pi pi-key",
+                icon: "bi bi-person-bounding-box",
                 route: 'role.index'
             },
             {
                 label: "Permisos",
-                icon: "pi pi-unlock",
+                icon: "bi bi-person-lines-fill",
                 route: 'permission.index'
             },
             {
                 label: "Empresas asociadas",
-                icon: "pi pi-unlock",
+                icon: "pi pi-building",
                 route: 'empresas.index'
             },
             {
                 label: "Países",
-                icon: "pi pi-unlock",
+                icon: "bi bi-globe",
                 route: 'paises.index'
             },
             {
                 label: "Estados",
-                icon: "pi pi-unlock",
+                icon: "pi pi-map",
                 route: 'estados.index'
             },
             {
                 label: "Municipios",
-                icon: "pi pi-unlock",
+                icon: "bi bi-geo-fill",
                 route: 'municipios.index'
             },
             {
@@ -189,12 +189,12 @@ const itemsRoutes = ref([
             },
             {
                 label: "Asesorías",
-                icon: "bi bi-journal-bookmark",
+                icon: "bi bi-person-video3",
                 route: 'GestionAcademica.Asesorias.index'
             },
             {
                 label: "Asignar materias",
-                icon: "bi bi-journal-bookmark",
+                icon: "bi bi-window-plus",
                 route: 'GestionAcademica.GrupoMateria.index'
             }
         ]
