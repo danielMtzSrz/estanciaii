@@ -153,7 +153,7 @@ class UserController extends Controller
 
         $pdf = PDF::loadView('pdf.cv', compact('user_map', 'fecha_actual'));
 
-        return $pdf->download('archivo.pdf');
+        return $pdf->download('CV-'.$user_map['nombre_completo'].'.pdf');
     }
 
     public function destroy(Request $request, User $user)
