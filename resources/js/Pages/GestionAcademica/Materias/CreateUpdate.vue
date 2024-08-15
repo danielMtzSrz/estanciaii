@@ -7,13 +7,13 @@
         <template #content>
             <form @submit.prevent="submit" enctype="multipart/form-data">
                 <div class="row col-12 pt-4">
-
                     <div class="col-sm-12 col-md-6">
                         <Dropdown 
                             label="Plan de estudio"
                             :data="dataPlanesEstudio"
                             textDropdown="mapa_curricular_clave_mapa_curricular"
                             v-model="planEstudioSeleccionado"
+                            :errors="form.errors.plan_estudios_id"
                         />
                     </div>
 
@@ -23,6 +23,7 @@
                             :data="dataCuatrimestres"
                             textDropdown="nombre"
                             v-model="cuatrimestreSeleccionado"
+                            :errors="form.errors.cuatrimestre_id"
                         />
                     </div>
 

@@ -7,7 +7,6 @@
         <template #content>
             <form @submit.prevent="submit" enctype="multipart/form-data">
                 <div class="row col-12 pt-4">
-                    
                     <div class="col-sm-12 col-md-6">
                         <Dropdown 
                             label="Países"
@@ -24,6 +23,7 @@
                             textDropdown="nombre"
                             v-model="estadoSeleccionado"
                             :disabled="!dataEstados"
+                            :errors="form.errors.estado_id"
                         />
                     </div>
 
@@ -115,7 +115,7 @@ const submit = () => {
     if (!props.dataModal.dataRegistro) {
         form.transform((data) => ({
             ...data,
-            estado_id: estadoSeleccionado?.value.id ?? null
+            estado_id: estadoSeleccionado?.value?.id ?? null
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();

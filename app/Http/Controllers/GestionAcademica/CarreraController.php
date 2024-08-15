@@ -24,12 +24,18 @@ class CarreraController extends Controller
             ];
         });
 
-
         return Inertia::render('GestionAcademica/Carreras/Index', compact('carreras'));
     }
 
     public function store(Request $request)
     {
+        $validated_data = $request->validate([
+            'nombre' => 'required',
+            'imagen' => 'required',
+            'descripcion' => 'required',
+            'estatus' => 'required'
+        ]);
+
         $carrera = Carrera::create($request->all());
 
          // Cargar imagen
@@ -43,13 +49,20 @@ class CarreraController extends Controller
 
     public function update(Request $request, $id)
     {
+        $validated_data = $request->validate([
+            'nombre' => 'required',
+            'imagen' => 'required',
+            'descripcion' => 'required',
+            'estatus' => 'required'
+        ]);
+
         $carrera = Carrera::find($id);
 
         if($request->file('imagen')){
             Storage::disk('public')->delete($carrera->imagen);
         }
 
-        $carrera->update($request->all());
+        $carrera->update($validated_data);
 
         if($request->file('imagen')) {
             $carrera->imagen = $request->file('imagen')->store('GestionAcademica/Carreras', 'public');

@@ -30,16 +30,28 @@ class PlanEstudioController extends Controller
 
     public function store(Request $request)
     {
-        PlanEstudio::create($request->all());
+        $validated_data = $request->validate([
+            'carrera_id' => 'required',
+            'mapa_curricular_id' => 'required',
+            'estatus' => 'required'
+        ]);
+
+        PlanEstudio::create($validated_data);
 
         return back()->with(config('messages.mensaje_exito'));
     }
 
     public function update(Request $request, $id)
     {
+        $validated_data = $request->validate([
+            'carrera_id' => 'required',
+            'mapa_curricular_id' => 'required',
+            'estatus' => 'required'
+        ]);
+
         $planEstudio = PlanEstudio::find($id);
             
-        $planEstudio->update($request->all());
+        $planEstudio->update($validated_data);
 
         return back()->with(config('messages.mensaje_actualizar'));
     }

@@ -33,8 +33,7 @@
                         <Calendar 
                             label="Horario inicio"
                             icon="pi pi-calendar"
-                            :value="horarioInicio"
-                            @input="form.horario_inicio = $event.valueFormat, horarioInicio = $event.valueShow"
+                            v-model="form.horario_inicio"
                             :errors="form.errors.horario_inicio"
                         />
                     </div>
@@ -43,8 +42,7 @@
                         <Calendar 
                             label="Horario inicio"
                             icon="pi pi-calendar"
-                            :value="horarioFinal"
-                            @input="form.horario_final = $event.valueFormat, horarioFinal = $event.valueShow"
+                            v-model="form.horario_final"
                             :errors="form.errors.horario_final"
                         />
                     </div>

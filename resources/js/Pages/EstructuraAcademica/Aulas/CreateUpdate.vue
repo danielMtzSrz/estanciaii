@@ -7,13 +7,13 @@
         <template #content>
             <form @submit.prevent="submit" enctype="multipart/form-data">
                 <div class="row col-12 pt-4">
-
                     <div class="col-sm-12 col-md-6">
                         <Dropdown 
                             label="Edificio"
                             :data="dataModal.dataEdificios"
                             textDropdown="nombre"
                             v-model="edificioSeleccionado"
+                            :errors="form.errors.edificio_id"
                         />
                     </div>
 
@@ -23,6 +23,7 @@
                             :data="dataModal.dataTiposAula"
                             textDropdown="nombre"
                             v-model="tipoAulaSeleccionado"
+                            :errors="form.errors.tipo_aula_id"
                         />
                     </div>
 

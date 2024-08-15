@@ -19,8 +19,7 @@ class Carrera extends Model
         'nombre',
         'imagen',
         'descripcion',
-        'estatus',
-        'tipo_coordinacion_carrera', // Eliminar propiedad
+        'estatus'
     ];
 
     public function perfilAcademico()

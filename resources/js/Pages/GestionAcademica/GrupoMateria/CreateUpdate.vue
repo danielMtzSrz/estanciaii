@@ -36,24 +36,27 @@
                         />
                     </div>
 
-                    <Divider align="left">
-                        <div class="inline-flex align-items-center">
-                            <i class="pi pi-clock mr-2"></i>
-                            <b>Horarios profesor</b>
-                        </div>
-                    </Divider>
+                    <div v-if="usuarioSeleccionado != null">
 
-                    <div v-if="usuarioSeleccionado.horarios">
-                        <ol class="ms-0">
-                            <li v-for="(dia, index) in sortedHorarios" :key="index">
-                                {{ dia.nombre }} {{ dia.hora_inicio }} - {{ dia.hora_fin }}
-                            </li>
-                        </ol>
-                    </div>
-                    <div v-else class="p-error">
-                        <ol class="ms-0">
-                            <li>Sin horarios definidos</li>
-                        </ol>
+                        <Divider align="left">
+                            <div class="inline-flex align-items-center">
+                                <i class="pi pi-clock mr-2"></i>
+                                <b>Horarios profesor</b>
+                            </div>
+                        </Divider>
+
+                        <div v-if="usuarioSeleccionado.horarios != null && Object.keys(usuarioSeleccionado.horarios).length > 0">
+                            <ol class="ms-0">
+                                <li v-for="(dia, index) in sortedHorarios" :key="index">
+                                    {{ dia.nombre }} {{ dia.hora_inicio }} - {{ dia.hora_fin }}
+                                </li>
+                            </ol>
+                        </div>
+                        <div v-else class="p-error">
+                            <ol class="ms-0">
+                                <li>Sin horarios definidos</li>
+                            </ol>
+                        </div>
                     </div>
 
                     <Schedules
@@ -172,13 +175,15 @@ const dias_semana = [
 ];
 
 const sortedHorarios = computed(() => {
-  return dias_semana
-    .filter(dia => usuarioSeleccionado.value.horarios[dia.key])
-    .map(dia => ({
-      nombre: dia.nombre,
-      hora_inicio: usuarioSeleccionado.value.horarios[`${dia.key}_hora_inicio`],
-      hora_fin: usuarioSeleccionado.value.horarios[`${dia.key}_hora_fin`]
-    }));
+    if(usuarioSeleccionado.value.horarios != null && Object.keys(usuarioSeleccionado.value.horarios).length > 0){
+        return dias_semana
+            .filter(dia => usuarioSeleccionado.value.horarios[dia.key])
+            .map(dia => ({
+            nombre: dia.nombre,
+            hora_inicio: usuarioSeleccionado.value.horarios[`${dia.key}_hora_inicio`],
+            hora_fin: usuarioSeleccionado.value.horarios[`${dia.key}_hora_fin`]
+            }));
+    }
 });
 
 // Watchers

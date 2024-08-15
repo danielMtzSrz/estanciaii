@@ -7,7 +7,6 @@
         <template #content>
             <form @submit.prevent="submit" enctype="multipart/form-data">
                 <div class="row col-12 pt-4">
-
                     <div class="col-sm-12 col-md-6">
                         <Dropdown 
                             label="Usuario"
@@ -15,6 +14,7 @@
                             imageDropdown="profile_photo_path"
                             textDropdown="nombre"
                             v-model="usuarioSeleccionado"
+                            :errors="form.errors.user_id"
                         />
                     </div>
 
@@ -24,6 +24,7 @@
                             :data="dataMaterias"
                             textDropdown="nombre"
                             v-model="materiaSeleccionada"
+                            :errors="form.errors.materia_id"
                         />
                     </div>
 

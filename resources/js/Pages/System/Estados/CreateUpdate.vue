@@ -14,6 +14,7 @@
                             :data="dataPaises"
                             textDropdown="nombre"
                             v-model="paisSeleccionado"
+                            :errors="form.errors.pais_id"
                         />
                     </div>
 
@@ -104,7 +105,7 @@ const submit = () => {
     if (!props.dataModal.dataRegistro) {
         form.transform((data) => ({
             ...data,
-            pais_id: paisSeleccionado?.value.id ?? null
+            pais_id: paisSeleccionado?.value?.id ?? null
         })).post(route(ruta.value), {
             onSuccess: () => {
                 closeModal();

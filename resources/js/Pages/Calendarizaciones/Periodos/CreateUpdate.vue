@@ -38,8 +38,7 @@
                         <Calendar 
                             label="Fecha inicio"
                             icon="pi pi-calendar"
-                            :value="fechaInicio"
-                            @input="form.fecha_inicio = $event.valueFormat, fechaInicio = $event.valueShow"
+                            v-model="form.fecha_inicio"
                             :errors="form.errors.fecha_inicio"
                             :showTime="false"
                         />
@@ -49,8 +48,7 @@
                         <Calendar 
                             label="Fecha fin"
                             icon="pi pi-calendar"
-                            :value="fechaFin"
-                            @input="form.fecha_fin = $event.valueFormat, fechaFin = $event.valueShow"
+                            v-model="form.fecha_fin"
                             :errors="form.errors.fecha_fin"
                             :showTime="false"
                         />

@@ -10,7 +10,7 @@
 
                   <div class="col-sm-12 col-md-3">
                       <InputText
-                          label="Nombre"
+                          label="Clave mapa curricular"
                           v-model="form.clave_mapa_curricular"
                           :errors="form.errors.clave_mapa_curricular"
                       />
@@ -68,8 +68,7 @@
                         <Calendar 
                             label="Fecha de revisión"
                             icon="pi pi-calendar"
-                            :value="fechaRevision"
-                            @input="form.fecha_revision = $event.valueFormat, fechaRevision = $event.valueShow"
+                            v-model="form.fecha_revision"
                             :errors="form.errors.fecha_revision"
                             :showTime="false"
                         />

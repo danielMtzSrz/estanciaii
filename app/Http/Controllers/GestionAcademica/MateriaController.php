@@ -17,10 +17,10 @@ class MateriaController extends Controller
             return [
                 'id' => $materia->id,
                 'plan_estudios' => [
-                    'id' => $materia->planEstudios->id,
-                    'mapa_curricular_clave_mapa_curricular' => $materia->planEstudios->mapaCurricular->clave_mapa_curricular
+                    'id' => $materia->planEstudios->id ?? null,
+                    'mapa_curricular_clave_mapa_curricular' => $materia->planEstudios->mapaCurricular->clave_mapa_curricular ?? null
                 ],
-                'plan_estudios_clave' => $materia->planEstudios->mapaCurricular->clave_mapa_curricular,
+                'plan_estudios_clave' => $materia->planEstudios->mapaCurricular->clave_mapa_curricular ?? null,
                 'cuatrimestre' => $materia->cuatrimestre(),
                 'cuatrimestre_nombre' => $materia->cuatrimestre()['nombre'],
                 'nombre' => $materia->nombre,
@@ -33,16 +33,30 @@ class MateriaController extends Controller
 
     public function store(Request $request)
     {
-        Materia::create($request->all());
+        $validated_data = $request->validate([
+            "cuatrimestre_id" => 'required',
+            "plan_estudios_id" => 'required',
+            "nombre" => 'required',
+            "color" => 'required'
+        ]);
+
+        Materia::create($validated_data);
 
         return back()->with(config('messages.mensaje_exito'));
     }
 
     public function update(Request $request, $id)
     {
+        $validated_data = $request->validate([
+            "cuatrimestre_id" => 'required',
+            "plan_estudios_id" => 'required',
+            "nombre" => 'required',
+            "color" => 'required'
+        ]);
+
         $materia = Materia::find($id);
             
-        $materia->update($request->all());
+        $materia->update($validated_data);
 
         return back()->with(config('messages.mensaje_actualizar'));
     }

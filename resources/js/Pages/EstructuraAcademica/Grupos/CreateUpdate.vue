@@ -24,6 +24,7 @@
                             :data="dataPeriodos"
                             textDropdown="titulo"
                             v-model="periodoSeleccionado"
+                            :errors="form.errors.periodo_id"
                         />
                     </div>
 

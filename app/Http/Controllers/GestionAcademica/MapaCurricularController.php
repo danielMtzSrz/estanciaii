@@ -34,16 +34,38 @@ class MapaCurricularController extends Controller
 
     public function store(Request $request)
     {
-        MapaCurricular::create($request->all());
+        $validated_data = $request->validate([
+            'clave_mapa_curricular' => 'required',
+            'total_cuatrimestres' => 'required',
+            'total_horas' => 'required',
+            'total_creditos' => 'required',
+            'total_materias' => 'required',
+            'duracion' => 'required',
+            'vigencia' => 'required',
+            'fecha_revision' => 'required'
+        ]);
+
+        MapaCurricular::create($validated_data);
 
         return back()->with(config('messages.mensaje_exito'));
     }
 
     public function update(Request $request, $id)
     {
+        $validated_data = $request->validate([
+            'clave_mapa_curricular' => 'required',
+            'total_cuatrimestres' => 'required',
+            'total_horas' => 'required',
+            'total_creditos' => 'required',
+            'total_materias' => 'required',
+            'duracion' => 'required',
+            'vigencia' => 'required',
+            'fecha_revision' => 'required'
+        ]);
+
         $mapaCurricular = MapaCurricular::find($id);
 
-        $mapaCurricular->update($request->all());
+        $mapaCurricular->update($validated_data);
 
         return back()->with(config('messages.mensaje_actualizar'));
     }

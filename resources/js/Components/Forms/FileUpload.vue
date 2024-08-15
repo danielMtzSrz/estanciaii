@@ -89,7 +89,7 @@ const formatSize = (bytes) => {
 
 const props = defineProps({
     errors: {
-        type: Object,
+        type: [Object, String],
         default: null
     },
     value : {

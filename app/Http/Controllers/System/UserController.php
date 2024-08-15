@@ -58,7 +58,7 @@ class UserController extends Controller
             'numero_interior' => '',
             'profile_photo_path' => '',
 
-            'horarios' => 'array'
+            'horarios' => ''
         ]);
 
         $validated_data['horarios'] = $this->horariosMap($validated_data['horarios']);

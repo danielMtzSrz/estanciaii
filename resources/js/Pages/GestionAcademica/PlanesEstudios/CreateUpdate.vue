@@ -7,7 +7,6 @@
         <template #content>
             <form @submit.prevent="submit" enctype="multipart/form-data">
                 <div class="row col-12 pt-4">
-  
                     <div class="col-sm-12 col-md-6">
                         <Dropdown 
                             label="Carrera"
@@ -15,6 +14,7 @@
                             imageDropdown="imagen"
                             textDropdown="nombre"
                             v-model="carreraSeleccionada"
+                            :errors="form.errors.carrera_id"
                         />
                     </div>
   
@@ -24,6 +24,7 @@
                             :data="dataMapasCurriculares"
                             textDropdown="clave_mapa_curricular"
                             v-model="mapaCurricularSeleccionado"
+                            :errors="form.errors.mapa_curricular_id"
                         />
                     </div>
 
