@@ -2,8 +2,6 @@
 
 use App\Http\Controllers\Api\UsuariosApi;
 use App\Http\Controllers\Api\Domicilios;
-use App\Http\Controllers\Api\Empresas;
-use App\Http\Controllers\Api\TipoAnuncioApi;
 use App\Http\Controllers\Api\TiposPeriodoApi;
 use App\Http\Controllers\Api\TiposConvocatoriaApi;
 use App\Http\Controllers\Api\PeriodosApi;
@@ -43,12 +41,6 @@ Route::get('user_roles/{id_user}', [RolesPermisosApi::class, 'UserRoles'])->name
 
 // Usuarios
 Route::get('usuarios', [UsuariosApi::class, 'Usuarios'])->name('usuarios');
-
-// Empresas
-Route::get('empresas', [Empresas::class, 'Empresas'])->name('empresas');
-
-// Tipos de anuncios
-Route::get('tipos_anuncio', [TipoAnuncioApi::class, 'TipoAnuncio'])->name('tipos_anuncio');
 
 // Tipos de periodos
 Route::get('tipos_periodo', [TiposPeriodoApi::class, 'TipoPeriodo'])->name('tipos_periodo');

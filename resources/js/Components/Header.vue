@@ -85,11 +85,6 @@ const itemsRoutes = ref([
                 route: 'permission.index'
             },
             {
-                label: "Empresas asociadas",
-                icon: "pi pi-building",
-                route: 'empresas.index'
-            },
-            {
                 label: "Países",
                 icon: "bi bi-globe",
                 route: 'paises.index'
@@ -103,16 +98,6 @@ const itemsRoutes = ref([
                 label: "Municipios",
                 icon: "bi bi-geo-fill",
                 route: 'municipios.index'
-            },
-            {
-                label: "Tipos de anuncios",
-                icon: "pi pi-unlock",
-                route: 'tiposanuncios.index'
-            },
-            {
-                label: "Anuncios",
-                icon: "pi pi-unlock",
-                route: 'anuncios.index'
             }
         ]
     },

@@ -2,14 +2,11 @@
 
 
 // Controladores
-use App\Http\Controllers\System\EmpresasController;
 use App\Http\Controllers\System\{UserController, RoleController, PermissionController};
 
 // Domicilios
 use App\Http\Controllers\System\{PaisesController, EstadosController, MunicipiosController};
 
-// Vacantes
-use App\Http\Controllers\System\{TiposAnunciosController, AnunciosController};
 use App\Http\Controllers\System\PanelPrincipalController;
 
 use Illuminate\Http\Request;
@@ -28,15 +25,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('role', RoleController::class);
     Route::resource('permission', PermissionController::class);
     
-    // Rutas de empresas
-    Route::resource("empresas", EmpresasController::class)->except('show','create','edit');
-    
     // Rutas de domicilios
     Route::resource("paises", PaisesController::class)->except('show','create','edit');
     Route::resource("estados", EstadosController::class)->except('show','create','edit');
     Route::resource("municipios", MunicipiosController::class)->except('show','create','edit');
-    
-    // Anuncios
-    Route::resource("tiposanuncios", TiposAnunciosController::class)->except('show','create','edit');
-    Route::resource('anuncios', AnunciosController::class);
 });
