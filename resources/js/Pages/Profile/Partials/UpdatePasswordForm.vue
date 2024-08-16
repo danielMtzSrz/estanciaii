@@ -58,6 +58,8 @@ const updatePassword = () => {
                                         name="current_password"
                                         id="current_password"
                                         required
+                                        :feedback="false"
+                                        toggleMask
                                     />
                                     <label>Contraseña actual</label>
                                 </span>
@@ -71,6 +73,7 @@ const updatePassword = () => {
                                         name="password"
                                         id="password"
                                         required
+                                        toggleMask
                                     >
                                         <template #footer>
                                             <p class="mt-2">Sugerencias</p>
@@ -101,6 +104,7 @@ const updatePassword = () => {
                                         name="password_confirmation"
                                         id="password_confirmation"
                                         required
+                                        toggleMask
                                     >
                                         <template #footer>
                                             <p class="mt-2">Sugerencias</p>

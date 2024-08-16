@@ -245,9 +245,8 @@ Propiedades dentro de filters: {}
                             type="button"
                             icon="pi pi-eye"
                             :label="`${item.dataField.header}`"
-                            class="p-button-raised p-button-rounded"
+                            class="p-button-text p-button-raised p-button-rounded p-button-primary"
                             @click="openModal(index)"
-                            text
                         />
                         <Dialog
                             :visible="displayHTML[index]"

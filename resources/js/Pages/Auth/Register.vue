@@ -90,7 +90,24 @@ const submit = () => {
                                     id="password"
                                     required
                                     autocomplete="new-password"
+                                    toggleMask
                                 >
+                                    <template #footer>
+                                        <p class="mt-2">Sugerencias</p>
+                                        <ul
+                                            class="pl-2 ml-2 mt-0"
+                                            style="line-height: 1.5"
+                                        >
+                                            <li>
+                                                Al menos 1 carácter en minúscula
+                                            </li>
+                                            <li>
+                                                Al menos 1 carácter en mayúsculas
+                                            </li>
+                                            <li>Al menos 1 valor numérico</li>
+                                            <li>Al menos 8 carácteres</li>
+                                        </ul>
+                                    </template>
                                 </Password>
                                 <label>Contraseña</label>
                             </span>
@@ -109,6 +126,8 @@ const submit = () => {
                                     id="password_confirmation"
                                     required
                                     autocomplete="current-password"
+                                    :feedback="false"
+                                    toggleMask
                                 >
                                 </Password>
                                 <label>Confirmar contraseña</label>

@@ -84,6 +84,8 @@ const submit = () => {
                                         id="password"
                                         required
                                         autocomplete="current-password"
+                                        :feedback="false"
+                                        toggleMask
                                     >
                                     </Password>
                                     <label>Contraseña</label>
